@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="400dp"
+    style="@style/table_dialog_layout">
+
+    <RelativeLayout style="@style/table_dialog_title">
+
+        <TextView
+            style="@style/table_dialog_title_text"
+            android:text="采集点任务一览" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listView_task"
+        android:layout_height="300dp"
+        style="@style/table_listview"></ListView>
+
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        style="@style/table_dialog_btn_confirm"
+        android:text="关 闭" />
+
+</LinearLayout>

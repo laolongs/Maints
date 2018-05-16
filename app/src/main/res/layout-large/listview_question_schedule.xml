@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_info"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" >
+        <View
+            android:id="@+id/line"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="22dp"
+            android:background="@color/gray"></View>
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="5dp"
+            android:text="aaaaaaaa"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/listview_status">
+
+        <View
+            android:id="@+id/line_handing"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="22dp"
+            android:visibility="gone"
+            android:background="@color/gray"></View>
+
+        <View
+            android:id="@+id/line_handing_point"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:background="@drawable/bg_circle"></View>
+
+        <View
+            android:id="@+id/line_end"
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="22dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/gray"></View>
+
+        <View
+            android:id="@+id/line_end_point"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="18dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/bg_circle"></View>
+
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="5dp"
+            android:text="bbbbbbbbb"
+            android:textColor="@color/black"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/text_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="25dp"
+            android:text="123123"
+            android:textColor="@color/black"
+            android:textSize="10sp" />
+    </RelativeLayout>
+</LinearLayout>

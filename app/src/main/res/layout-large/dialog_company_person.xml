@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/table_dialog_layout"
+    android:layout_height="500dp">
+
+    <RelativeLayout style="@style/table_dialog_title">
+
+        <Button  android:id="@+id/btn_cancel" style="@style/table_dialog_btn_cancel" />
+
+        <TextView
+            style="@style/table_dialog_title_text"
+            android:text="修改联系人" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/text_companyname"
+        style="@style/table_dialog_text"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="用户名" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="商务负责人"/>
+
+        <EditText
+            android:id="@+id/edit_business_name"
+            style="@style/table_dialog_edit"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="电话"/>
+
+        <EditText
+            android:id="@+id/edit_business_tel"
+            style="@style/table_dialog_edit"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="财务负责人"/>
+
+        <EditText
+            android:id="@+id/edit_finance_name"
+            style="@style/table_dialog_edit"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="电话"/>
+
+        <EditText
+            android:id="@+id/edit_finance_tel"
+            style="@style/table_dialog_edit"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="技术负责人"/>
+
+        <EditText
+            android:id="@+id/edit_tech_name"
+            style="@style/table_dialog_edit"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="电话"/>
+
+        <EditText
+            android:id="@+id/edit_tech_tel"
+            style="@style/table_dialog_edit"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_marginTop="40dp"
+        style="@style/table_dialog_btn_confirm"
+        android:text="修改" />
+
+</LinearLayout>

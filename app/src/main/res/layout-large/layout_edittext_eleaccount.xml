@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/edit_ele_account"
+        android:layout_width="75dp"
+        style="@style/table_dialog_edit" />
+
+    <TextView
+        style="@style/form_second_textview"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:text="容量"
+        android:textColor="@color/black48" />
+
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:id="@+id/edit_ele_volume"
+        android:layout_width="75dp"
+        style="@style/table_dialog_edit" />
+
+    <ImageView
+        android:id="@+id/image_add"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="20dp"
+        android:background="@mipmap/ic_sub"
+        android:visibility="gone" />
+</LinearLayout>

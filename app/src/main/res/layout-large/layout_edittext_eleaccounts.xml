@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_ele_account"
+            style="@style/form_edittext_middle" />
+
+        <TextView
+            style="@style/form_second_textview"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:text="容量"
+            android:textColor="@color/black48" />
+
+        <EditText
+            android:id="@+id/edit_ele_volume"
+            style="@style/form_edittext_middle"
+            android:layout_marginLeft="10dp" />
+
+        <ImageView
+            android:id="@+id/image_sub"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@mipmap/ic_sub" />
+    </LinearLayout>

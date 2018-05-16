@@ -1,0 +1,52 @@
+package cn.tties.maint.util;
+
+/**
+ * ================================================
+ * 作    者：jeasonlzy（廖子尧）
+ * 版    本：1.0
+ * 创建日期：2016/3/28
+ * 描    述：我的Github地址  https://github.com/jeasonlzy0216
+ * 修订历史：
+ * ================================================
+ */
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+
+import com.lzy.imagepicker.loader.ImageLoader;
+
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
+
+import cn.tties.maint.R;
+
+public class XUtils3ImageLoader implements ImageLoader {
+    @Override
+    public void displayImage(Activity activity, String path, ImageView imageView, int width, int height) {
+        ImageOptions options = new ImageOptions.Builder()//
+                .setLoadingDrawableId(R.drawable.ic_default_image)//
+                .setFailureDrawableId(R.drawable.ic_default_image)//
+                .setConfig(Bitmap.Config.RGB_565)//
+                .setSize(width, height)//
+                .setCrop(false)//
+                .setUseMemCache(true)//
+                .build();
+        x.image().bind(imageView, path, options);
+    }
+
+    @Override
+    public void displayImagePreview(Activity activity, String path, ImageView imageView, int width, int height) {
+        ImageOptions options = new ImageOptions.Builder()//
+                .setConfig(Bitmap.Config.RGB_565)//
+                .setSize(width, height)//
+                .setCrop(false)//
+                .setUseMemCache(true)//
+                .build();
+        x.image().bind(imageView, path, options);
+    }
+
+    @Override
+    public void clearMemoryCache() {
+    }
+}

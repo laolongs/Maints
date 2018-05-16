@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_main"
+    style="@style/common_linearLayout">
+
+    <TextView
+        style="@style/common_title"
+        android:text="电费单上传" />
+
+    <ImageView style="@style/common_title_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:padding="1dp">
+
+        <Spinner
+            android:id="@+id/spinner_company"
+            android:layout_width="0dip"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/spinner_eleAccount"
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dip"
+            android:layout_height="40dp"
+            android:layout_weight="1" />
+
+        <RadioGroup
+            android:id="@+id/radio_date"
+            android:layout_width="0dip"
+            android:layout_height="40dp"
+            android:gravity="right"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButton_lastYear"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/selector_radiobtn_billdate_left"
+                android:text="123" />
+
+            <RadioButton
+                android:id="@+id/radioButton_year"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:gravity="center"
+                android:checked="true"
+                android:background="@drawable/selector_radiobtn_billdate_right"
+                android:text="2018" />
+
+
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_login"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/textview_companyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:text="公司名称" />
+
+        <TextView
+            android:id="@+id/textview_eleAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="用电户号" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <cn.tties.maint.view.HorizontalListView
+            android:id="@+id/listview_hor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+</LinearLayout>

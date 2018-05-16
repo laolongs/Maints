@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/common_linearLayout">
+
+    <TextView
+        style="@style/common_title"
+        android:text="创建账号" />
+
+    <ImageView style="@style/common_title_line" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/form_linearLayout"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    style="@style/form_first_textview"
+                    android:text="账号类型" />
+
+                <RadioGroup
+                    android:id="@+id/radio_role"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/radio1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="管理员"
+                        android:visibility="gone"/>
+
+                    <RadioButton
+                        android:id="@+id/radio2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="市场经理" />
+
+                    <RadioButton
+                        android:id="@+id/radio3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="运维专员" />
+
+                    <RadioButton
+                        android:id="@+id/radio4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="能效专员" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/form_linearLayout"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    style="@style/form_first_textview"
+                    android:text="员工信息" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="姓名" />
+
+                        <EditText
+                            android:id="@+id/edit_staffname"
+                            style="@style/form_edittext" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="工号" />
+
+                        <EditText
+                            android:id="@+id/edit_staffno"
+                            style="@style/form_edittext" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="电话" />
+
+                        <EditText
+                            android:id="@+id/edit_tel"
+                            style="@style/form_edittext" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="密码" />
+
+                        <EditText
+                            android:id="@+id/edit_pwd"
+                            android:inputType="textPassword"
+                            style="@style/form_edittext" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="邮箱" />
+
+                        <EditText
+                            android:id="@+id/edit_email"
+                            style="@style/form_edittext" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_save"
+                style="@style/form_btn_confirm"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:text="创 建" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

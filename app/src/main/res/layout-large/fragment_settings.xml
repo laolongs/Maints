@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/common_linearLayout">
+
+    <TextView
+        style="@style/common_title"
+        android:text="设置" />
+
+    <ImageView style="@style/common_title_line" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fadingEdge="vertical"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/form_linearLayout"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    style="@style/form_first_textview"
+                    android:text="登录账号:" />
+
+                <TextView
+                    android:id="@+id/text_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="1.0" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/form_linearLayout"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    style="@style/form_first_textview"
+                    android:text="修改密码" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="旧密码" />
+
+                        <EditText
+                            android:id="@+id/edit_setting_oldPwd"
+                            style="@style/form_edittext"
+                            android:inputType="textPassword" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="新密码" />
+
+                        <EditText
+                            android:id="@+id/edit_setting_newPwd"
+                            style="@style/form_edittext"
+                            android:inputType="textPassword" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/form_second_textview"
+                            android:text="确定密码" />
+
+                        <EditText
+                            android:id="@+id/edit_setting_newPwd2"
+                            style="@style/form_edittext"
+                            android:inputType="textPassword" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_setting_save_pwd"
+                            style="@style/form_btn_confirm"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="0dp"
+                            android:text="提   交" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/form_linearLayout"
+                android:layout_marginTop="30dp"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/form_first_textview"
+                    android:text="上传离线数据" />
+
+                <Button
+                    android:id="@+id/btn_upload"
+                    style="@style/form_btn_confirm"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:text="上 传 数 据" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/form_linearLayout"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    style="@style/form_first_textview"
+                    android:text="当前版本" />
+
+                <LinearLayout
+                    android:id="@+id/layout_version"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_version">
+
+                    <TextView
+                        android:id="@+id/text_version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:text="1.0" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/form_linearLayout"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    style="@style/form_first_textview"
+                    android:text="切换账号" />
+
+                <Button
+                    android:id="@+id/btn_setting_logout"
+                    style="@style/form_btn_confirm"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:text="退 出 登 录" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

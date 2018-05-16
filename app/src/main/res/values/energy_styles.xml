@@ -1,0 +1,281 @@
+<resources>
+
+    <style name="common_linearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/main_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">30dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+
+    <style name="common_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@color/main_title</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="common_title_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@mipmap/line_common</item>
+    </style>
+
+    <style name="form_linearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="form_first_textview">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="form_second_textview">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="form_third_textview">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="form_edittext">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/edittext_radius</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+    <style name="form_edittext_middle">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/edittext_radius</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+    <style name="form_edittext_short">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/edittext_radius</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+    <style name="form_edittext_large">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/edittext_radius</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+    <style name="form_btn_confirm">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/selector_btn_confirm_click</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="table_listview">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+        <item name="android:divider">#00000000</item>
+        <item name="android:dividerHeight">0dip</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:listSelector">@android:color/transparent</item>
+        <item name="android:scrollbars">none</item>
+    </style>
+
+    <style name="table_dialog_layout">
+        <item name="android:layout_width">400dp</item>
+        <item name="android:layout_height">330dp</item>
+        <item name="android:background">@drawable/bg_table_dialog</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:minWidth">200dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+
+    <style name="table_dialog_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@drawable/bg_table_dialog_title</item>
+    </style>
+
+    <style name="table_dialog_title_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="table_dialog_btn_cancel">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:background">@drawable/btn_dialog_cancel</item>
+        <item name="android:text">取消</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="table_dialog_btn_confirm">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">33dp</item>
+        <item name="android:background">@drawable/selector_btn_confirm_click</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="table_dialog_first_text">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_marginLeft">39dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="table_dialog_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="table_dialog_edit">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:background">@drawable/edittext_radius</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="table_text_title">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/table_title</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="table_text">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="table_btn">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:background">@drawable/selector_btn_form_click</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+
+    <style name="listview_patrol_input_item_textview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:layout_marginRight">5dp</item>
+    </style>
+
+
+    <style name="listview_patrol_input_item_edittext">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:background">@drawable/edittext_radius</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+    </style>
+
+
+
+    <style name="toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">39dp</item>
+        <item name="android:background">@color/toobar_bg</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:theme">@style/toolbar_blue_theme</item>
+    </style>
+
+    <style name="cut_off_line_1dp">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/border</item>
+    </style>
+
+    <style name="cut_off_line_5dp">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">5dp</item>
+        <item name="android:background">@color/border</item>
+    </style>
+
+    <style name="cut_off_line_9dp">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">9dp</item>
+        <item name="android:background">@color/border</item>
+    </style>
+
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <!-- 边框 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!-- 模糊 -->
+    </style>
+</resources>

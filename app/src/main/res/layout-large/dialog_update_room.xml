@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/table_dialog_layout">
+
+    <RelativeLayout style="@style/table_dialog_title">
+
+        <Button android:id="@+id/btn_cancel"
+            style="@style/table_dialog_btn_cancel" />
+
+        <TextView
+            style="@style/table_dialog_title_text"
+            android:text="修改电房" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="电房名称" />
+
+        <EditText
+            android:id="@+id/edit_eleRoomName"
+            style="@style/table_dialog_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+          <CheckBox
+            android:id="@+id/high_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="高压电房"
+              android:paddingLeft="40dp"
+              android:textColor="@color/black"/>
+        <CheckBox
+            android:id="@+id/low_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="低压电房"
+            android:paddingLeft="40dp"
+            android:textColor="@color/black"/>
+        <CheckBox
+            android:id="@+id/transformer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="变压器室"
+            android:paddingLeft="40dp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_marginTop="20dp"
+        style="@style/table_dialog_btn_confirm"
+        android:text="修 改" />
+
+</LinearLayout>

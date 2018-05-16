@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/table_dialog_layout">
+
+    <RelativeLayout style="@style/table_dialog_title">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/table_dialog_btn_cancel" />
+
+        <TextView
+            style="@style/table_dialog_title_text"
+            android:text="离职交接" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="员工" />
+
+        <TextView
+            android:id="@+id/text_staffname"
+            style="@style/table_dialog_text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/table_dialog_first_text"
+            android:text="绑定账号" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="200dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_marginTop="40dp"
+        style="@style/table_dialog_btn_confirm"
+        android:text="交接" />
+
+</LinearLayout>

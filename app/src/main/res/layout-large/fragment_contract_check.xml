@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/common_linearLayout">
+
+    <TextView
+        style="@style/common_title"
+        android:text="合同管理" />
+
+    <ImageView style="@style/common_title_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:padding="1dp">
+
+        <RelativeLayout
+            android:id="@+id/layout_table"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@color/table_border">
+
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:text="企业名称"
+                android:textColor="@color/gray"
+                android:textSize="20sp" />
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/edittext_search"
+                android:iconifiedByDefault="false"
+                android:queryHint="请输入搜索内容" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <CheckBox
+                android:id="@+id/cb_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:checked="false"
+                ></CheckBox>
+
+            <Button
+                android:id="@+id/btn_upload"
+                style="@style/form_btn_confirm"
+                android:height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="-25sp"
+                android:text="上 传" />
+
+            <Button
+                android:id="@+id/btn_download"
+                style="@style/form_btn_confirm"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="-25sp"
+                android:text="下 载" />
+
+            <Button
+                android:id="@+id/btn_refresh"
+                style="@style/form_btn_confirm"
+                android:layout_gravity="center"
+                android:paddingLeft="20dp"
+                android:drawablePadding="-25sp"
+                android:layout_marginLeft="10dp"
+                android:text="刷 新" />
+
+            <Button
+                android:id="@+id/btn_view"
+                style="@style/form_btn_confirm"
+                android:layout_gravity="center"
+                android:paddingLeft="20dp"
+                android:drawablePadding="-25sp"
+                android:layout_marginLeft="10dp"
+                android:text="查 看" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:layout_marginTop="10dp"
+            android:fadingEdge="none"
+            android:listSelector="@android:color/transparent"
+            android:scrollbarStyle="outsideOverlay"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"
+            app:spanCount="5"
+            tools:listitem="@layout/listview_image"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:descendantFocusability="beforeDescendants"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="left"
+        android:text="title"
+        android:textColor="@color/black"
+        android:textSize="14dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_name1"
+            style="@style/listview_patrol_input_item_textview"
+            android:text="项目1" />
+
+        <EditText
+            android:id="@+id/edit_value1"
+            style="@style/listview_patrol_input_item_edittext"
+            android:layout_width="180dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/text_name2"
+            style="@style/listview_patrol_input_item_textview"
+
+            android:text="项目1" />
+
+        <EditText
+            android:id="@+id/edit_value2"
+            style="@style/listview_patrol_input_item_edittext" />
+
+        <TextView
+            android:id="@+id/text_unit2"
+            style="@style/listview_patrol_input_item_textview"
+            android:layout_marginRight="10dp"
+            android:text="项目1" />
+
+        <TextView
+            android:id="@+id/text_name3"
+            style="@style/listview_patrol_input_item_textview"
+
+            android:text="项目1" />
+
+        <EditText
+            android:id="@+id/edit_value3"
+            style="@style/listview_patrol_input_item_edittext" />
+
+        <TextView
+            android:id="@+id/text_unit3"
+            style="@style/listview_patrol_input_item_textview"
+            android:layout_marginRight="10dp"
+            android:text="项目1" />
+    </LinearLayout>
+</LinearLayout>
+

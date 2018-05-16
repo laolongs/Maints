@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/table_dialog_layout">
+
+    <RelativeLayout style="@style/table_dialog_title">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/table_dialog_btn_cancel" />
+
+        <TextView
+            style="@style/table_dialog_title_text"
+            android:text="修改角色" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/text_staffname"
+        style="@style/table_dialog_text"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="用户名" />
+
+    <RadioGroup
+        android:id="@+id/radio_role"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="120dp">
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_marginTop="10dp"
+        style="@style/table_dialog_btn_confirm"
+        android:text="修改" />
+
+</LinearLayout>

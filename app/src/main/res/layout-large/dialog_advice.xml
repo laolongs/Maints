@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/table_dialog_layout"
+    android:layout_width="500dp"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout style="@style/table_dialog_title">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/table_dialog_btn_cancel" />
+
+        <TextView
+            style="@style/table_dialog_title_text"
+            android:text="添加建议" />
+
+    </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_replay"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_save"
+            android:background="@color/silver"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/edit_advice"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/bg_listview_gray"
+                android:gravity="left|top"
+                android:textSize="12dp"
+                android:hint="请输入处理建议..."
+                android:textColor="@color/black"
+                android:inputType="textMultiLine"
+                android:minLines="6" />
+
+            <Button
+                android:id="@+id/btn_save"
+                style="@style/table_dialog_btn_confirm"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="添加" />
+        </LinearLayout>
+</LinearLayout>

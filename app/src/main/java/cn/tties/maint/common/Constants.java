@@ -24,8 +24,9 @@ import cn.tties.maint.widget.TabClass;
  *
  */
 public class Constants {
-//    public static final String BASE_URL = "http://192.168.2.220:8683/";//测试环境运维
-    public static final String BASE_URL = "http://192.168.2.127:8080/";//本地
+    public static final String BASE_URL = "http://192.168.2.220:8683/";//测试环境运维
+//    public static final String BASE_URL = "http://192.168.2.127:8080/";//本地
+//    public static final String BASE_URL = "http://192.168.2.49:8080/";//李震
 //    public static final String BASE_URL = "http://maint.tties.cn/";
     public static final String API_URL = BASE_URL + "api/";
     public static final String CACHE_LOGIN_STATUS = "CACHE_LOGIN_STATUS";

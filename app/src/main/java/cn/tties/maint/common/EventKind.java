@@ -10,6 +10,10 @@ public class EventKind {
     public static final String EVENT_COMPANY_CHANGE = "EVENT_COMPANY_CHANGE";
     //切换公司ID
     public static final String EVENT_COMPANY_CHANGEID = "EVENT_COMPANY_CHANGEID";
+    //更新添加过的二级列表
+    public static final String EVENT_COMPANY_APAPTER = "EVENT_COMPANY_APAPTER";
+    //判断打开的二级详情是否关闭；
+    public static final String EVENT_COMPANY_DATAILS = "EVENT_COMPANY_DATAILS";
     //检查版本
     public static final String EVENT_VERSION_SYCN = "EVENT_VERSION_SYCN";
 

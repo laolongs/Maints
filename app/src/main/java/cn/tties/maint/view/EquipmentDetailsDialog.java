@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.x;
 
 import java.lang.reflect.Type;
@@ -37,8 +39,11 @@ import cn.tties.maint.R;
 import cn.tties.maint.activity.AmmeterFragment;
 import cn.tties.maint.adapter.EquipmentLayoutAdapter;
 import cn.tties.maint.bean.EquipmentLayoutBean;
+import cn.tties.maint.bean.EventBusBean;
+import cn.tties.maint.common.EventKind;
 import cn.tties.maint.common.MyApplication;
 import cn.tties.maint.enums.ItemInputType;
+import cn.tties.maint.secondLv.RecyclerAdapter;
 import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.util.ToastUtil;
 import cn.tties.maint.widget.CustomDatePicker;
@@ -48,17 +53,32 @@ import cn.tties.maint.widget.CustomDatePicker;
  */
 
 public class EquipmentDetailsDialog extends BaseCustomDialog {
-
+    private static final String TAG = "EquipmentDetailsDialog";
     public Context context;
     private  List<EquipmentLayoutBean> beanList;
     public ListView ListView;
     private LinearLayout cancel;
     private LinearLayout save;
+    private TextView savetv;
     private TextView title;
     private EditText edit_value;
     private String name;
-    public EquipmentDetailsDialog(Context context, String name,List<EquipmentLayoutBean> beanList, View.OnClickListener clickListener) {
+    EquipmentLayoutAdapter AdapterD;
+    Integer EquipmentId;
+    boolean flag;
+    boolean isAdd;
+    public EquipmentDetailsDialog(boolean isAdd,Context context, String name, List<EquipmentLayoutBean> beanList,Integer EquipmentId,boolean flag, View.OnClickListener clickListener) {
        super((Activity) context,clickListener);
+        this.isAdd=isAdd;
+        this.context = context;
+        this.beanList=beanList;
+        this.name=name;
+        this.EquipmentId=EquipmentId;
+        this.flag=flag;
+    }
+    public EquipmentDetailsDialog(boolean isAdd,Context context, String name, List<EquipmentLayoutBean> beanList, View.OnClickListener clickListener) {
+        super((Activity) context,clickListener);
+        this.isAdd=isAdd;
         this.context = context;
         this.beanList=beanList;
         this.name=name;
@@ -71,10 +91,11 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         ListView = findViewById(R.id.dg_eq_de_list);
         cancel = findViewById(R.id.dg_eq_de_cancel);
         save = findViewById(R.id.dg_eq_de_save);
+        savetv = findViewById(R.id.dg_eq_de_saveTv);
         title = findViewById(R.id.dg_eq_de_title);
         //重命名输入框
         edit_value = findViewById(R.id.edit_value);
-        EquipmentLayoutAdapter AdapterD = new EquipmentLayoutAdapter(context,beanList);
+        AdapterD= new EquipmentLayoutAdapter(context,beanList);
         ListView.setAdapter(AdapterD);
         //返回关闭
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -83,27 +104,38 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
                 EquipmentDetailsDialog.this.dismiss();
             }
         });
+        if(!isAdd){
+            savetv.setText("保存");
+        }else{
+            savetv.setText("修改");
+        }
         //保存添加到另一个recycleview 四级设备类型
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!isAdd){
+                    //刷新二级列表
+                    EventBusBean busBean = new EventBusBean();
+                    busBean.setKind(EventKind.EVENT_COMPANY_APAPTER);
+                    busBean.setMessage(EquipmentId+"");
+                    busBean.setObj(AdapterD.getDataList());
+                    busBean.setSuccess(flag);
+                    busBean.setName(edit_value.getText().toString());
+                    EventBus.getDefault().post(busBean);
+                }else{
 
-                ToastUtil.showShort(context,"尚未有接口文档，不知怎么发送保存");
+                }
+
+                EquipmentDetailsDialog.this.dismiss();
             }
         });
         title.setText(name);
         edit_value.setText(name);
     }
-
-//    public void refreshMDataList(List<EquipmentLayoutBean> list) {
-//        myMeterAdapter.setMList(list);
-//        myMeterAdapter.notifyDataSetChanged();
-//    }
+    
     public class EquipmentLayoutAdapter extends BaseAdapter {
 
         public static final int EDITTEXT = 0;
-        public static final int RADIO = 1;
-        public static final int COUNT = 2;
         public static final int LEAF = 3;
         private Context context;
         private CustomDatePicker cuys;
@@ -138,7 +170,7 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         @Override
         public int getViewTypeCount() {
             //这里是adapter里有几种布局
-            return 7;
+            return 5;
         }
 
         @Override
@@ -163,26 +195,14 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final EquipmentLayoutBean bean = beanList.get(position);
-            EquipmentLayoutAdapter.ViewEditTextHolder vEditText = null;
-            EquipmentLayoutAdapter.ViewRadioHolder vRadio = null;
-            EquipmentLayoutAdapter.ViewCountHolder vCount = null;
-            EquipmentLayoutAdapter.ViewLeafHolder vLeaf = null;
+            ViewEditTextHolder vEditText = null;
+            ViewLeafHolder vLeaf = null;
             if (convertView == null) {
                 switch (bean.getType()) {
                     case EDITTEXT:
                         convertView = View.inflate(x.app(), R.layout.layout_edittext, null);
                         vEditText = new ViewEditTextHolder(convertView);
                         convertView.setTag(vEditText);
-                        break;
-                    case RADIO:
-                        convertView = View.inflate(x.app(), R.layout.layout_radiogroup, null);
-                        vRadio = new ViewRadioHolder(convertView);
-                        convertView.setTag(vRadio);
-                        break;
-                    case COUNT:
-                        convertView = View.inflate(x.app(), R.layout.layout_count, null);
-                        vCount = new ViewCountHolder(convertView);
-                        convertView.setTag(vCount);
                         break;
                     case LEAF:
                         convertView = View.inflate(x.app(), R.layout.layout_leafnode, null);
@@ -194,12 +214,6 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
                 switch (bean.getType()) {
                     case EDITTEXT:
                         vEditText = (ViewEditTextHolder) convertView.getTag();
-                        break;
-                    case RADIO:
-                        vRadio = (ViewRadioHolder) convertView.getTag();
-                        break;
-                    case COUNT:
-                        vCount = (ViewCountHolder) convertView.getTag();
                         break;
                     case LEAF:
                         vLeaf = (ViewLeafHolder) convertView.getTag();
@@ -223,57 +237,6 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
 
                     //根据输入类型，增加验证和默认值
                     setInputType(bean,  vEditText.value);
-                    break;
-                case RADIO:
-                    //清除焦点
-                    vRadio.radioGroup.clearFocus();
-                    vRadio.radioGroup.setOnCheckedChangeListener(null);
-                    vRadio.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
-                    //吧监听设置到不同的EditText上
-                    vRadio.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                            RadioButton btn = (RadioButton) radioGroup.findViewById(i);
-                            bean.setCheck(false);
-                            if (btn.getText().equals("是")) {
-                                bean.setCheck(true);
-                            }
-                        }
-                    });
-                    break;
-                case COUNT:
-                    //清除焦点
-                    vCount.value.clearFocus();
-                    vCount.add.setOnClickListener(null);
-                    vCount.sub.setOnClickListener(null);
-                    //设置数据
-                    vCount.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
-                    vCount.value.setText("0");
-                    final EditText editText1 = vCount.value;
-                    vCount.add.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            int count = bean.getValue() == null ? 0 : Integer.valueOf(bean.getValue());
-                            count = count + 1;
-                            if (count > 20) {
-                                count = 20;
-                            }
-                            bean.setValue(String.valueOf(count));
-                            editText1.setText(count + "");
-                        }
-                    });
-                    vCount.sub.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            int count = bean.getValue() == null ? 0 : Integer.valueOf(bean.getValue());
-                            count = count - 1;
-                            if (count < 0) {
-                                count = 0;
-                            }
-                            bean.setValue(String.valueOf(count));
-                            editText1.setText(count + "");
-                        }
-                    });
                     break;
                 case LEAF:
                     //设置数据
@@ -399,40 +362,6 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
             }
         }
 
-        /**
-         * 第二种布局的Holder
-         */
-        class ViewRadioHolder {
-            TextView name;
-            RadioButton trueBtn;
-            RadioButton falseBtn;
-            RadioGroup radioGroup;
-
-            public ViewRadioHolder(View convertView) {
-                name = (TextView) convertView.findViewById(R.id.text_name);
-                radioGroup = (RadioGroup) convertView.findViewById(R.id.radiogroup);
-                trueBtn = (RadioButton) convertView.findViewById(R.id.radio1);
-                falseBtn = (RadioButton) convertView.findViewById(R.id.radio2);
-            }
-        }
-
-        /**
-         * 第三种布局的Holder
-         */
-        class ViewCountHolder {
-            TextView name;
-            TextView add;
-            TextView sub;
-            EditText value;
-
-            public ViewCountHolder(View convertView) {
-                name = (TextView) convertView.findViewById(R.id.text_name);
-                add = (TextView) convertView.findViewById(R.id.text_add);
-                sub = (TextView) convertView.findViewById(R.id.text_sub);
-                value = (EditText) convertView.findViewById(R.id.edit_value);
-            }
-        }
-
         public abstract class SimpeTextWather implements TextWatcher {
 
             @Override
@@ -507,120 +436,4 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         }
     }
 
-//    public class MyEquipmentDetailsAdapter extends BaseAdapter {
-//        private static final int ONE = 1;
-//        private static final int TWO = 2;
-//
-//        public List<EquipmentLayoutBean> list;
-//
-//        public LayoutInflater inflater;
-//
-//        public MyEquipmentDetailsAdapter(Context context, List<EquipmentLayoutBean> list) {
-//            this.list = list;
-//            inflater = LayoutInflater.from(context);
-//        }
-//
-//        public void setMList(List<EquipmentLayoutBean> list) {
-//            this.list = list;
-//        }
-//
-//        public List<EquipmentLayoutBean> getMList() {
-//            return this.list;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            int ret = 0;
-//            if (list != null) {
-//                ret = list.size();
-//            }
-//            return ret;
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public Object getItem(int i) {
-//            return list.get(i);
-//        }
-//
-//        @Override
-//        public int getItemViewType(int position) {
-//            return list.get(position).getType();
-//        }
-//
-//        @Override
-//        public int getViewTypeCount() {
-//            return 2;
-//        }
-//
-//        @Override
-//        public View getView(final int position, View convertView, ViewGroup parent) {
-//            EquipmentLayoutBean bean = beanList.get(position);
-//            ViewHolder viewHolder=null;
-//            ViewEditTextHolder viewEditTextHolder=null;
-//            if (convertView == null) {
-//                switch (bean.getType()){
-//                    case ONE:
-//                        convertView = inflater.inflate(R.layout.dialog_equipment_datails_itme, null);
-//                        viewHolder = new ViewHolder(convertView);
-//                        convertView.setTag(viewHolder);
-//                        break;
-//                    case TWO:
-//                        convertView = inflater.inflate(R.layout.layout_edittext, null);
-//                        viewEditTextHolder = new ViewEditTextHolder(convertView);
-//                        convertView.setTag(viewHolder);
-//                        break;
-//                }
-//
-//            }
-//            viewHolder=(ViewHolder) convertView.getTag();
-//            viewEditTextHolder=(ViewEditTextHolder) convertView.getTag();
-//            //设置数据
-//            viewHolder.dg_eq_de_item_title.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
-//            viewHolder.dg_eq_de_item_info.removeAllViews();
-//            viewHolder.dg_eq_de_item_info.clearFocus();
-//            for (final EquipmentLayoutBean layoutBean : bean.getChildrenList()) {
-//                View layout = View.inflate(x.app(), R.layout.layout_edittext, null);
-//               ViewEditTextHolder holder = new ViewEditTextHolder(layout);
-//                holder.name.setText(layoutBean.getTextName());
-//                holder.value.setText(layoutBean.getValue());
-//                holder.value.setOnClickListener(null);
-//                holder.value.setOnFocusChangeListener(null);
-//                holder.value.clearFocus();
-//                if (holder.value.getTag() instanceof TextWatcher) {
-//                    holder.value.removeTextChangedListener((TextWatcher) (holder.value.getTag()));
-//                }
-//                //根据输入类型，增加验证和默认值
-//                setInputType(layoutBean, holder.value);
-//                vLeaf.layoutInfo.clearFocus();
-//                vLeaf.layoutInfo.addView(layout);
-//            }
-//            break;
-//
-//            return convertView;
-//        }
-//
-//        public class ViewHolder {
-//            public TextView dg_eq_de_item_title;
-//            public LinearLayout dg_eq_de_item_info;
-//            public ViewHolder(View convertView) {
-//                dg_eq_de_item_title = (TextView) convertView.findViewById(R.id.dg_eq_de_item_title);
-//                dg_eq_de_item_info = (LinearLayout) convertView.findViewById(R.id.dg_eq_de_item_info);
-//
-//            }
-//        }
-//        class ViewEditTextHolder {
-//            TextView name;
-//            EditText value;
-//
-//            public ViewEditTextHolder(View convertView) {
-//                name = (TextView) convertView.findViewById(R.id.text_name);
-//                value = (EditText) convertView.findViewById(R.id.edit_value);
-//            }
-//        }
-//    }
 }

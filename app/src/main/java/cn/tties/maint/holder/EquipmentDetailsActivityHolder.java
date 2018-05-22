@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -32,9 +33,10 @@ public class EquipmentDetailsActivityHolder extends BaseLayoutHolder {
 
     public TextView eq_de_num;
 
+    public ListView eq_de_list_feal_list;
     public SwipeMenuRecyclerView eq_de_list_lv4;
     public SwipeMenuRecyclerView eq_de_list_lv4_details;
-    public Boolean copyFlag;
+    public Boolean isCabinet;
     public EquipmentDetailsActivityHolder(View view) {
         this.eq_de_start = (LinearLayout) view.findViewById(R.id.eq_de_start);
         this.eq_de_old = (LinearLayout) view.findViewById(R.id.eq_de_old);
@@ -46,17 +48,19 @@ public class EquipmentDetailsActivityHolder extends BaseLayoutHolder {
         this.eq_de_no = (RadioButton) view.findViewById(R.id.eq_de_no);
         this.edit_value = (EditText) view.findViewById(R.id.edit_value);
         this.eq_de_num = (TextView) view.findViewById(R.id.eq_de_num);
+        this.eq_de_list_feal_list = (ListView) view.findViewById(R.id.eq_de_list_feal_list);
         this.eq_de_list_lv4 = (SwipeMenuRecyclerView) view.findViewById(R.id.eq_de_list_lv4);
         this.eq_de_list_lv4_details = (SwipeMenuRecyclerView) view.findViewById(R.id.eq_de_list_lv4_details);
-        copyFlag = false;
+        isCabinet = false;
+        //是否有柜体
         this.eq_de_radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 RadioButton button = radioGroup.findViewById(i);
                 if (button.getText().equals("是")) {
-                    copyFlag = true;
+                    isCabinet = true;
                 } else {
-                    copyFlag = false;
+                    isCabinet = false;
                 }
             }
         });

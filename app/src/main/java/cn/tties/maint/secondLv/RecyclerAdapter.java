@@ -6,9 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import cn.tties.maint.R;
+import cn.tties.maint.bean.EventBusBean;
+import cn.tties.maint.common.EventKind;
+import cn.tties.maint.util.ToastUtil;
 
 /**
  * Created by li on 2018/5/11
@@ -22,13 +27,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private List<DataBean> dataBeanList;
     private LayoutInflater mInflater;
     private OnScrollListener mOnScrollListener;
-
-    public RecyclerAdapter(Context context, List<DataBean> dataBeanList) {
+    boolean falg=false;
+    public RecyclerAdapter(Context context) {
         this.context = context;
-        this.dataBeanList = dataBeanList;
         this.mInflater = LayoutInflater.from(context);
     }
-
+    public void setDataBeanList(List<DataBean> dataBeanList){
+        this.dataBeanList = dataBeanList;
+    }
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
@@ -51,7 +57,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      * @param position
      */
     @Override
-    public void onBindViewHolder(BaseViewHolder holder, int position) {
+    public void onBindViewHolder(BaseViewHolder holder, final int position) {
         switch (getItemViewType(position)){
             case DataBean.PARENT_ITEM:
                 ParentViewHolder parentViewHolder = (ParentViewHolder) holder;
@@ -59,14 +65,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 break;
             case DataBean.CHILD_ITEM:
                 ChildViewHolder childViewHolder = (ChildViewHolder) holder;
-                childViewHolder.bindView(dataBeanList.get(position), position);
+                childViewHolder.bindView(dataBeanList.get(position), position,this);
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return dataBeanList.size();
+        return dataBeanList==null?0:dataBeanList.size();
     }
 
     @Override
@@ -86,11 +92,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             if (position == dataBeanList.size() - 2 && mOnScrollListener != null) { //如果点击的item为最后一个
                 mOnScrollListener.scrollTo(position + 1);//向下滚动，使子布局能够完全展示
             }
+            falg=false;
+            EventBusBean busBean = new EventBusBean();
+            busBean.setKind(EventKind.EVENT_COMPANY_DATAILS);
+            busBean.setSuccess(falg);
+            EventBus.getDefault().post(busBean);
         }
 
         @Override
         public void onHideChildren(DataBean bean) {
             int position = getCurrentPosition(bean.getID());//确定当前点击的item位置
+            ToastUtil.showShort(context,""+position);
             DataBean children = bean.getChildBean();//获取子布局对象
             if (children == null) {
                 return;
@@ -99,6 +111,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             if (mOnScrollListener != null) {
                 mOnScrollListener.scrollTo(position);
             }
+            falg=true;
+            EventBusBean busBean = new EventBusBean();
+            busBean.setKind(EventKind.EVENT_COMPANY_DATAILS);
+            busBean.setSuccess(falg);
+            EventBus.getDefault().post(busBean);
         }
     };
 
@@ -116,11 +133,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      *移除子布局数据
      * @param position
      */
-    protected void remove(int position) {
+    public void remove(int position) {
+        dataBeanList.remove(position);
+        notifyItemChanged(position);
+        notifyItemRangeChanged(position,dataBeanList.size()-position);
+    }
+    /**
+     *移除父布局数据
+     * @param position
+     */
+    protected void removeparent(int position) {
         dataBeanList.remove(position);
         notifyItemRemoved(position);
+        notifyItemRangeChanged(position,dataBeanList.size()-position);
     }
-
     /**
      * 确定当前点击的item位置并返回
      * @param uuid
@@ -145,10 +171,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private DataBean getChildDataBean(DataBean bean){
         DataBean child = new DataBean();
         child.setType(1);
-        child.setParentLeftTxt(bean.getParentLeftTxt());
-        child.setParentRightTxt(bean.getParentRightTxt());
-        child.setChildLeftTxt(bean.getChildLeftTxt());
-        child.setChildRightTxt(bean.getChildRightTxt());
+        child.setBean(bean.getBean());
         return child;
     }
 

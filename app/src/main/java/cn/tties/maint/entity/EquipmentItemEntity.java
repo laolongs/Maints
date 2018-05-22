@@ -3,6 +3,7 @@ package cn.tties.maint.entity;
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
 
+import cn.tties.maint.bean.CommonListViewInterface;
 import cn.tties.maint.httpclient.result.EquipmentInfoResult;
 
 /**
@@ -10,7 +11,7 @@ import cn.tties.maint.httpclient.result.EquipmentInfoResult;
  */
 @Table(name = "equipment_item",
         onCreated = "CREATE INDEX equipment_item_search ON equipment_item(itemName)")
-public class EquipmentItemEntity extends AbstractEntity {
+public class EquipmentItemEntity extends AbstractEntity implements CommonListViewInterface {
 
     @Column(name = "id", isId = true, autoGen = true)
     private int id;
@@ -45,11 +46,26 @@ public class EquipmentItemEntity extends AbstractEntity {
     public void setEquipmentItemId(int equipmentItemId) {
         this.equipmentItemId = equipmentItemId;
     }
+    //实现接口的三个方法-----------
+    @Override
+    public Integer getItemId() {
+        return null;
+    }
 
     public String getItemName() {
         return itemName;
     }
 
+    @Override
+    public boolean isChecked() {
+        return false;
+    }
+
+    @Override
+    public void setChecked(boolean checked) {
+
+    }
+    //------------
     public void setItemName(String itemName) {
         this.itemName = itemName;
     }

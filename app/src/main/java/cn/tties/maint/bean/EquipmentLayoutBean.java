@@ -18,7 +18,8 @@ public class EquipmentLayoutBean {
     private Integer dbId;
     private Boolean check;
     private List<EquipmentLayoutBean> childrenList;
-
+    //用于存父级的name
+    private String titleName;
     public EquipmentLayoutBean(int type, Integer itemId) {
         this.type = type;
         this.itemId = itemId;
@@ -33,6 +34,14 @@ public class EquipmentLayoutBean {
         this.dbId = dbId;
         childrenList = new ArrayList<>();
         inputType = ItemInputType.STRING.getType();
+    }
+
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
     }
 
     public int getType() {

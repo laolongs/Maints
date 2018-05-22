@@ -41,6 +41,7 @@
                 android:gravity="center"
                 android:layout_height="match_parent">
                 <TextView
+                    android:id="@+id/dg_eq_de_saveTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22sp"

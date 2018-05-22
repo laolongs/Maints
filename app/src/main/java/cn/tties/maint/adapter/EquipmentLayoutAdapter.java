@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -56,7 +57,7 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return beanList.size();
+        return beanList==null?0:beanList.size();
     }
 
 
@@ -69,7 +70,7 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         //这里是adapter里有几种布局
-        return 7;
+        return 5;
     }
 
     @Override
@@ -95,8 +96,6 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final EquipmentLayoutBean bean = beanList.get(position);
         ViewEditTextHolder vEditText = null;
-        ViewRadioHolder vRadio = null;
-        ViewCountHolder vCount = null;
         ViewLeafHolder vLeaf = null;
         if (convertView == null) {
             switch (bean.getType()) {
@@ -104,16 +103,6 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
                     convertView = View.inflate(x.app(), R.layout.layout_edittext, null);
                     vEditText = new ViewEditTextHolder(convertView);
                     convertView.setTag(vEditText);
-                    break;
-                case RADIO:
-                    convertView = View.inflate(x.app(), R.layout.layout_radiogroup, null);
-                    vRadio = new ViewRadioHolder(convertView);
-                    convertView.setTag(vRadio);
-                    break;
-                case COUNT:
-                    convertView = View.inflate(x.app(), R.layout.layout_count, null);
-                    vCount = new ViewCountHolder(convertView);
-                    convertView.setTag(vCount);
                     break;
                 case LEAF:
                     convertView = View.inflate(x.app(), R.layout.layout_leafnode, null);
@@ -125,12 +114,6 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
             switch (bean.getType()) {
                 case EDITTEXT:
                     vEditText = (ViewEditTextHolder) convertView.getTag();
-                    break;
-                case RADIO:
-                    vRadio = (ViewRadioHolder) convertView.getTag();
-                    break;
-                case COUNT:
-                    vCount = (ViewCountHolder) convertView.getTag();
                     break;
                 case LEAF:
                     vLeaf = (ViewLeafHolder) convertView.getTag();
@@ -154,57 +137,6 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
 
                 //根据输入类型，增加验证和默认值
                 setInputType(bean,  vEditText.value);
-                break;
-            case RADIO:
-                //清除焦点
-                vRadio.radioGroup.clearFocus();
-                vRadio.radioGroup.setOnCheckedChangeListener(null);
-                vRadio.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
-                //吧监听设置到不同的EditText上
-                vRadio.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                        RadioButton btn = (RadioButton) radioGroup.findViewById(i);
-                        bean.setCheck(false);
-                        if (btn.getText().equals("是")) {
-                            bean.setCheck(true);
-                        }
-                    }
-                });
-                break;
-            case COUNT:
-                //清除焦点
-                vCount.value.clearFocus();
-                vCount.add.setOnClickListener(null);
-                vCount.sub.setOnClickListener(null);
-                //设置数据
-                vCount.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
-                vCount.value.setText("0");
-                final EditText editText1 = vCount.value;
-                vCount.add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int count = bean.getValue() == null ? 0 : Integer.valueOf(bean.getValue());
-                        count = count + 1;
-                        if (count > 20) {
-                            count = 20;
-                        }
-                        bean.setValue(String.valueOf(count));
-                        editText1.setText(count + "");
-                    }
-                });
-                vCount.sub.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int count = bean.getValue() == null ? 0 : Integer.valueOf(bean.getValue());
-                        count = count - 1;
-                        if (count < 0) {
-                            count = 0;
-                        }
-                        bean.setValue(String.valueOf(count));
-                        editText1.setText(count + "");
-                    }
-                });
                 break;
             case LEAF:
                 //设置数据
@@ -329,38 +261,16 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
             value = (EditText) convertView.findViewById(R.id.edit_value);
         }
     }
-
     /**
-     * 第二种布局的Holder
+     * 第四种布局的Holder
      */
-    class ViewRadioHolder {
+    class ViewLeafHolder {
         TextView name;
-        RadioButton trueBtn;
-        RadioButton falseBtn;
-        RadioGroup radioGroup;
+        LinearLayout layoutInfo;
 
-        public ViewRadioHolder(View convertView) {
+        public ViewLeafHolder(View convertView) {
             name = (TextView) convertView.findViewById(R.id.text_name);
-            radioGroup = (RadioGroup) convertView.findViewById(R.id.radiogroup);
-            trueBtn = (RadioButton) convertView.findViewById(R.id.radio1);
-            falseBtn = (RadioButton) convertView.findViewById(R.id.radio2);
-        }
-    }
-
-    /**
-     * 第三种布局的Holder
-     */
-    class ViewCountHolder {
-        TextView name;
-        TextView add;
-        TextView sub;
-        EditText value;
-
-        public ViewCountHolder(View convertView) {
-            name = (TextView) convertView.findViewById(R.id.text_name);
-            add = (TextView) convertView.findViewById(R.id.text_add);
-            sub = (TextView) convertView.findViewById(R.id.text_sub);
-            value = (EditText) convertView.findViewById(R.id.edit_value);
+            layoutInfo = (LinearLayout) convertView.findViewById(R.id.layout_info);
         }
     }
 
@@ -375,18 +285,7 @@ public class EquipmentLayoutAdapter extends BaseAdapter {
         }
     }
 
-    /**
-     * 第四种布局的Holder
-     */
-    class ViewLeafHolder {
-        TextView name;
-        LinearLayout layoutInfo;
 
-        public ViewLeafHolder(View convertView) {
-            name = (TextView) convertView.findViewById(R.id.text_name);
-            layoutInfo = (LinearLayout) convertView.findViewById(R.id.layout_info);
-        }
-    }
 
     @Override
     public boolean areAllItemsEnabled() {

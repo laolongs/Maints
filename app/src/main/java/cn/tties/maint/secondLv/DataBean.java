@@ -1,5 +1,9 @@
 package cn.tties.maint.secondLv;
 
+import java.util.List;
+
+import cn.tties.maint.bean.EquipmentLayoutBean;
+
 /**
  * Created by li on 2018/5/11
  * description：
@@ -17,8 +21,24 @@ public class DataBean {
     private String ID;
     private String parentLeftTxt;
     private String parentRightTxt;
-    private String childLeftTxt;
-    private String childRightTxt;
+    private List<EquipmentLayoutBean> bean;
+    private int itemid;
+
+    public int getItemid() {
+        return itemid;
+    }
+
+    public void setItemid(int itemid) {
+        this.itemid = itemid;
+    }
+
+    public List<EquipmentLayoutBean> getBean() {
+        return bean;
+    }
+
+    public void setBean(List<EquipmentLayoutBean> bean) {
+        this.bean = bean;
+    }
 
     public String getParentLeftTxt() {
         return parentLeftTxt;
@@ -26,22 +46,6 @@ public class DataBean {
 
     public void setParentLeftTxt(String parentLeftTxt) {
         this.parentLeftTxt = parentLeftTxt;
-    }
-
-    public String getChildRightTxt() {
-        return childRightTxt;
-    }
-
-    public void setChildRightTxt(String childRightTxt) {
-        this.childRightTxt = childRightTxt;
-    }
-
-    public String getChildLeftTxt() {
-        return childLeftTxt;
-    }
-
-    public void setChildLeftTxt(String childLeftTxt) {
-        this.childLeftTxt = childLeftTxt;
     }
 
     public String getParentRightTxt() {

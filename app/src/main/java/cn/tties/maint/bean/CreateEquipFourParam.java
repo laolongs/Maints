@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CreateEquipFourParam {
     private Integer equIdFour;
-    private List<CreateEquipItemParam> equItemFourArr;
+    private List<CreateEquipFiveParam> equItemFourArr;
 
     public Integer getEquIdFour() {
         return equIdFour;
@@ -18,11 +18,11 @@ public class CreateEquipFourParam {
         this.equIdFour = equIdFour;
     }
 
-    public List<CreateEquipItemParam> getEquItemFourArr() {
+    public List<CreateEquipFiveParam> getEquItemFourArr() {
         return equItemFourArr;
     }
 
-    public void setEquItemFourArr(List<CreateEquipItemParam> equItemFourArr) {
+    public void setEquItemFourArr(List<CreateEquipFiveParam> equItemFourArr) {
         this.equItemFourArr = equItemFourArr;
     }
 }

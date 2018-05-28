@@ -43,6 +43,7 @@ import cn.tties.maint.bean.EventBusBean;
 import cn.tties.maint.common.EventKind;
 import cn.tties.maint.common.MyApplication;
 import cn.tties.maint.enums.ItemInputType;
+import cn.tties.maint.secondLv.DataBean;
 import cn.tties.maint.secondLv.RecyclerAdapter;
 import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.util.ToastUtil;
@@ -67,6 +68,9 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
     Integer EquipmentId;
     boolean flag;
     boolean isAdd;
+    DataBean dataBean;
+    //用于记录id位置便于回传。
+    int position;
     public EquipmentDetailsDialog(boolean isAdd,Context context, String name, List<EquipmentLayoutBean> beanList,Integer EquipmentId,boolean flag, View.OnClickListener clickListener) {
        super((Activity) context,clickListener);
         this.isAdd=isAdd;
@@ -76,12 +80,15 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         this.EquipmentId=EquipmentId;
         this.flag=flag;
     }
-    public EquipmentDetailsDialog(boolean isAdd,Context context, String name, List<EquipmentLayoutBean> beanList, View.OnClickListener clickListener) {
+    public EquipmentDetailsDialog(int eqmid,int position,DataBean dataBean,boolean isAdd, Context context, String name, List<EquipmentLayoutBean> beanList, View.OnClickListener clickListener) {
         super((Activity) context,clickListener);
         this.isAdd=isAdd;
         this.context = context;
         this.beanList=beanList;
         this.name=name;
+        this.dataBean=dataBean;
+        this.position=position;
+        this.EquipmentId=eqmid;
     }
 
     @Override
@@ -114,16 +121,25 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
             @Override
             public void onClick(View view) {
                 if(!isAdd){
-                    //刷新二级列表
+                    //刷新添加二级列表
                     EventBusBean busBean = new EventBusBean();
-                    busBean.setKind(EventKind.EVENT_COMPANY_APAPTER);
+                    busBean.setKind(EventKind.EVENT_COMPANY_ADD);
                     busBean.setMessage(EquipmentId+"");
                     busBean.setObj(AdapterD.getDataList());
                     busBean.setSuccess(flag);
+                    busBean.setNew(false);
                     busBean.setName(edit_value.getText().toString());
                     EventBus.getDefault().post(busBean);
                 }else{
-
+                    EventBusBean busBean = new EventBusBean();
+                    busBean.setKind(EventKind.EVENT_COMPANY_EDITOR);
+                    busBean.setObj(AdapterD.getDataList());
+                    busBean.setObjs(dataBean);
+                    busBean.setSuccess(true);
+                    busBean.setPosition(position);
+                    busBean.setName(edit_value.getText().toString());
+                    EventBus.getDefault().post(busBean);
+                    AdapterD.notifyDataSetChanged();
                 }
 
                 EquipmentDetailsDialog.this.dismiss();
@@ -134,7 +150,6 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
     }
     
     public class EquipmentLayoutAdapter extends BaseAdapter {
-
         public static final int EDITTEXT = 0;
         public static final int LEAF = 3;
         private Context context;

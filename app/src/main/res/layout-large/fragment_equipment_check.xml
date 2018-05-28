@@ -7,19 +7,43 @@
     android:layout_height="match_parent"
     android:background="@color/main_background"
     android:orientation="vertical">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/layout_lv1"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:orientation="vertical">
         <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
             android:id="@+id/listview_lv1_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_listview_gray" />
-
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/equipment_companyMessage"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="企业信息"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/equipment_eleConfiguration"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="200dp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="电房配置"/>
+        </LinearLayout>
+    </RelativeLayout>
     <LinearLayout
+        android:id="@+id/layout_equipment_info"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -44,7 +68,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="新建柜体"/>
+                android:text="新建"/>
             <LinearLayout
                 android:id="@+id/layout_lv2_all"
                 android:layout_width="match_parent"
@@ -237,6 +261,201 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_ele_info"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:background="@color/darkgray"
+            android:id="@+id/layout_ele_lv2"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/lv2_ele_img"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/ic_add"/>
+            <TextView
+                android:id="@+id/lv2_ele_tv"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="新建电房"/>
+            <LinearLayout
+                android:id="@+id/layout_lv2_ele_all"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:paddingEnd="4dp"
+                android:paddingStart="8dp"
+                android:paddingTop="15dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+                    <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+                        android:id="@+id/listview_ele_lv2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_listview_gray" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_lv2_ele_hite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前没有电房"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!-- 展示三级设备-->
+        <LinearLayout
+            android:visibility="gone"
+            android:gravity="center"
+            android:id="@+id/layout_lv3_ele_hite"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请选择电表或新建电表"/>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/layout_lv3_ele_all"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/main_background"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/text_ele_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="电房配置"
+                            android:textSize="20sp"
+                            android:textColor="@color/royalblue" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/main_background"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+                            <Button
+                                android:id="@+id/btn_ele_del"
+                                style="@style/form_btn_confirm"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="10dp"
+                                android:text="删除" />
+
+                            <Button
+                                android:id="@+id/btn_ele_update"
+                                style="@style/form_btn_confirm"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="10dp"
+                                android:text="修改基本信息" />
+                            <Button
+                                android:id="@+id/btn_ele_save"
+                                style="@style/form_btn_confirm"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="10dp"
+                                android:text="保存" />
+                            <Button
+                                android:id="@+id/btn_ele_editor"
+                                style="@style/form_btn_confirm"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="10dp"
+                                android:text="编辑" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_lv3_ele_message"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="基本信息"/>
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="名称"/>
+                        <TextView
+                            android:id="@+id/ele_message_name"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="psdfpdsfs"/>
+                       </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="类型"/>
+                        <TextView
+                            android:id="@+id/ele_message_type"
+                            android:layout_marginLeft="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="高压电访"/>
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="柜体/变压器"/>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/lv3_ele_message_smrecy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+                <include
+                    android:id="@+id/layout_lv3_ele_configuration"
+                    layout="@layout/layout_common_distribution" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

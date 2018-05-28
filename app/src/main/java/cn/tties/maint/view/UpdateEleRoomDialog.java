@@ -8,6 +8,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import cn.tties.maint.R;
 import cn.tties.maint.activity.EleRoomCheckFragment;
+import cn.tties.maint.activity.EquipmentCheckFragment;
 import cn.tties.maint.httpclient.result.EleRoomResult;
 
 /**
@@ -24,9 +25,9 @@ public class UpdateEleRoomDialog extends BaseCustomDialog {
     public CheckBox transformer;
     public EleRoomResult selectEleRoomResult;
 
-    private EleRoomCheckFragment mEleRoomCheckFragment;
+    private EquipmentCheckFragment mEleRoomCheckFragment;
 
-    public UpdateEleRoomDialog(EleRoomCheckFragment context, View.OnClickListener clickListener, EleRoomResult selectEleRoomResult) {
+    public UpdateEleRoomDialog(EquipmentCheckFragment context, View.OnClickListener clickListener, EleRoomResult selectEleRoomResult) {
         super(context.getActivity(), clickListener);
         this.mEleRoomCheckFragment = context;
         this.selectEleRoomResult = selectEleRoomResult;

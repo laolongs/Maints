@@ -10,18 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.tties.maint.R;
-import cn.tties.maint.bean.CommonListViewInterface;
 import cn.tties.maint.bean.EquipmentLayoutBean;
-import cn.tties.maint.entity.EquipmentEntity;
+import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
 
 /**
  * Created by chensi on 2018/1/9.
  */
-public class EquipmentCheckDetailsAdapter<T extends EquipmentLayoutBean> extends RecyclerView.Adapter<EquipmentCheckDetailsAdapter.ViewHolder> {
+public class MyEquipmentCheckEleAdapter<T extends CompanyEquipmentResult> extends RecyclerView.Adapter<MyEquipmentCheckEleAdapter.ViewHolder> {
 
-    private List<EquipmentLayoutBean> mDataList;
+    private List<T> mDataList;
 
-    public EquipmentCheckDetailsAdapter() {
+    public MyEquipmentCheckEleAdapter() {
         mDataList = new ArrayList<>();
     }
 
@@ -35,16 +34,17 @@ public class EquipmentCheckDetailsAdapter<T extends EquipmentLayoutBean> extends
     }
 
     @Override
-    public EquipmentCheckDetailsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new EquipmentCheckDetailsAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_equipmentcheckele_item, parent, false));
+    public MyEquipmentCheckEleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new MyEquipmentCheckEleAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_equipmentcheckele_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(EquipmentCheckDetailsAdapter.ViewHolder holder, int position) {
-        holder.setData(mDataList.get(position));
+    public void onBindViewHolder(MyEquipmentCheckEleAdapter.ViewHolder holder, int position) {
+        final T item = mDataList.get(position);
+        holder.setData(item);
     }
 
-    public EquipmentLayoutBean getItem(int position) {
+    public T getItem(int position) {
         if (mDataList == null || mDataList.size() <= position) {
             return null;
         }
@@ -59,8 +59,8 @@ public class EquipmentCheckDetailsAdapter<T extends EquipmentLayoutBean> extends
             textName = (TextView) itemView.findViewById(R.id.text_name);
         }
 
-        public void setData(EquipmentLayoutBean title) {
-            this.textName.setText(title.getTextName());
+        public void setData(T title) {
+            this.textName.setText(title.getItemName());
         }
     }
     public void remove(){

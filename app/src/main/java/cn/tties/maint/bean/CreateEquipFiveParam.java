@@ -4,8 +4,9 @@ package cn.tties.maint.bean;
  * Created by Justin on 2018/1/11.
  */
 
-public class CreateEquipTwoParam {
+import java.util.List;
 
+public class CreateEquipFiveParam {
     private String equItemContent;
     private Integer equItemId;
 

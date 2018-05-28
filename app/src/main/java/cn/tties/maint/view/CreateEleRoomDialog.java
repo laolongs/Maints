@@ -8,6 +8,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import cn.tties.maint.R;
 import cn.tties.maint.activity.EleRoomCheckFragment;
+import cn.tties.maint.activity.EquipmentCheckFragment;
 
 /**
  * 创建电房弹框
@@ -22,11 +23,11 @@ public class CreateEleRoomDialog extends BaseCustomDialog {
     public CheckBox lowRoom;
     public CheckBox transformer;
 
-    private EleRoomCheckFragment mEleRoomCheckFragment;
+    private EquipmentCheckFragment equipmentCheckFragment;
 
-    public CreateEleRoomDialog(EleRoomCheckFragment eleRoomCheckFragment, View.OnClickListener clickListener) {
-        super(eleRoomCheckFragment.getActivity(), clickListener);
-        this.mEleRoomCheckFragment = eleRoomCheckFragment;
+    public CreateEleRoomDialog(EquipmentCheckFragment equipmentCheckFragment, View.OnClickListener clickListener) {
+        super(equipmentCheckFragment.getActivity(), clickListener);
+        this.equipmentCheckFragment = equipmentCheckFragment;
     }
 
     @Override
@@ -43,6 +44,6 @@ public class CreateEleRoomDialog extends BaseCustomDialog {
 
     @Override
     public void onValidationSucceeded() {
-        this.mEleRoomCheckFragment.createEleRoom();
+        this.equipmentCheckFragment.createEleRoom();
     }
 }

@@ -23,6 +23,16 @@ public class DataBean {
     private String parentRightTxt;
     private List<EquipmentLayoutBean> bean;
     private int itemid;
+    //记录是否叶结点
+    private boolean isLeaf;
+
+    public boolean isLeaf() {
+        return isLeaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        isLeaf = leaf;
+    }
 
     public int getItemid() {
         return itemid;
@@ -87,4 +97,5 @@ public class DataBean {
     public void setID(String ID) {
         this.ID = ID;
     }
+
 }

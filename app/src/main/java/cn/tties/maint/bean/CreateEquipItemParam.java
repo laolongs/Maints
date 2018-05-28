@@ -1,26 +1,47 @@
 package cn.tties.maint.bean;
 
+import java.util.List;
+
 /**
  * Created by Justin on 2018/1/11.
  */
 
 public class CreateEquipItemParam {
-    private Integer equItemId;
-    private String equItemContent;
+    private Integer equId;
+    private String equName;
 
-    public Integer getEquItemId() {
-        return equItemId;
+    private List<CreateEquipTwoParam> comItemThree;
+    private List<CreateEquipFourParam> equArrFour;
+
+    public Integer getEquId() {
+        return equId;
     }
 
-    public void setEquItemId(Integer equItemId) {
-        this.equItemId = equItemId;
+    public void setEquId(Integer equId) {
+        this.equId = equId;
     }
 
-    public String getEquItemContent() {
-        return equItemContent;
+    public String getEquName() {
+        return equName;
     }
 
-    public void setEquItemContent(String equItemContent) {
-        this.equItemContent = equItemContent;
+    public void setEquName(String equName) {
+        this.equName = equName;
+    }
+
+    public List<CreateEquipFourParam> getEquArrFour() {
+        return equArrFour;
+    }
+
+    public void setEquArrFour(List<CreateEquipFourParam> equArrFour) {
+        this.equArrFour = equArrFour;
+    }
+
+    public List<CreateEquipTwoParam> getComItemThree() {
+        return comItemThree;
+    }
+
+    public void setComItemThree(List<CreateEquipTwoParam> comItemThree) {
+        this.comItemThree = comItemThree;
     }
 }

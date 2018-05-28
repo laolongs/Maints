@@ -92,7 +92,7 @@
     </style>
 
     <style name="form_btn_confirm">
-        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:background">@drawable/selector_btn_confirm_click</item>

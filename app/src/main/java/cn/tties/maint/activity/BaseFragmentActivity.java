@@ -2,6 +2,7 @@ package cn.tties.maint.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -11,12 +12,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.x;
 
 import cn.tties.maint.bean.EventBusBean;
+import cn.tties.maint.common.EventKind;
+import cn.tties.maint.util.ToastUtil;
 
 /**
  * Created by wyouflf on 15/11/4.
  */
 public class BaseFragmentActivity extends FragmentActivity {
-
+    private static final String TAG = "BaseFragmentActivity";
+    //公司电表ID
+    protected Integer curEleId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +44,6 @@ public class BaseFragmentActivity extends FragmentActivity {
         ActivityCollector.removeActivity(this);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(EventBusBean bean) {
-    }
-
     public void oneActivityDo() {
         onResume();
     }
@@ -52,4 +53,8 @@ public class BaseFragmentActivity extends FragmentActivity {
         }
         return String.valueOf(str);
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(EventBusBean bean) {
+    }
+
 }

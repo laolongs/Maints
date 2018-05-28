@@ -145,23 +145,23 @@ public class EleRoomCheckFragment extends BaseEleAccountFragment {
     }
 
     protected void lv2DownListViewClick(CommonListViewInterface bean) {
-        createEleRoomDialog = new CreateEleRoomDialog(EleRoomCheckFragment.this, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createEleRoomDialog.validator.validate();
-            }
-        });
-        createEleRoomDialog.show();
+//        createEleRoomDialog = new CreateEleRoomDialog(EleRoomCheckFragment.this, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                createEleRoomDialog.validator.validate();
+//            }
+//        });
+//        createEleRoomDialog.show();
     }
 
     private void intoUpdateEleRoom(EleRoomResult eleRoomResult) {
-        updateEleRoomDialog = new UpdateEleRoomDialog(EleRoomCheckFragment.this, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateEleRoomDialog.validator.validate();
-            }
-        }, eleRoomResult);
-        updateEleRoomDialog.show();
+//        updateEleRoomDialog = new UpdateEleRoomDialog(EleRoomCheckFragment.this, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                updateEleRoomDialog.validator.validate();
+//            }
+//        }, eleRoomResult);
+//        updateEleRoomDialog.show();
     }
 
     /**

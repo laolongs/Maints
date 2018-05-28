@@ -10,8 +10,8 @@ import java.util.List;
 
 public enum AmmeterType {
 
-    BASE_INFO(1, "基础信息"),
-    ACCOUNT(2, "开通账户"),
+//    BASE_INFO(1, "基础信息"),
+//    ACCOUNT(2, "开通账户"),
     COLLECTION_POINT(3, "采集点配置"),
     TOTAL_ELECTRIC(4, "总电量配置");
     private final Integer value;

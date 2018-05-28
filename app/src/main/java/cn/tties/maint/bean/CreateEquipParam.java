@@ -11,10 +11,13 @@ public class CreateEquipParam {
     private Integer equipmentId;
     private Integer eleAccountId;
     private Integer pid;
-    private CreateBoxBody boxBody;
-    private List<CreateEquipTwoParam> equNameArrTwo;
-    private List<CreateEquipItemParam> comItemThree;
-    private List<CreateEquipFourParam> equArrFour;
+//    private CreateBoxBody boxBody;
+    private List<CreateBoxBody> boxBody;
+
+//    private List<CreateEquipTwoParam> equNameArrTwo;
+    private List<CreateEquipItemParam> equNameArrThree;
+    private List<CreateEquipTwoParam> comItemTwo;
+//    private List<CreateEquipFourParam> equArrFour;
 
     public String getComEquName() {
         return comEquName;
@@ -48,35 +51,27 @@ public class CreateEquipParam {
         this.pid = pid;
     }
 
-    public CreateBoxBody getBoxBody() {
+    public List<CreateBoxBody> getBoxBody() {
         return boxBody;
     }
 
-    public void setBoxBody(CreateBoxBody boxBody) {
+    public void setBoxBody(List<CreateBoxBody> boxBody) {
         this.boxBody = boxBody;
     }
 
-    public List<CreateEquipTwoParam> getEquNameArrTwo() {
-        return equNameArrTwo;
+    public List<CreateEquipItemParam> getEquNameArrThree() {
+        return equNameArrThree;
     }
 
-    public void setEquNameArrTwo(List<CreateEquipTwoParam> equNameArrTwo) {
-        this.equNameArrTwo = equNameArrTwo;
+    public void setEquNameArrThree(List<CreateEquipItemParam> equNameArrThree) {
+        this.equNameArrThree = equNameArrThree;
     }
 
-    public List<CreateEquipItemParam> getComItemThree() {
-        return comItemThree;
+    public List<CreateEquipTwoParam> getComItemTwo() {
+        return comItemTwo;
     }
 
-    public void setComItemThree(List<CreateEquipItemParam> comItemThree) {
-        this.comItemThree = comItemThree;
-    }
-
-    public List<CreateEquipFourParam> getEquArrFour() {
-        return equArrFour;
-    }
-
-    public void setEquArrFour(List<CreateEquipFourParam> equArrFour) {
-        this.equArrFour = equArrFour;
+    public void setComItemTwo(List<CreateEquipTwoParam> comItemTwo) {
+        this.comItemTwo = comItemTwo;
     }
 }

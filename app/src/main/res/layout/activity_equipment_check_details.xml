@@ -106,6 +106,7 @@
                 android:layout_height="wrap_content"
                 android:text="高压开关柜"/>
             <TextView
+                android:id="@+id/eq_de_CabinetTV"
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,6 +123,7 @@
                     android:id="@+id/eq_de_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="是"
                     android:textColor="@color/gray" />
                 <RadioButton
@@ -129,7 +131,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:checked="true"
                     android:text="否"
                     android:textColor="@color/gray" />
             </RadioGroup>

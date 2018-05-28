@@ -84,7 +84,6 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
         mTabHashMap = new HashMap<>();
         mFristChecked = false;
         new VersionSend().send(new VersionParams(), false);
-        initView();
         //获取公司信息
         CompanyParams params = new CompanyParams();
         params.setMaintStaffId(MyApplication.getUserInfo().getStaffId());
@@ -93,6 +92,8 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
         //展示公司信息并点击切换
         initEleIdListView();
         initCompanyList();
+        //添加对应得fragment
+        initView();
     }
     private void initCompanyList() {
         companyList = new ArrayList<>();
@@ -113,6 +114,10 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
             getEleAccountList();
         }
         mChangeCompanyId = -1;
+        EventBusBean busBean = new EventBusBean();
+        busBean.setKind(EventKind.EVENT_COMPANY_COMPANYBEAN);
+        busBean.setObjs(curCompany);
+        EventBus.getDefault().post(busBean);
     }
     protected void getEleAccountList() {
         eleAccountList = curCompany.getEleAccountList();
@@ -123,6 +128,7 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
             EventBusBean busBean = new EventBusBean();
             busBean.setKind(EventKind.EVENT_COMPANY_CHANGEID);
             busBean.setObj(curEleId);
+            busBean.setObjs(curCompany);
             busBean.setMessage(curEleNo);
             EventBus.getDefault().post(busBean);
         } else {
@@ -172,20 +178,10 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
                     busBean.setObj(curEleId);
                     busBean.setMessage(curEleNo);
                     EventBus.getDefault().post(busBean);
-//                    changeEleAccountNextStep();
                 }
             }
         });
     }
-
-//    protected void changeEleAccountNextStep() {
-//        List<EquipmentEntity> dataList = EquipmentDao.getInstance().queryByLevel(1);
-//        rootAdapter.setmDataList(dataList);
-//        rootAdapter.notifyDataSetChanged();
-
-//    }
-
-
     /**
      * 初始化组件
      */

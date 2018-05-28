@@ -9,7 +9,7 @@ import java.util.List;
 public class CreateBoxBody {
     private Integer boxBodyId;
 
-    private List<CreateEquipItemParam> boxBodyEquItemArr;
+    private List<CreateEquipFiveParam> boxBodyEquItemArr;
 
     public Integer getBoxBodyId() {
         return boxBodyId;
@@ -19,11 +19,11 @@ public class CreateBoxBody {
         this.boxBodyId = boxBodyId;
     }
 
-    public List<CreateEquipItemParam> getBoxBodyEquItemArr() {
+    public List<CreateEquipFiveParam> getBoxBodyEquItemArr() {
         return boxBodyEquItemArr;
     }
 
-    public void setBoxBodyEquItemArr(List<CreateEquipItemParam> boxBodyEquItemArr) {
+    public void setBoxBodyEquItemArr(List<CreateEquipFiveParam> boxBodyEquItemArr) {
         this.boxBodyEquItemArr = boxBodyEquItemArr;
     }
 }

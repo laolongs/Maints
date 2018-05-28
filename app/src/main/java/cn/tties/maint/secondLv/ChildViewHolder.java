@@ -50,6 +50,7 @@ public class ChildViewHolder extends BaseViewHolder implements View.OnClickListe
         super(itemView);
         this.mContext = context;
         this.view = itemView;
+
     }
 
     public void bindView(final DataBean dataBean, final int pos,RecyclerAdapter recyclerAdapter){
@@ -69,6 +70,7 @@ public class ChildViewHolder extends BaseViewHolder implements View.OnClickListe
         child_compile.setOnClickListener(this);
         child_delete.setOnClickListener(this);
         child_new.setOnClickListener(this);
+
     }
 
     @Override
@@ -76,19 +78,17 @@ public class ChildViewHolder extends BaseViewHolder implements View.OnClickListe
         switch (view.getId()){
             //编辑
             case R.id.re_item_child_compile:
-                EquipmentDetailsDialog dialog = new EquipmentDetailsDialog(true,mContext, dataBean.getBean().get(0).getTitleName(), dataBean.getBean(),new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                });
-                dialog.show();
+//                EquipmentDetailsDialog dialog = new EquipmentDetailsDialog(dataBean,true,mContext, dataBean.getBean().get(0).getTitleName(), dataBean.getBean(),new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                    }
+//                });
+//                dialog.show();
                 break;
             //删除
             case R.id.re_item_child_delete:
                 ToastUtil.showShort(mContext,""+position);
-                recyclerAdapter.removeparent(position);
-                recyclerAdapter.remove(position-1);
                 recyclerAdapter.notifyDataSetChanged();
                 falg=true;
                 EventBusBean busBean = new EventBusBean();
@@ -98,7 +98,20 @@ public class ChildViewHolder extends BaseViewHolder implements View.OnClickListe
                 break;
             //新建 就是复制当前条目
             case R.id.re_item_child_new:
-
+                EventBusBean busBeans = new EventBusBean();
+                busBeans.setKind(EventKind.EVENT_COMPANY_ADD);
+                busBeans.setMessage(dataBean.getBean().get(0).getItemId()+"");
+                busBeans.setObj(dataBean.getBean());
+                busBeans.setAdd(true);
+                busBeans.setPosition(position);
+                busBeans.setSuccess(dataBean.getBean().get(0).isLeaf());
+                busBeans.setName(dataBean.getBean().get(0).getTitleName());
+                EventBus.getDefault().post(busBeans);
+                Log.i(TAG, "onClick: "+ dataBean.getBean().get(0).getItemId());
+                Log.i(TAG, "onClick: "+ dataBean.getBean().get(0).isLeaf());
+                dataBean.setExpand(true);
+//                recyclerAdapter.isclose(position);
+                recyclerAdapter.notifyDataSetChanged();
                 break;
         }
     }

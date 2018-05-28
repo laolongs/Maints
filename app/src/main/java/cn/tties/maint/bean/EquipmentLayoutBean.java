@@ -17,6 +17,8 @@ public class EquipmentLayoutBean {
     private Integer itemId;
     private Integer dbId;
     private Boolean check;
+    private String ID;
+    private boolean isLeaf;
     private List<EquipmentLayoutBean> childrenList;
     //用于存父级的name
     private String titleName;
@@ -106,5 +108,21 @@ public class EquipmentLayoutBean {
 
     public void setInputType(int inputType) {
         this.inputType = inputType;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public boolean isLeaf() {
+        return isLeaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        isLeaf = leaf;
     }
 }

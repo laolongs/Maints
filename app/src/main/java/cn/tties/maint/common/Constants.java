@@ -24,8 +24,9 @@ import cn.tties.maint.widget.TabClass;
  *
  */
 public class Constants {
-    public static final String BASE_URL = "http://192.168.2.220:8683/";//测试环境运维
-//    public static final String BASE_URL = "http://192.168.2.127:8080/";//本地
+//    public static final String BASE_URL = "http://192.168.2.220:8683/";//测试环境运维
+    public static final String BASE_URL = "http://192.168.2.106:8080/";//本地
+//    public static final String BASE_URL = "http://192.168.2.116:8081/";//康维杰
 //    public static final String BASE_URL = "http://192.168.2.49:8080/";//李震
 //    public static final String BASE_URL = "http://maint.tties.cn/";
     public static final String API_URL = BASE_URL + "api/";
@@ -52,13 +53,13 @@ public class Constants {
         //运维人员
         menuList.add(new TabClass("equipmentMgr", EquipmentCheckFragment.class, "管理档案", R.mipmap.ic_equipment, R.mipmap.ic_equipment_selected));
         //运维人员
-//        menuList.add(new TabClass("eleRoomMgr", EleRoomCheckFragment.class, "管理电房", R.mipmap.ic_room, R.mipmap.ic_room_selected));
+        menuList.add(new TabClass("eleRoomMgr", EleRoomCheckFragment.class, "管理电房", R.mipmap.ic_room, R.mipmap.ic_room_selected));
         //运维人员
 //        menuList.add(new TabClass("patrolMgr", PatrolFragment.class, "电房巡视", R.mipmap.ic_room_patrol, R.mipmap.ic_room_patrol_selected));
         //运维人员
 //        menuList.add(new TabClass("overhaul", OverhaulFragment.class, "电房检修", R.mipmap.ic_room_overhaul, R.mipmap.ic_room_overhaul_selected));
         //运维人员
-//        menuList.add(new TabClass("ammeterSettingMgr", AmmeterFragment.class, "电表配置", R.mipmap.ic_ele_meter_setting, R.mipmap.ic_ele_meter_setting_selected));
+        menuList.add(new TabClass("ammeterSettingMgr", AmmeterFragment.class, "电表配置", R.mipmap.ic_ele_meter_setting, R.mipmap.ic_ele_meter_setting_selected));
         //运维人员
         menuList.add(new TabClass("questionMgr", QuestionFragment.class, "问题处理", R.mipmap.ic_question, R.mipmap.ic_question_selected));
         menuList.add(new TabClass("settingMgr", SettingFragment.class, "设置", R.mipmap.ic_setting, R.mipmap.ic_setting_selected));

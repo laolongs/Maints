@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import cn.tties.maint.bean.EventBusBean;
 import cn.tties.maint.common.EventKind;
+import cn.tties.maint.httpclient.result.CompanyResult;
 import cn.tties.maint.util.DateUtils;
 import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.util.ToastUtil;
@@ -33,6 +34,8 @@ import cn.tties.maint.widget.CustomDatePicker;
  * Created by wyouflf on 15/11/4.
  */
 public class BaseFragment extends Fragment implements Validator.ValidationListener {
+    //用于存储公司id
+    public CompanyResult curCompany;
     //工单列表要跳转的公司ID
     protected int mChangeCompanyId = -1;
     //公司电表ID
@@ -74,10 +77,6 @@ public class BaseFragment extends Fragment implements Validator.ValidationListen
             EventBus.getDefault().register(this);
         }
     }
-
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onEventMainThread(EventBusBean bean) {
-//    }
 
     @Override
     public void onValidationSucceeded() {
@@ -151,19 +150,25 @@ public class BaseFragment extends Fragment implements Validator.ValidationListen
     public void changeEleAccountNextStep(){};
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(EventBusBean bean) {
-//        if (bean.getKind().equals(EventKind.EVENT_COMPANYLIST)) {
-//            initCompanyList();
-//        }
         if (bean.getKind().equals(EventKind.EVENT_COMPANY_CHANGEID)) {
             //电号ID
             int result = bean.getObj();
             //总电量
             String message = bean.getMessage();
+            curCompany = bean.getObjs();
             this.setCurEleId(result);
             this.setCurEleNo(message);
-            ToastUtil.showShort(getActivity(),""+result);
+//            ToastUtil.showShort(getActivity(),""+result);
             changeEleAccountNextStep();
 //            getEleAccountList();
         }
+        //公司id  //公司bean 便于获取到当前得公司ID;
+        if (bean.getKind().equals(EventKind.EVENT_COMPANY_COMPANYBEAN)) {
+            curCompany = bean.getObjs();
+            ToastUtil.showShort(getActivity(),""+curCompany.getCompanyId());
+        }
+    }
+    public  int  setCurEleId(){
+        return curEleId;
     }
 }

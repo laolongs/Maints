@@ -25,6 +25,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.tties.maint.R;
+import cn.tties.maint.activity.EquipmentCheckFragment;
+import cn.tties.maint.adapter.EquiRecyclerAdapter;
 import cn.tties.maint.bean.EquipmentLayoutBean;
 import cn.tties.maint.bean.EventBusBean;
 import cn.tties.maint.common.EventKind;
@@ -38,8 +40,8 @@ import cn.tties.maint.widget.CustomDatePicker;
  * Created by Justin on 2018/1/12.
  */
 
-public class EquipmentDetailsDialog extends BaseCustomDialog {
-    private static final String TAG = "EquipmentDetailsDialog";
+public class MyEquipmentDetailsDialog extends BaseCustomDialog {
+    private static final String TAG = "MyEquipmentDetailsDialog";
     public Context context;
     private  List<EquipmentLayoutBean> beanList;
     public ListView ListView;
@@ -54,9 +56,10 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
     boolean flag;
     boolean isAdd;
     DataBean dataBean;
+    OnClick onClick;
     //用于记录id位置便于回传。
     int position;
-    public EquipmentDetailsDialog(boolean isAdd,Context context, String name, List<EquipmentLayoutBean> beanList,Integer EquipmentId,boolean flag, View.OnClickListener clickListener) {
+    public MyEquipmentDetailsDialog(boolean isAdd, Context context, String name, List<EquipmentLayoutBean> beanList, Integer EquipmentId, boolean flag, View.OnClickListener clickListener) {
        super((Activity) context,clickListener);
         this.isAdd=isAdd;
         this.context = context;
@@ -65,7 +68,10 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         this.EquipmentId=EquipmentId;
         this.flag=flag;
     }
-    public EquipmentDetailsDialog(int eqmid,int position,DataBean dataBean,boolean isAdd, Context context, String name, List<EquipmentLayoutBean> beanList, View.OnClickListener clickListener) {
+    public void setOnClick(OnClick onClick){
+        this.onClick=onClick;
+    }
+    public MyEquipmentDetailsDialog(int eqmid, int position, DataBean dataBean, boolean isAdd, Context context, String name, List<EquipmentLayoutBean> beanList, View.OnClickListener clickListener) {
         super((Activity) context,clickListener);
         this.isAdd=isAdd;
         this.context = context;
@@ -93,7 +99,7 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EquipmentDetailsDialog.this.dismiss();
+                MyEquipmentDetailsDialog.this.dismiss();
             }
         });
         if(!isAdd){
@@ -106,28 +112,15 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
             @Override
             public void onClick(View view) {
                 if(!isAdd){
-                    //刷新添加二级列表
-                    EventBusBean busBean = new EventBusBean();
-                    busBean.setKind(EventKind.EVENT_COMPANY_ADD);
-                    busBean.setMessage(EquipmentId+"");
-                    busBean.setObj(AdapterD.getDataList());
-                    busBean.setSuccess(flag);
-                    busBean.setNew(false);
-                    busBean.setName(edit_value.getText().toString());
-                    EventBus.getDefault().post(busBean);
                 }else{
-                    EventBusBean busBean = new EventBusBean();
-                    busBean.setKind(EventKind.EVENT_COMPANY_EDITOR);
-                    busBean.setObj(AdapterD.getDataList());
-                    busBean.setObjs(dataBean);
-                    busBean.setSuccess(true);
-                    busBean.setPosition(position);
-                    busBean.setName(edit_value.getText().toString());
-                    EventBus.getDefault().post(busBean);
-                    AdapterD.notifyDataSetChanged();
+                    DataBean dataBean=new DataBean();
+                    List<EquipmentLayoutBean> dataList = AdapterD.getDataList();
+                    dataBean.setBean(dataList);
+                    dataBean.setParentLeftTxt(edit_value.getText().toString());
+                    onClick.OnClickListener(position,dataBean);
+//
                 }
-
-                EquipmentDetailsDialog.this.dismiss();
+                MyEquipmentDetailsDialog.this.dismiss();
             }
         });
         title.setText(name);
@@ -435,5 +428,7 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
             cuys.show(editText.getText().toString());
         }
     }
-
+    public interface  OnClick{
+        public void OnClickListener(int pos,DataBean dataBean);
+    }
 }

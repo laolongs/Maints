@@ -59,7 +59,7 @@ public class Constants {
         //运维人员
 //        menuList.add(new TabClass("overhaul", OverhaulFragment.class, "电房检修", R.mipmap.ic_room_overhaul, R.mipmap.ic_room_overhaul_selected));
         //运维人员
-        menuList.add(new TabClass("ammeterSettingMgr", AmmeterFragment.class, "电表配置", R.mipmap.ic_ele_meter_setting, R.mipmap.ic_ele_meter_setting_selected));
+//        menuList.add(new TabClass("ammeterSettingMgr", AmmeterFragment.class, "电表配置", R.mipmap.ic_ele_meter_setting, R.mipmap.ic_ele_meter_setting_selected));
         //运维人员
         menuList.add(new TabClass("questionMgr", QuestionFragment.class, "问题处理", R.mipmap.ic_question, R.mipmap.ic_question_selected));
         menuList.add(new TabClass("settingMgr", SettingFragment.class, "设置", R.mipmap.ic_setting, R.mipmap.ic_setting_selected));

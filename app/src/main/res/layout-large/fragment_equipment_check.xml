@@ -139,11 +139,8 @@
                 android:layout_height="wrap_content"
                 android:text="当前没有任何设备"/>
         </LinearLayout>
+
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
                 android:id="@+id/layout_lv3_all"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -246,8 +243,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"
-                            android:text="2"/>
+                            android:text="0"/>
                     </LinearLayout>
+                    <ListView
+                        android:id="@+id/lv3_leaf_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </ListView>
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/list_detail"
                         android:layout_width="match_parent"
@@ -257,8 +260,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout

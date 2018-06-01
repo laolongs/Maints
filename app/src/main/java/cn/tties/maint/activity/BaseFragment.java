@@ -22,9 +22,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import cn.tties.maint.bean.EquipmentLayoutBean;
 import cn.tties.maint.bean.EventBusBean;
 import cn.tties.maint.common.EventKind;
 import cn.tties.maint.httpclient.result.CompanyResult;
+import cn.tties.maint.secondLv.DataBean;
 import cn.tties.maint.util.DateUtils;
 import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.util.ToastUtil;
@@ -45,7 +47,6 @@ public class BaseFragment extends Fragment implements Validator.ValidationListen
     private boolean injected = false;
 
     protected Validator validator;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         injected = true;
@@ -167,6 +168,7 @@ public class BaseFragment extends Fragment implements Validator.ValidationListen
             curCompany = bean.getObjs();
             ToastUtil.showShort(getActivity(),""+curCompany.getCompanyId());
         }
+
     }
     public  int  setCurEleId(){
         return curEleId;

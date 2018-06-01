@@ -50,6 +50,7 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
 
     public TextView lv2_details_num;
 
+    public ListView lv3_leaf_list;
     public RecyclerView recy_detail;
     //电房-----------------------------------------------------------
     public LinearLayout layout_ele_info;
@@ -110,6 +111,7 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
         this.lv2_details_iscabinet = (TextView) view.findViewById(R.id.lv2_details_iscabinet);
         this.lv2_details_name = (TextView) view.findViewById(R.id.lv2_details_name);
         this.lv2_details_num = (TextView) view.findViewById(R.id.lv2_details_num);
+        this.lv3_leaf_list = (ListView) view.findViewById(R.id.lv3_leaf_list);
         this.recy_detail = (RecyclerView) view.findViewById(R.id.list_detail);
         //电房-----------------------------------------------------------------
         this.layout_ele_info = (LinearLayout) view.findViewById(R.id.layout_ele_info);

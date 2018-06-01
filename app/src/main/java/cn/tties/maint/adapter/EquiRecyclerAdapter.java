@@ -1,4 +1,4 @@
-package cn.tties.maint.secondLv;
+package cn.tties.maint.adapter;
 
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
@@ -17,18 +17,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cn.tties.maint.R;
-import cn.tties.maint.adapter.MyEquipmentLayout_RecyAdapter;
 import cn.tties.maint.bean.EquipmentLayoutBean;
 import cn.tties.maint.bean.EventBusBean;
 import cn.tties.maint.common.EventKind;
-import cn.tties.maint.util.ToastUtil;
+import cn.tties.maint.secondLv.BaseViewHolder;
+import cn.tties.maint.secondLv.DataBean;
 import cn.tties.maint.view.EquipmentDetailsDialog;
+import cn.tties.maint.view.MyEquipmentDetailsDialog;
 
 /**
  * Created by li on 2018/5/11
@@ -36,8 +37,9 @@ import cn.tties.maint.view.EquipmentDetailsDialog;
  * author：guojlli
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
-    private static final String TAG = "RecyclerAdapter";
+public class EquiRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+    private static final String TAG = "EquiRecyclerAdapter";
+    private MyEquipmentDetailsDialog dialog;
     private Context context;
     private List<DataBean> dataBeanList;
     private LayoutInflater mInflater;
@@ -53,12 +55,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      * 标记展开的item
      */
     private int opened = -1;
-    public RecyclerAdapter(Context context) {
+    OnClickTextViewData listener;
+    public EquiRecyclerAdapter(Context context) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
     }
     public void setDataBeanList(List<DataBean> dataBeanList){
         this.dataBeanList = dataBeanList;
+    }
+    public void setOnClickTextViewData(OnClickTextViewData listener){
+        this.listener=listener;
     }
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -75,12 +81,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public void onBindViewHolder(BaseViewHolder holder, final int position) {
         parentViewHolder = (ParentViewHolder) holder;
-//        if(!flag){
-            parentViewHolder.bindView(position,dataBeanList.get(position));
-//        }else{
-//            parentViewHolder.bindView(position,databean);
-//            flag=false;
-//        }
+        parentViewHolder.bindView(position,dataBeanList.get(position));
 
     }
     @Override
@@ -99,6 +100,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         public LinearLayout child_compile;
         public LinearLayout child_delete;
         public LinearLayout child_new;
+
+
         public ParentViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
@@ -120,7 +123,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             //新建
             child_new = (LinearLayout) view.findViewById(R.id.re_item_child_new);
             recy.setLayoutManager(new GridLayoutManager(context,2));
-            MyEquipmentLayout_RecyAdapter adapter=new MyEquipmentLayout_RecyAdapter(context,dataBean.getBean());
+            MyEquipmentLayout_EquiRecyAdapter adapter=new MyEquipmentLayout_EquiRecyAdapter(context,dataBean.getBean());
             recy.setAdapter(adapter);
             containerLayout.setOnClickListener(this);
             child_compile.setOnClickListener(this);
@@ -140,6 +143,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 parentRightView.setText("详情");
                 rotationExpandIcon(90, 0);
             }
+
         }
         @Override
         public void onClick(View view) {
@@ -158,13 +162,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     break;
                     //编辑
                 case R.id.re_item_child_compile:
-                    EquipmentDetailsDialog dialog = new EquipmentDetailsDialog(data.getItemid(),position,data,true,context, data.getParentLeftTxt(), data.getBean(),new View.OnClickListener() {
+                    dialog = new MyEquipmentDetailsDialog(data.getItemid(),position,data,true,context, data.getParentLeftTxt(), data.getBean(),new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                         }
                     });
                     dialog.show();
+                    //接口回调传值回来
+                    dialog.setOnClick(new MyEquipmentDetailsDialog.OnClick() {
+                        @Override
+                        public void OnClickListener(int pos, DataBean dataBean) {
+                            dataBeanList.set(pos,dataBean);
+                            notifyDataSetChanged();
+                        }
+                    });
                     break;
                 //删除
                 case R.id.re_item_child_delete:
@@ -174,14 +186,27 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     break;
                 //新建
                 case R.id.re_item_child_new:
-                    EventBusBean busBeans = new EventBusBean();
-                    busBeans.setKind(EventKind.EVENT_COMPANY_ADD);
-                    busBeans.setMessage(data.getItemid()+"");
-                    busBeans.setObj(data.getBean());
-                    busBeans.setSuccess(data.isLeaf());
-                    busBeans.setNew(true);
-                    busBeans.setName(data.getParentLeftTxt());
-                    EventBus.getDefault().post(busBeans);
+                    DataBean dataBean = dataBeanList.get(getAdapterPosition());
+                    String parentLeftTxt = dataBean.getParentLeftTxt();
+                    List<EquipmentLayoutBean> bean = dataBean.getBean();
+                    int itemid = dataBean.getItemid();
+                    DataBean dataBean1=new DataBean();
+                    if(parentLeftTxt.contains("复制")){
+                        dataBean1.setParentLeftTxt(parentLeftTxt);
+                    }else{
+                        dataBean1.setParentLeftTxt(parentLeftTxt+"复制");
+                    }
+                    dataBean1.setBean(bean);
+                    dataBean1.setItemid(itemid);
+                    dataBeanList.add(dataBean1);
+                    Collections.sort(dataBeanList, new Comparator<DataBean>() {
+                        @Override
+                        public int compare(DataBean dataBean, DataBean t1) {
+                            return  Integer.valueOf(dataBean.getItemid()).compareTo(Integer.valueOf(t1.getItemid()));
+                        }
+                    });
+                    listener.OnClickTextViewDataListener(dataBeanList.size());
+                    notifyDataSetChanged();
                     break;
             }
         }
@@ -202,15 +227,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             }
         }
     }
-    public void setEditor(int posit,DataBean dataBean){
-//        this.flag=flag;
-//        dataBeanList.add(posit,dataBean);
-//        notifyItemInserted(posit);
-//        dataBeanList.remove(posit+1);
-//        notifyDataSetChanged();
-//        this.databean=dataBean;
-        dataBeanList.set(posit,dataBean);
-        notifyDataSetChanged();
+    public interface  OnClickTextViewData{
+        public void OnClickTextViewDataListener(int text);
     }
-
 }

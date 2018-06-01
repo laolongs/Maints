@@ -12,12 +12,17 @@ public class EventKind {
     public static final String EVENT_COMPANY_COMPANYBEAN = "EVENT_COMPANY_COMPANYBEAN";
     //切换公司下得表号ID
     public static final String EVENT_COMPANY_CHANGEID = "EVENT_COMPANY_CHANGEID";
-    //更新添加过的二级列表
+    //activity创建  新建+更新添加过的二级列表
     public static final String EVENT_COMPANY_ADD = "EVENT_COMPANY_ADD";
-    //编辑过的二级列表
+    //activity创建  编辑过的二级列表
     public static final String EVENT_COMPANY_EDITOR = "EVENT_COMPANY_EDITOR";
-    //判断打开的二级详情是否关闭；
-    public static final String EVENT_COMPANY_DATAILS = "EVENT_COMPANY_DATAILS";
+
+
+    //fragment创建  新建更新添加过的二级列表
+    public static final String EVENT_FRAGMENTCOMPANY_ADD = "EVENT_FRAGMENTCOMPANY_ADD";
+    //fragment创建  编辑过的二级列表
+    public static final String EVENT_FRAGMENTCOMPANY_EDITOR = "EVENT_FRAGMENTCOMPANY_EDITOR";
+
     //检查版本
     public static final String EVENT_VERSION_SYCN = "EVENT_VERSION_SYCN";
 

@@ -24,9 +24,11 @@ import java.util.Locale;
 
 import cn.tties.maint.bean.EquipmentLayoutBean;
 import cn.tties.maint.bean.EventBusBean;
+import cn.tties.maint.common.Constants;
 import cn.tties.maint.common.EventKind;
 import cn.tties.maint.httpclient.result.CompanyResult;
 import cn.tties.maint.secondLv.DataBean;
+import cn.tties.maint.util.ACache;
 import cn.tties.maint.util.DateUtils;
 import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.util.ToastUtil;
@@ -35,18 +37,18 @@ import cn.tties.maint.widget.CustomDatePicker;
 /**
  * Created by wyouflf on 15/11/4.
  */
-public class BaseFragment extends Fragment implements Validator.ValidationListener {
+public abstract class BaseFragment extends Fragment implements Validator.ValidationListener {
     //用于存储公司id
-    public CompanyResult curCompany;
-    //工单列表要跳转的公司ID
-    protected int mChangeCompanyId = -1;
+    private CompanyResult curCompany;
     //公司电表ID
-    protected Integer curEleId;
+    private Integer curEleId;
     //公司电表电量
-    protected String curEleNo;
+    private String curEleNo;
     private boolean injected = false;
 
     protected Validator validator;
+
+    List<CompanyResult> companylist;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         injected = true;
@@ -54,20 +56,7 @@ public class BaseFragment extends Fragment implements Validator.ValidationListen
         validator.setValidationListener(this);
         return x.view().inject(this, inflater, container);
     }
-    protected Integer getCurEleId() {
-        return curEleId;
-    }
 
-    protected void  setCurEleId(int curEleId) {
-        this.curEleId=curEleId;
-    }
-    protected String getCurEleNo() {
-        return curEleNo;
-    }
-
-    protected void  setCurEleNo(String curEleNo) {
-        this.curEleNo=curEleNo;
-    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -82,9 +71,7 @@ public class BaseFragment extends Fragment implements Validator.ValidationListen
     @Override
     public void onValidationSucceeded() {
     }
-    protected void intoSelectedCompany(int companyId) {
-        this.mChangeCompanyId = companyId;
-    }
+
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
@@ -148,29 +135,23 @@ public class BaseFragment extends Fragment implements Validator.ValidationListen
         editText.setText("");
         editText.setError(null,null);
     }
-    public void changeEleAccountNextStep(){};
+    public void changeEleAccountNextSteps(Integer curEleId,String curEleNo,CompanyResult curCompany){};
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(EventBusBean bean) {
         if (bean.getKind().equals(EventKind.EVENT_COMPANY_CHANGEID)) {
             //电号ID
-            int result = bean.getObj();
+            curEleId = bean.getEleID();
+            curCompany = bean.getObj();
             //总电量
-            String message = bean.getMessage();
-            curCompany = bean.getObjs();
-            this.setCurEleId(result);
-            this.setCurEleNo(message);
-//            ToastUtil.showShort(getActivity(),""+result);
-            changeEleAccountNextStep();
-//            getEleAccountList();
+            curEleNo = bean.getMessage();
+            ToastUtil.showShort(getActivity(),""+curEleId);
+            changeEleAccountNextSteps(curEleId,curEleNo,curCompany);
         }
         //公司id  //公司bean 便于获取到当前得公司ID;
-        if (bean.getKind().equals(EventKind.EVENT_COMPANY_COMPANYBEAN)) {
-            curCompany = bean.getObjs();
-            ToastUtil.showShort(getActivity(),""+curCompany.getCompanyId());
-        }
+//        if (bean.getKind().equals(EventKind.EVENT_COMPANY_COMPANYBEAN)) {
+//            curCompany = bean.getObj();
+////            ToastUtil.showShort(getActivity(),""+curCompany.getCompanyId());
+//        }
 
-    }
-    public  int  setCurEleId(){
-        return curEleId;
     }
 }

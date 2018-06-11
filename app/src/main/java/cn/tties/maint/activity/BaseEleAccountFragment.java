@@ -152,7 +152,7 @@ public abstract class BaseEleAccountFragment extends BaseFragment {
     protected void  setCurEleNo(String curEleNo) {
         this.curEleNo=curEleNo;
     }
-//    protected abstract void changeEleAccountNextStep();
+    protected abstract void changeEleAccountNextStep();
 
     protected void initRootListView() {
         rootAdapter = new CommonSwipListViewAdapter();

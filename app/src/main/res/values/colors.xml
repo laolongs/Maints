@@ -31,8 +31,12 @@
     <color name="table_border">#cbcbcb</color>
 
     <color name="border">#e2e2e2</color>
+    <color name="btn_color">#9DAABA</color>
 
     <color name="listview_check">#FF4780C8</color>
+    <color name="lv2_check">#FE9F00</color>
+    <color name="root_check">#1B92EE</color>
+    <color name="delete_check">#FF3737</color>
     <color name="listview_text">#FF6B6B6B</color>
     <color name="listview_btn_del">#FFF97171</color>
     <color name="listview_btn_update">#FF80DC89</color>
@@ -50,7 +54,8 @@
     <color name="color5">#57C5E8</color>
 
     <color name="listview_status">#4D57C5E8</color>
-
+    <color name="common_root">#BDC8D8</color>
+    <color name="common_bg">#E9ECF3</color>
 
     <!--系统颜色 -->
     <color name="toobar_bg">#157cd3</color>

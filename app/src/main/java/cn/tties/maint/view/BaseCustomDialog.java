@@ -35,6 +35,7 @@ public class BaseCustomDialog extends Dialog implements Validator.ValidationList
 
     public Validator validator;
 
+
     public BaseCustomDialog(Activity context) {
         super(context);
         this.context = context;
@@ -106,4 +107,5 @@ public class BaseCustomDialog extends Dialog implements Validator.ValidationList
             }
         }
     }
+
 }

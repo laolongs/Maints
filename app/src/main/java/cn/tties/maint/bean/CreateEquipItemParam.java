@@ -9,9 +9,36 @@ import java.util.List;
 public class CreateEquipItemParam {
     private Integer equId;
     private String equName;
-
-    private List<CreateEquipTwoParam> comItemThree;
+    private Integer companyId;
+    private Integer companyEquipmentId;
+    private boolean flag;
+    private List<CreateEquipFiveParam> comItemThree;
     private List<CreateEquipFourParam> equArrFour;
+
+    public Integer getCompanyEquipmentId() {
+        return companyEquipmentId;
+    }
+
+    public void setCompanyEquipmentId(Integer companyEquipmentId) {
+        this.companyEquipmentId = companyEquipmentId;
+    }
+
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
+    }
 
     public Integer getEquId() {
         return equId;
@@ -37,11 +64,11 @@ public class CreateEquipItemParam {
         this.equArrFour = equArrFour;
     }
 
-    public List<CreateEquipTwoParam> getComItemThree() {
+    public List<CreateEquipFiveParam> getComItemThree() {
         return comItemThree;
     }
 
-    public void setComItemThree(List<CreateEquipTwoParam> comItemThree) {
+    public void setComItemThree(List<CreateEquipFiveParam> comItemThree) {
         this.comItemThree = comItemThree;
     }
 }

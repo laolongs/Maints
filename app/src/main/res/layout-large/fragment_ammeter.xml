@@ -5,562 +5,1254 @@
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="horizontal">
+    android:background="@color/common_bg"
+    android:orientation="vertical">
     <LinearLayout
-        android:background="@color/darkgray"
-        android:id="@+id/ammeter_info1"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/ammeter_RL1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="20dp"
-            android:paddingEnd="4dp"
-            android:paddingStart="8dp"
-            android:paddingTop="15dp">
-            <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-                android:id="@+id/ammeter_lv1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_listview_gray" />
-            <LinearLayout
-                android:layout_alignParentBottom="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="通道设置"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="主站IP"/>
-                    <TextView
-                        android:id="@+id/ammeter_ip"
-                        android:layout_marginLeft="15dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="172.0.0.1"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="端口"/>
-                    <TextView
-                        android:id="@+id/ammeter_port"
-                        android:layout_marginLeft="15dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="8080"/>
-                </LinearLayout>
-            </LinearLayout>
-        </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/ammeter_LL1_hite"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前没有任何柜体"/>
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:background="@color/darkgray"
-        android:id="@+id/ammeter_info2"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <ImageView
-            android:id="@+id/ammeter_img"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/ic_add"/>
-        <TextView
-            android:id="@+id/ammeter_tv"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="新建采集点"/>
-        <LinearLayout
-            android:id="@+id/ammeter_LL2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="20dp"
-            android:paddingEnd="4dp"
-            android:paddingStart="8dp"
-            android:paddingTop="15dp">
-            <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-                android:id="@+id/ammeter_lv2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_listview_gray" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/ammeter_LL2_hite"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前没有任何柜体"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_info"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_margin="5dp"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            style="@style/common_linehight"/>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/ammeter_title"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="采集点信息"/>
+            android:layout_weight="1"
+            android:layout_height="0dp">
+            <View
+                style="@style/common_linewidth"/>
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/main_background"
-                android:gravity="right"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/btn_getMetsureStatus"
-                    style="@style/form_btn_confirm"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="10dp"
-                    android:text="召测" />
-
-                <Button
-                    android:id="@+id/btn_add_task"
-                    style="@style/form_btn_confirm"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="10dp"
-                    android:text="配置" />
-                <Button
-                    android:id="@+id/btn_add_editor"
-                    style="@style/form_btn_confirm"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="10dp"
-                    android:text="编辑" />
-
-                <Button
-                    android:id="@+id/btn_save"
-                    style="@style/form_btn_confirm"
-                    android:layout_gravity="right"
-                    android:text="保存" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ammeter_collection_configuration"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_listview_gray"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fadingEdge="vertical"
-                android:scrollbars="vertical">
-
-                <LinearLayout
+                android:id="@+id/ammeter_info1"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:id="@+id/ammeter_RL1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-
+                    android:paddingBottom="20dp"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="20dp"
+                    >
+                    <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+                        android:id="@+id/ammeter_lv1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_listview_gray" />
+                    <LinearLayout
+                        android:id="@+id/ammeter_LL"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="通道设置"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="主站IP"/>
+                            <TextView
+                                android:id="@+id/ammeter_ip"
+                                android:layout_marginLeft="15dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="172.0.0.1"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="端口"/>
+                            <TextView
+                                android:id="@+id/ammeter_port"
+                                android:layout_marginLeft="15dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="8080"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/ammeter_LL1_hite"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前没有任何柜体"/>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                style="@style/common_linewidth"/>
+            <LinearLayout
+                android:id="@+id/ammeter_info2"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/ammeter_img"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@mipmap/file_new"/>
+                <TextView
+                    android:id="@+id/ammeter_tv"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="新建采集点"/>
+                <LinearLayout
+                    android:id="@+id/ammeter_LL2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingEnd="4dp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="15dp">
+                    <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+                        android:id="@+id/ammeter_lv2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_listview_gray" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ammeter_LL2_hite"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前没有任何柜体"/>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                style="@style/common_linewidth"/>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/layout_info_hite"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="暂无信息"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_info"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/ammeter_title"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:text="采集点信息"/>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/btn_getMetsureStatus"
+                            style="@style/form_btn_confirm"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="10dp"
+                            android:text="召测" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="采集点名称"
-                            android:textColor="@color/gray" />
+                        <Button
+                            android:id="@+id/btn_configuration"
+                            style="@style/form_btn_confirm"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="10dp"
+                            android:text="配置" />
+                        <Button
+                            android:id="@+id/btn_editor"
+                            style="@style/form_btn_confirm"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="10dp"
+                            android:text="编辑" />
+                        <Button
+                            android:id="@+id/btn_eleeditor"
+                            style="@style/form_btn_confirm"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="10dp"
+                            android:text="编辑" />
 
-                        <EditText
-                            android:id="@+id/edit_collecton_point_name"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="8"
-                            android:background="@drawable/edittext_radius"
-                            android:paddingLeft="10dp"
-                            android:textColor="@color/gray"
-                            android:textSize="10sp" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
+                        <Button
+                            android:id="@+id/btn_save"
+                            style="@style/form_btn_confirm"
+                            android:layout_gravity="right"
+                            android:text="保存" />
                     </LinearLayout>
+                </LinearLayout>
 
-                    <LinearLayout
+                <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/ammeter_collection_configuration"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+                        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            android:fadingEdge="vertical"
+                            android:scrollbars="vertical">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="设备类型"
-                            android:textColor="@color/gray" />
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="采集点名称"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_collecton_point_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    >
 
-                        <Spinner
-                            android:id="@+id/equipment_type"
-                            android:layout_width="0dp"
-                            android:layout_height="30dp"
-                            android:layout_weight="8" />
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="设备类型"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                                    <Spinner
+                                        android:layout_marginLeft="10dp"
+                                        android:id="@+id/equipment_type"
+                                        android:layout_width="100dp"
+                                        android:layout_height="30dp"
+                                        />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="电表类型"
-                            android:textColor="@color/gray" />
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="电表类型"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <Spinner
+                                        android:layout_marginLeft="10dp"
+                                        android:id="@+id/spinner_ammeter_line_in_type"
+                                        android:layout_width="100dp"
+                                        android:layout_height="30dp"
+                                        />
 
-                        <Spinner
-                            android:id="@+id/spinner_ammeter_line_in_type"
-                            android:layout_width="0dp"
-                            android:layout_height="30dp"
-                            android:layout_weight="8" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="区号"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_area_code"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="区号"
-                            android:textColor="@color/gray" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <EditText
-                            android:id="@+id/edit_area_code"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="8"
-                            android:background="@drawable/edittext_radius"
-                            android:paddingLeft="10dp"
-                            android:textColor="@color/gray"
-                            android:textSize="10sp" />
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="终端地址"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_terminal_address"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:digits="0123456789"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="测量点号"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_point"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:digits="0123456789"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="电压互感器倍率"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <Spinner
+                                        android:layout_marginLeft="10dp"
+                                        android:id="@+id/edit_voltage_transformer_ratio"
+                                        android:layout_width="100dp"
+                                        android:layout_height="30dp"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="终端地址"
-                            android:textColor="@color/gray" />
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="电流互感器倍率"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_current_transformer_ratio"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:digits="0123456789"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <EditText
-                            android:id="@+id/edit_terminal_address"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="8"
-                            android:background="@drawable/edittext_radius"
-                            android:digits="0123456789"
-                            android:paddingLeft="10dp"
-                            android:textColor="@color/gray"
-                            android:textSize="10sp" />
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="通信协议类型"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <Spinner
+                                        android:layout_marginLeft="10dp"
+                                        android:id="@+id/comm_protocol_type"
+                                        android:layout_width="100dp"
+                                        android:layout_height="30dp"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
-                    <LinearLayout
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="测量点电源接线方式"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <Spinner
+                                        android:layout_marginLeft="10dp"
+                                        android:id="@+id/spinner_conn_mode"
+                                        android:layout_width="100dp"
+                                        android:layout_height="30dp"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="GPRS卡编号"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <!--<EditText-->
+                                        <!--android:paddingLeft="10dp"-->
+                                        <!--android:id="@+id/edit_GPRS"-->
+                                        <!--android:layout_width="match_parent"-->
+                                        <!--android:layout_height="match_parent"-->
+                                        <!--android:background="@drawable/edittext_radius"-->
+                                        <!--android:digits="0123456789"-->
+                                        <!--android:textColor="@color/gray"-->
+                                        <!--android:textSize="10sp" />-->
+                                    <AutoCompleteTextView
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_GPRS"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:digits="0123456789"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="额定电流"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_rated_current"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:inputType="number|numberDecimal"
+                                        android:maxLength="10"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="额定电压"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_rated_voltage"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:inputType="number|numberDecimal"
+                                        android:maxLength="10"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="额定功率"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_rated_power"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:inputType="number|numberDecimal"
+                                        android:maxLength="10"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:visibility="gone"
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="电表出场编号"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <EditText
+                                        android:paddingLeft="10dp"
+                                        android:id="@+id/edit_ammeter_number"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@drawable/edittext_radius"
+                                        android:digits="0123456789"
+                                        android:textColor="@color/gray"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                                <LinearLayout
+                                    android:background="@color/white"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="36dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_width="150dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="关联变压器"
+                                        android:textColor="@color/gray" />
+                                    <View
+                                        android:layout_width="1dp"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/border"/>
+                                    <Spinner
+                                        android:layout_marginLeft="10dp"
+                                        android:id="@+id/spinner_transformer"
+                                        android:layout_width="100dp"
+                                        android:layout_height="30dp"
+                                        />
+                                </LinearLayout>
+                                <View
+                                    style="@style/common_linehights"/>
+                            </LinearLayout>
+
+                        </ScrollView>
+                            <LinearLayout
                         android:id="@+id/ammeter_collection_message_delete"
                         android:gravity="center"
+                        android:background="@color/delete_check"
                         android:layout_marginTop="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_width="80dp"
-                        android:layout_height="40dp">
+                        android:layout_width="120dp"
+                        android:layout_height="50dp">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/img_delete"/>
                         <TextView
+                            android:textSize="18sp"
+                            android:textColor="@color/white"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="删除"/>
                     </LinearLayout>
-
                 </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/ammeter_collection_message"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_listview_gray"
-            android:orientation="vertical"
-            android:padding="20dp">
 
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fadingEdge="vertical"
-                android:scrollbars="vertical">
 
                 <LinearLayout
+                    android:id="@+id/ammeter_collection_message"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_marginTop="20dp"
+                    android:background="@color/common_bg"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <LinearLayout
+                    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                        android:layout_height="220dp"
+                        android:fadingEdge="vertical"
+                        android:scrollbars="vertical">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="采集点名称"
-                            android:textColor="@color/gray" />
-                        <TextView
-                            android:id="@+id/ammeter_message_name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:gravity="left"
-                            android:text="PSFSDFSD"
-                            android:textColor="@color/gray" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="采集点名称"
+                                    android:textColor="@color/gray" />
+                                <TextView
+                                    android:id="@+id/edit_collecton_point_names"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="设备类型"
-                            android:textColor="@color/gray" />
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/ammeter_message_equipment"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:gravity="left"
-                            android:text="PSFSDFSD"
-                            android:textColor="@color/gray" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="设备类型"
+                                    android:textColor="@color/gray" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                                <TextView
+                                    android:id="@+id/equipment_types"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="电表类型"
-                            android:textColor="@color/gray" />
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/ammeter_message_ele"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:gravity="left"
-                            android:text="PSFSDFSD"
-                            android:textColor="@color/gray" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="电表类型"
+                                    android:textColor="@color/gray" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                                <TextView
+                                    android:id="@+id/spinner_ammeter_line_in_types"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="区号"
-                            android:textColor="@color/gray" />
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/ammeter_message_area"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:gravity="left"
-                            android:text="PSFSDFSD"
-                            android:textColor="@color/gray" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="区号"
+                                    android:textColor="@color/gray" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp">
+                                <TextView
+                                    android:id="@+id/edit_area_codes"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="4"
-                            android:gravity="left"
-                            android:text="终端地址"
-                            android:textColor="@color/gray" />
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/ammeter_message_address"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="8"
-                            android:gravity="left"
-                            android:text="PSFSDFSD"
-                            android:textColor="@color/gray" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="终端地址"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_terminal_addresss"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="测量点号"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_points"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="电压互感器倍率"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_voltage_transformer_ratios"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="电流互感器倍率"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_current_transformer_ratios"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="通信协议类型"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/comm_protocol_types"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="测量点电源接线方式"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/spinner_conn_modes"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="GPRS卡编号"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_GPRSs"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="额定电流"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_rated_currents"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="额定电压"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_rated_voltages"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                        </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="额定功率"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_rated_powers"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="电表出场编号"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/edit_ammeter_numbers"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingTop="10dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="4"
+                                    android:gravity="left"
+                                    android:text="关联变压器"
+                                    android:textColor="@color/gray" />
+
+                                <TextView
+                                    android:id="@+id/spinner_transformers"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="8"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textColor="@color/gray" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="10dp"
+                                    android:layout_weight="1" />
+                            </LinearLayout>
+
+
+
+
+                        </LinearLayout>
+                    </ScrollView>
                 </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
-        <include
-            android:id="@+id/ammeter_allele_configuration"
-            layout="@layout/layout_common_distribution" />
-        <LinearLayout
-            android:id="@+id/ammeter_allele_message"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前总电量"/> 
-            <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-                android:id="@+id/ammeter_allele_smRecy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <include
+                    android:id="@+id/ammeter_allele_configuration"
+                    layout="@layout/layout_common_distribution" />
+                <LinearLayout
+                    android:id="@+id/ammeter_allele_message"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_marginTop="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当前总电量"/>
+                    <ListView
+                        android:id="@+id/ammeter_allele_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="#00000000"
+                        android:dividerHeight="0dip">
+                    </ListView>
+                </LinearLayout>
 
-            </com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
+
+            </LinearLayout>
+            <View
+                style="@style/common_linewidth"/>
         </LinearLayout>
-      
-        
+        <View
+            style="@style/common_linehight"/>
     </LinearLayout>
+
 </LinearLayout>

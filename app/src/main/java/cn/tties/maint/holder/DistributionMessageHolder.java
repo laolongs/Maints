@@ -16,10 +16,10 @@ import cn.tties.maint.bean.CommonListViewInterface;
 
 public class DistributionMessageHolder {
 
-    public SwipeMenuRecyclerView ammeter_allele_smRecy;
+    public ListView ammeter_allele_list;
 
     public DistributionMessageHolder(View contentView) {
-        this.ammeter_allele_smRecy = (SwipeMenuRecyclerView) contentView.findViewById(R.id.ammeter_allele_smRecy);
+        this.ammeter_allele_list = (ListView) contentView.findViewById(R.id.ammeter_allele_list);
 
     }
 

@@ -1,5 +1,6 @@
 package cn.tties.maint.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,14 +30,19 @@ import java.util.List;
 
 import cn.tties.maint.R;
 import cn.tties.maint.adapter.CommonAppendListViewAdapter;
+import cn.tties.maint.adapter.CommonListViewAdapter;
 import cn.tties.maint.adapter.CommonSwipListViewAdapter;
+import cn.tties.maint.adapter.MyEquipmentCheckEleAdapter;
+import cn.tties.maint.adapter.OrderEleAllListViewAdapter;
 import cn.tties.maint.bean.CommonListViewBean;
 import cn.tties.maint.bean.CommonListViewInterface;
+import cn.tties.maint.common.Constants;
 import cn.tties.maint.dao.RateDao;
 import cn.tties.maint.entity.RateEntity;
 import cn.tties.maint.enums.AmmeterType;
 import cn.tties.maint.enums.CommProtocolType;
 import cn.tties.maint.enums.ConnModeType;
+import cn.tties.maint.enums.EditVoltageType;
 import cn.tties.maint.enums.LineInType;
 import cn.tties.maint.enums.MeterEquipmentType;
 import cn.tties.maint.enums.PowerUtilizationNatureType;
@@ -71,6 +77,7 @@ import cn.tties.maint.httpclient.result.MeterResult;
 import cn.tties.maint.httpclient.result.QueryEnergyUserResult;
 import cn.tties.maint.httpclient.result.TaskResult;
 import cn.tties.maint.httpclient.result.TotalElectricityMeterResult;
+import cn.tties.maint.util.ACache;
 import cn.tties.maint.util.JsonUtils;
 import cn.tties.maint.util.NoFastClickUtils;
 import cn.tties.maint.util.ToastUtil;
@@ -82,8 +89,9 @@ import cn.tties.maint.view.TaskDialog;
 /**
  * 电表配置.
  */
+@SuppressLint("ValidFragment")
 @ContentView(R.layout.fragment_ammeter)
-public class AmmeterFragment extends BaseFragment  {
+public class AmmeterFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "AmmeterFragment";
     //一级列表
     @ViewInject(R.id.ammeter_lv1)
@@ -112,19 +120,27 @@ public class AmmeterFragment extends BaseFragment  {
     //二级提示信息
     @ViewInject(R.id.ammeter_LL2_hite)
     private LinearLayout ammeter_LL2_hite;
+    //三级级列表
+    @ViewInject(R.id.layout_info)
+    private LinearLayout layout_info;
+    //三级提示信息
+    @ViewInject(R.id.layout_info_hite)
+    private LinearLayout layout_info_hite;
     //title
     @ViewInject(R.id.ammeter_title)
     private TextView ammeter_title;
-
     //召测
     @ViewInject(R.id.btn_getMetsureStatus)
     public Button btnGetMetsureStatus;
     //配置
-    @ViewInject(R.id.btn_add_task)
-    public Button btnAddTask;
+    @ViewInject(R.id.btn_configuration)
+    public Button btn_configuration;
     //编辑
-    @ViewInject(R.id.btn_add_editor)
-    public Button btn_add_editor;
+    @ViewInject(R.id.btn_editor)
+    public Button btn_editor;
+    //总电量编辑
+    @ViewInject(R.id.btn_eleeditor)
+    public Button btn_eleeditor;
     //保存
     @ViewInject(R.id.btn_save)
     public Button btn_save;
@@ -156,14 +172,13 @@ public class AmmeterFragment extends BaseFragment  {
      * 总电量holder.
      */
     private DistributionHolder totalElectricHolder;
-
     private DistributionMessageHolder distributionMessageHolder;
-
     //1级
     protected CommonSwipListViewAdapter lv2Adapter;
     protected CommonSwipListViewAdapter rootAdapter;
     protected SwipeItemClickListener rootListener;
     protected SwipeItemClickListener lv2Listener;
+
     /**
      * 请求类型 1-采集点配置
      */
@@ -172,27 +187,27 @@ public class AmmeterFragment extends BaseFragment  {
      * 采集点id
      */
     private CriProgressDialog dialog;
-
     private InfoDialog infoDialog;
-
     List<TaskResult> taskList;
-
     //功率因素
     List<String> powerFactorList;
-
+    //变压器列表
+    List<CompanyEquipmentResult> totalTransformerList;
     //可选择变压器列表
     List<CompanyEquipmentResult> transformerList;
-
     private TaskDialog taskDialog;
-
     /*
     *  召测
     */
     private MeterInfoDialog meterInfoDialog;
-
     private List<Long> taskIdList;
     private int taskIndex;
     private boolean taskStopFlag;
+    private CompanyResult curCompany;
+    private Integer curEleId;
+    String curEleNo;
+    private OrderEleAllListViewAdapter adapter;
+    private ArrayList<String> strGPRSarray;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -201,19 +216,30 @@ public class AmmeterFragment extends BaseFragment  {
         infoDialog = new InfoDialog();
         taskDialog = new TaskDialog(closeClick);
         taskStopFlag = false;
-    }
-
-    @Override
-    public void changeEleAccountNextStep() {
         initView();
         //1级数据展示
         initRootListView();
-        getAmmeterTypeListView();
         //采集点二级
         initLv2ListView();
-
+        //总电量
+        initEleListView();
+        getAmmeterTypeListView();
+    }
+    @SuppressLint("ValidFragment")
+    public AmmeterFragment(Integer curEleId,String curEleNo, CompanyResult curCompany){
+        this.curEleId=curEleId;
+        this.curEleNo=curEleNo;
+        this.curCompany=curCompany;
 
     }
+    @Override
+    public void changeEleAccountNextSteps(Integer curEleId, String curEleNo, CompanyResult curCompany) {
+        this.curEleId=curEleId;
+        this.curEleNo=curEleNo;
+        this.curCompany=curCompany;
+        getAmmeterTypeListView();
+    }
+
     //一级数据库数据展示
     protected void initRootListView() {
         rootAdapter = new CommonSwipListViewAdapter();
@@ -237,7 +263,7 @@ public class AmmeterFragment extends BaseFragment  {
         ammeter_lv1.setSwipeItemClickListener(rootListener);
         ammeter_lv1.setAdapter(rootAdapter);
     }
-    //二级
+    //二级  获取采集点列表.
     protected void initLv2ListView() {
         lv2Adapter = new CommonSwipListViewAdapter();
         ammeter_lv2.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -264,6 +290,7 @@ public class AmmeterFragment extends BaseFragment  {
      * 获取采集点列表.
      */
     private void getCollection() {
+        strGPRSarray = new ArrayList<String>();
         QueryMeterListParams params = new QueryMeterListParams();
         params.setCompanyId(curCompany.getCompanyId());
         params.setEleAccountId(curEleId);
@@ -277,18 +304,18 @@ public class AmmeterFragment extends BaseFragment  {
                 }
                 List<MeterResult> meterList = JsonUtils.deserialize(ret.getResult(), new TypeToken<List<MeterResult>>() {
                 }.getType());
+                for (int i = 0; i < meterList.size(); i++) {
+                    strGPRSarray.add(meterList.get(i).getGprsCardNo());
+                }
                 lv2Adapter.setmDataList(meterList);
                 lv2Adapter.notifyDataSetChanged();
             }
         });
-        //新建采集点
-        ammeter_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ammeter_title.setText("采集点配置");
-                ToastUtil.showShort(getActivity(),"什么效果不知道");
-            }
-        });
+    }
+    //总电量信息
+    protected void initEleListView() {
+        adapter = new OrderEleAllListViewAdapter();
+        distributionMessageHolder.ammeter_allele_list.setAdapter(adapter);
     }
 
     /**
@@ -303,9 +330,63 @@ public class AmmeterFragment extends BaseFragment  {
         totalElectricHolder = new DistributionHolder(layoutTotalElectric);
         //总电量信息
         distributionMessageHolder = new DistributionMessageHolder(layoutallelemessage);
-
+//        btn_configuration.setOnClickListener(this);
+//        btn_editor.setOnClickListener(this);
+        btn_eleeditor.setOnClickListener(this);
+        btn_save.setOnClickListener(this);
+        ammeter_img.setOnClickListener(this);
+        collectionHolder.ammeter_collection_message_delete.setOnClickListener(this);
+        showHoulder(5);
     }
-
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            //配置
+//            case R.id.btn_configuration:
+//                break;
+            //编辑
+//            case R.id.btn_add_editor:
+//                if (NoFastClickUtils.isFastClick()) {
+//                    return;
+//                }
+//                showHoulder(1);
+////                addAutoTask(result.getDcTerminalId(), result.getEquipmentType());
+//                break;
+            //总电量编辑
+            case R.id.btn_eleeditor:
+                if (NoFastClickUtils.isFastClick()) {
+                    return;
+                }
+                showHoulder(3);
+                break;
+            //总电量保存
+            case R.id.btn_save:
+                if (NoFastClickUtils.isFastClick()) {
+                    return;
+                }
+                sendUpdateTotalElectric();
+                break;
+            //新建
+            case R.id.ammeter_img:
+                if (NoFastClickUtils.isFastClick()) {
+                    return;
+                }
+                showHoulder(1);
+                ammeter_title.setText("采集点配置");
+                showAddDetail();
+                break;
+            //删除采集点
+            case R.id.ammeter_collection_message_delete:
+                if (NoFastClickUtils.isFastClick()) {
+                    return;
+                }
+               //发起请求
+                showHoulder(2);
+                //刷新采集点列表
+                getCollection();
+                break;
+        }
+    }
 
     /**
      * 初始化电表配置类型.
@@ -334,12 +415,15 @@ public class AmmeterFragment extends BaseFragment  {
 
     protected void rootListViewClick(CommonListViewInterface bean) {
         if (bean.getItemId() == AmmeterType.COLLECTION_POINT.getValue()) {
+            //采集点数据
             getCollection();
+            //变压器关联
+            getTransformer();
             showHoulder(2);
         }
         if (bean.getItemId() == AmmeterType.TOTAL_ELECTRIC.getValue()) {
             showUpdateDetail(bean);
-            showHoulder(3);
+            showHoulder(4);
         }
     }
     /**
@@ -349,6 +433,7 @@ public class AmmeterFragment extends BaseFragment  {
      */
     private void showUpdateDetail(CommonListViewInterface bean) {
         if (rootAdapter.getChecked().getItemId() == AmmeterType.COLLECTION_POINT.getValue()) {
+            showHoulder(2);
             showCollectionDetail(bean);
         }
         if (rootAdapter.getChecked().getItemId() == AmmeterType.TOTAL_ELECTRIC.getValue()) {
@@ -356,35 +441,137 @@ public class AmmeterFragment extends BaseFragment  {
         }
     }
     /**
+     * 显示新增页面.
+     */
+    private void showAddDetail() {
+        collectionHolder.ammeter_collection_message_delete.setVisibility(View.GONE);
+        collectionHolder.clear();
+        List<String> strList = getTranformerList(null);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(x.app(), R.layout.spinner_text, strList);
+        collectionHolder.spinnerTransformer.setAdapter(adapter1);
+        collectionHolder.dbId = null;
+        btn_configuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (NoFastClickUtils.isFastClick()) {
+                    return;
+                }
+                requestType = 1;
+                collectionHolder.validator(AmmeterFragment.this);
+            }
+        });
+    }
+    /**
      * 显示采集点更新界面.
      *
      * @param bean 选中的采集点
      */
     private void showCollectionDetail(final CommonListViewInterface bean) {
-
         final MeterResult result = (MeterResult) bean;
+        collectionHolder.clear();
+        collectionHolder.editAmmeterNumber.setText(setNullEdit(result.getAmmeterNumber()));
+        collectionHolder.editCollectonPointName.setText(setNullEdit(result.getMeterName()));
+        collectionHolder.editTerminalAddress.setText(setNullEdit(result.getTerminalAddress()));
+        ArrayAdapter<String> arrayListArrayAdapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_expandable_list_item_1,strGPRSarray);
+        collectionHolder.editGPRS.setAdapter(arrayListArrayAdapter);
+//        collectionHolder.editGPRS.setText(setNullEdit(result.getGprsCardNo()));
+        collectionHolder.editCurrentTransformerRatio.setText(setNullEdit(result.getTa()));
+        collectionHolder.editRatedCurrent.setText(setNullEdit(result.getRatedCurrent()));
+        collectionHolder.editRatedVoltage.setText(setNullEdit(result.getRatedVoltage()));
+        collectionHolder.editRatedPower.setText(setNullEdit(result.getRatedPower()));
+        collectionHolder.editAreaCode.setText(setNullEdit(result.getAreaCode()));
+        collectionHolder.point.setText(setNullEdit(result.getPoint()));
+
         //采集点名称
-        collectionMessageHolder.ammeter_message_name.setText(setNullEdit(result.getMeterName()));
+        collectionMessageHolder.editCollectonPointNames.setText(setNullEdit(result.getMeterName()));
         //区号
-        collectionMessageHolder.ammeter_message_area.setText(setNullEdit(result.getAreaCode()));
+        collectionMessageHolder.editAreaCodes.setText(setNullEdit(result.getAreaCode()));
         //终端地址
-        collectionMessageHolder.ammeter_message_address.setText(setNullEdit(result.getTerminalAddress()));
-        //设备类型
+        collectionMessageHolder.editTerminalAddresss.setText(setNullEdit(result.getTerminalAddress()));
+        //测量点号
+        collectionMessageHolder.points.setText(setNullEdit(result.getPoint()));
+        //电流互感器倍率
+        collectionMessageHolder.editCurrentTransformerRatios.setText(setNullEdit(result.getTa()));
+        //GPRS卡编号
+        collectionMessageHolder.editGPRSs.setText(setNullEdit(result.getGprsCardNo()));
+        //电表出场编号
+//        collectionMessageHolder.editAmmeterNumbers.setText(setNullEdit(result.getRatedCurrent()));
+        //额定电流
+        collectionMessageHolder.editRatedCurrents.setText(setNullEdit(result.getRatedCurrent()));
+        //额定电压
+        collectionMessageHolder.editRatedVoltages.setText(setNullEdit(result.getRatedVoltage()));
+        //额定功率
+        collectionMessageHolder.editRatedPowers.setText(setNullEdit(result.getRatedPower()));
+        //设备类型   -----getEquipmentType
         if (result.getEquipmentType() !=  null) {
-            int i =0;
+            int i=0;
             for (MeterEquipmentType e : MeterEquipmentType.values()) {
                 if (e.getType() == result.getEquipmentType()) {
-                    collectionMessageHolder.ammeter_message_equipment.setText(i+"");
+                    collectionHolder.equipmentType.setSelection(i);
+                    collectionMessageHolder.equipmentTypes.setText(e.getInfo()+"");
                 }
                 i++;
             }
         }
-        //电表类型
-        if (result.getLineInType() !=  null && result.getLineInType() > 0) {
-            collectionMessageHolder.ammeter_message_ele.setText(result.getLineInType().intValue() - 1+"");
+        //电表类型   -------getLineInType
+        if (result.getLineInType() !=  null) {
+            int i=0;
+            for (LineInType e : LineInType.values()) {
+                if (e.getType() == result.getLineInType()) {
+                    collectionHolder.lineInType.setSelection(i);
+                    collectionMessageHolder.lineInTypes.setText(e.getInfo()+"");
+                }
+                i++;
+            }
         }
-
-
+        //电压互感器倍率   ------getLineInType
+        if (result.getTv() !=  null) {
+            int i=0;
+            for (EditVoltageType e : EditVoltageType.values()) {
+                if (e.getType() == result.getTv()) {
+                    collectionHolder.editVoltageTransformerRatio.setSelection(i);
+                    collectionMessageHolder.editVoltageTransformerRatios.setText(e.getInfo()+"");
+                }
+                i++;
+            }
+        }
+        //通信协议类型    --------getCommProtocolType
+        if (result.getCommProtocolType() !=  null) {
+            int i=0;
+            for (CommProtocolType e : CommProtocolType.values()) {
+                if (e.getType() == result.getCommProtocolType()) {
+                    collectionHolder.commProtocolType.setSelection(i);
+                    collectionMessageHolder.commProtocolTypes.setText(e.getInfo()+"");
+                }
+                i++;
+            }
+        }
+        //测量点电源接线方式    ------getConnMode
+        if (result.getConnMode() !=  null) {
+            int i=0;
+            for (ConnModeType e : ConnModeType.values()) {
+                if (e.getType() == result.getConnMode()) {
+                    collectionHolder.spinnerConnMode.setSelection(i);
+                    collectionMessageHolder.spinnerConnModes.setText(e.getInfo()+"");
+                }
+                i++;
+            }
+        }
+        //关联变压器    -------
+        //循环该电号下全部变压器
+        List<String> strList = getTranformerList(result);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(x.app(), R.layout.spinner_text, strList);
+        collectionHolder.spinnerTransformer.setAdapter(adapter);
+        int i =1;
+        for (CompanyEquipmentResult result1 : transformerList) {
+            if (result1.getCompanyEquipmentId().equals(result.getTransformerId())) {
+                collectionHolder.spinnerTransformer.setSelection(i);
+                collectionMessageHolder.spinnerTransformers.setText(strList.get(i)+"");
+            }else{
+                collectionMessageHolder.spinnerTransformers.setText("无关联");
+            }
+            i++;
+        }
         //召测
         btnGetMetsureStatus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -395,15 +582,71 @@ public class AmmeterFragment extends BaseFragment  {
                 sendGetMetsureStatus(result);
             }
         });
-        //编辑
-        btn_add_editor.setOnClickListener(new View.OnClickListener() {
+        btn_editor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (NoFastClickUtils.isFastClick()) {
                     return;
                 }
                 showHoulder(1);
-//                addAutoTask(result.getDcTerminalId(), result.getEquipmentType());
+            }
+
+        });
+        btn_configuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collectionHolder.ammeter_collection_message_delete.setVisibility(View.VISIBLE);
+                collectionHolder.dbId = result.getMeterId();
+                requestType = 1;
+                collectionHolder.validator(AmmeterFragment.this);
+            }
+
+        });
+
+    }
+    //关联变压器数据
+    private List<String> getTranformerList(MeterResult meter) {
+        transformerList = (ArrayList)((ArrayList)totalTransformerList).clone();
+        List<MeterResult> list = lv2Adapter.getMList();
+        for (MeterResult result : list) {
+            if (result.getTransformerId() == null) {
+                continue;
+            }
+            for (CompanyEquipmentResult result1 : transformerList) {
+                if (meter != null) {
+                    if (result1.getCompanyEquipmentId().equals(result.getTransformerId()) && result.getTransformerId() != meter.getTransformerId()) {
+                        transformerList.remove(result1);
+                        break;
+                    }
+                } else {
+                    if (result1.getCompanyEquipmentId().equals(result.getTransformerId())) {
+                        transformerList.remove(result1);
+                        break;
+                    }
+                }
+            }
+        }
+        List<String> spinnerList = new ArrayList<>();
+        spinnerList.add("不关联");
+        for (CompanyEquipmentResult result1 : transformerList) {
+            spinnerList.add(result1.getName());
+        }
+        return spinnerList;
+    }
+    //关联变压器数据请求
+    private void getTransformer() {
+        GetTransformerParams params = new GetTransformerParams();
+        params.setEleAccountId(curEleId);
+        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
+            @Override
+            public void onSuccess(String result) {
+                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
+                if (ret.getErrorCode() != 0) {
+                    Toast.makeText(x.app(), "获取运维专员失败", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                totalTransformerList = JsonUtils.deserialize(ret.getResult(), new TypeToken<List<CompanyEquipmentResult>>() {
+                }.getType());
             }
         });
     }
@@ -412,18 +655,8 @@ public class AmmeterFragment extends BaseFragment  {
      * 显示总电量界面.
      */
     private void showTotalElectricDetail() {
-//        totalElectricHolder.textLeft.setText(curEleNo + "总电量");
         totalElectricHolder.textLeft.setText("当前总电量");
         getTotalElectricity();
-        btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (NoFastClickUtils.isFastClick()) {
-                    return;
-                }
-                sendUpdateTotalElectric();
-            }
-        });
     }
 
     /**
@@ -445,6 +678,8 @@ public class AmmeterFragment extends BaseFragment  {
                 List<CommonListViewBean> list = new ArrayList<>();
                 totalElectricHolder.leftAdapter.setmDataList(totalElectricityMeterResult.getHaveMeterList());
                 totalElectricHolder.leftAdapter.notifyDataSetChanged();
+                adapter.setmDataList(totalElectricityMeterResult.getHaveMeterList());
+                adapter.notifyDataSetChanged();
 
                 totalElectricHolder.rightAdapter.setmDataList(totalElectricityMeterResult.getNoHaveMeterList());
                 totalElectricHolder.rightAdapter.notifyDataSetChanged();
@@ -458,7 +693,7 @@ public class AmmeterFragment extends BaseFragment  {
     public void onValidationSucceeded() {
         switch (requestType) {
             case 1:
-//                this.meterConfigRequest();
+                this.meterConfigRequest();
                 break;
         }
 
@@ -468,7 +703,7 @@ public class AmmeterFragment extends BaseFragment  {
         dialog.loadDialog("召测中...");
         reMetsureSend(bean.getDcPointId(), null);
     }
-
+    //召测
     private void reMetsureSend(final Long pointId, Long frameId) {
         GetMetsureStatusParams params = new GetMetsureStatusParams();
         params.setPointId(pointId);
@@ -524,67 +759,68 @@ public class AmmeterFragment extends BaseFragment  {
     /**
      * 请求采集点配置
      */
-//    private void meterConfigRequest() {
-//        dialog.loadDialog("采集点信息配置中...");
-//        final SaveOrUpdateMeterConfigParams meterParams = new SaveOrUpdateMeterConfigParams();
-//        meterParams.setMeterId(collectionHolder.dbId);
-//        meterParams.setEleAccountId(curEleId);
-//        meterParams.setCompanyId(curCompany.getCompanyId());
-//        meterParams.setMeterName(collectionHolder.editCollectonPointName.getText().toString());
-////        meterParams.setAmmeterNumber(Integer.parseInt(collectionHolder.editAmmeterNumber.getText().toString()));
-//        meterParams.setTerminalAddress(collectionHolder.editTerminalAddress.getText().toString());
-//        meterParams.setGprsCardNo(collectionHolder.editGPRS.getText().toString());
-//        meterParams.setTv(Integer.parseInt(collectionHolder.editVoltageTransformerRatio.getText().toString()));
-//        meterParams.setTa(Integer.parseInt(collectionHolder.editCurrentTransformerRatio.getText().toString()));
-//        meterParams.setRatedCurrent(Integer.parseInt(collectionHolder.editRatedCurrent.getText().toString()));
-//        meterParams.setRatedPower(Integer.parseInt(collectionHolder.editRatedPower.getText().toString()));
-//        meterParams.setRatedVoltage(Integer.parseInt(collectionHolder.editRatedVoltage.getText().toString()));
-//        meterParams.setConnMode(ConnModeType.getValue(String.valueOf(collectionHolder.spinnerConnMode.getSelectedItem())));
-//        meterParams.setAreaCode(collectionHolder.editAreaCode.getText().toString());
-//        meterParams.setPoint(Long.valueOf(collectionHolder.point.getText().toString()));
-//        meterParams.setEquipmentType(MeterEquipmentType.getValue(String.valueOf(collectionHolder.equipmentType.getSelectedItem())));
-//        meterParams.setCommProtocolType(CommProtocolType.getValue(String.valueOf(collectionHolder.commProtocolType.getSelectedItem())));
-//        meterParams.setLineInType(LineInType.getValue(String.valueOf(collectionHolder.lineInType.getSelectedItem())));
-//        if (collectionHolder.spinnerTransformer.getSelectedItemPosition() != 0) {
-//            meterParams.setTransformerId(transformerList.get(collectionHolder.spinnerTransformer.getSelectedItemPosition() - 1).getCompanyEquipmentId());
-//        }
-//        HttpClientSend.getInstance().send(meterParams, new BaseStringCallback() {
-//            @Override
-//            public void onSuccess(String result) {
-//                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
-//                if (ret.getErrorCode() != 0) {
-//                    infoDialog.loadDialog(false, "采集点配置失败", ret.getErrorMessage());
-//                    dialog.removeDialog();
-//                    return;
-//                }
-//                JsonObject element = ret.getResult().getAsJsonObject();
-//                boolean flag = false;
-//                if (element.has("isNewTerm")) {
-//                    if (element.get("isNewTerm").getAsBoolean()) {
-//                        flag = true;
-//                    }
-//                }
-//                //新建场合 自动执行任务配置
-//                if  (collectionHolder.dbId == null && flag) {
-//                    //配置任务
-//                    AmmeterFragment.this.sleep(5000);
-//                    addAutoTask(element.get("terminalId").getAsLong(), meterParams.getEquipmentType());
-//                } else {
-//                    dialog.removeDialog();
-//                    infoDialog.loadDialog(true, "采集点配置更新成功", null);
-//                }
-//                //刷新列表
-//                getCollection();
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//                dialog.removeDialog();
-//                infoDialog.loadDialog(false, "采集点配置失败",null);
-//                ex.printStackTrace();
-//            }
-//        });
-//    }
+    private void meterConfigRequest() {
+        dialog.loadDialog("采集点信息配置中...");
+        final SaveOrUpdateMeterConfigParams meterParams = new SaveOrUpdateMeterConfigParams();
+        meterParams.setMeterId(collectionHolder.dbId);
+        meterParams.setEleAccountId(curEleId);
+        meterParams.setCompanyId(curCompany.getCompanyId());
+        meterParams.setMeterName(collectionHolder.editCollectonPointName.getText().toString());
+//        meterParams.setAmmeterNumber(Integer.parseInt(collectionHolder.editAmmeterNumber.getText().toString()));
+        meterParams.setTerminalAddress(collectionHolder.editTerminalAddress.getText().toString());
+        meterParams.setGprsCardNo(collectionHolder.editGPRS.getText().toString());
+        //电压互感倍率
+        meterParams.setTv(EditVoltageType.getValue(String.valueOf(collectionHolder.editVoltageTransformerRatio.getSelectedItem())));
+        meterParams.setTa(Integer.parseInt(collectionHolder.editCurrentTransformerRatio.getText().toString()));
+        meterParams.setRatedCurrent(Integer.parseInt(collectionHolder.editRatedCurrent.getText().toString()));
+        meterParams.setRatedPower(Integer.parseInt(collectionHolder.editRatedPower.getText().toString()));
+        meterParams.setRatedVoltage(Integer.parseInt(collectionHolder.editRatedVoltage.getText().toString()));
+        meterParams.setConnMode(ConnModeType.getValue(String.valueOf(collectionHolder.spinnerConnMode.getSelectedItem())));
+        meterParams.setAreaCode(collectionHolder.editAreaCode.getText().toString());
+        meterParams.setPoint(Long.valueOf(collectionHolder.point.getText().toString()));
+        meterParams.setEquipmentType(MeterEquipmentType.getValue(String.valueOf(collectionHolder.equipmentType.getSelectedItem())));
+        meterParams.setCommProtocolType(CommProtocolType.getValue(String.valueOf(collectionHolder.commProtocolType.getSelectedItem())));
+        meterParams.setLineInType(LineInType.getValue(String.valueOf(collectionHolder.lineInType.getSelectedItem())));
+        if (collectionHolder.spinnerTransformer.getSelectedItemPosition() != 0) {
+            meterParams.setTransformerId(transformerList.get(collectionHolder.spinnerTransformer.getSelectedItemPosition() - 1).getCompanyEquipmentId());
+        }
+        HttpClientSend.getInstance().send(meterParams, new BaseStringCallback() {
+            @Override
+            public void onSuccess(String result) {
+                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
+                if (ret.getErrorCode() != 0) {
+                    infoDialog.loadDialog(false, "采集点配置失败", ret.getErrorMessage());
+                    dialog.removeDialog();
+                    return;
+                }
+                JsonObject element = ret.getResult().getAsJsonObject();
+                boolean flag = false;
+                if (element.has("isNewTerm")) {
+                    if (element.get("isNewTerm").getAsBoolean()) {
+                        flag = true;
+                    }
+                }
+                //新建场合 自动执行任务配置
+                if  (collectionHolder.dbId == null && flag) {
+                    //配置任务
+                    AmmeterFragment.this.sleep(5000);
+                    addAutoTask(element.get("terminalId").getAsLong(), meterParams.getEquipmentType());
+                } else {
+                    dialog.removeDialog();
+                    infoDialog.loadDialog(true, "采集点配置更新成功", null);
+                }
+                //刷新列表
+                getCollection();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                dialog.removeDialog();
+                infoDialog.loadDialog(false, "采集点配置失败",null);
+                ex.printStackTrace();
+            }
+        });
+    }
 
     /**
      * 配置任务
@@ -737,16 +973,18 @@ public class AmmeterFragment extends BaseFragment  {
                 //召测
                 btnGetMetsureStatus.setVisibility(View.GONE);
                 ////配置
-                btnAddTask.setVisibility(View.VISIBLE);
+                btn_configuration.setVisibility(View.VISIBLE);
+                //总电量编辑
+                btn_eleeditor.setVisibility(View.GONE);
                 //编辑
-                btn_add_editor.setVisibility(View.GONE);
+                btn_editor.setVisibility(View.GONE);
                 //保存
                 btn_save.setVisibility(View.GONE);
                 //采集点配置layout.
                 layoutCollectionPoint.setVisibility(View.VISIBLE);
                 //采集点信息layout.
                 layoutCollectionmessage.setVisibility(View.GONE);
-                //总电量配置
+                //总电量编辑
                 layoutTotalElectric.setVisibility(View.GONE);
                 //总电量信息
                 layoutallelemessage.setVisibility(View.GONE);
@@ -754,15 +992,18 @@ public class AmmeterFragment extends BaseFragment  {
                 ammeter_info2.setVisibility(View.VISIBLE);
                 //二级提示视图
                 ammeter_LL2_hite.setVisibility(View.VISIBLE);
+                layout_info.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 ammeter_title.setText("采集点信息");
                 //召测
                 btnGetMetsureStatus.setVisibility(View.VISIBLE);
                 ////配置
-                btnAddTask.setVisibility(View.GONE);
+                btn_configuration.setVisibility(View.GONE);
                 //编辑
-                btn_add_editor.setVisibility(View.VISIBLE);
+                btn_editor.setVisibility(View.VISIBLE);
+                //总电量编辑
+                btn_eleeditor.setVisibility(View.GONE);
                 //保存
                 btn_save.setVisibility(View.GONE);
                 //采集点配置layout.
@@ -777,15 +1018,20 @@ public class AmmeterFragment extends BaseFragment  {
                 ammeter_info2.setVisibility(View.VISIBLE);
                 //二级提示视图
                 ammeter_LL2_hite.setVisibility(View.VISIBLE);
+                layout_info.setVisibility(View.VISIBLE);
+                layout_info_hite.setVisibility(View.GONE);
+                layout_info.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 ammeter_title.setText("总电量配置");
                 //召测
                 btnGetMetsureStatus.setVisibility(View.GONE);
                 ////配置
-                btnAddTask.setVisibility(View.GONE);
+                btn_configuration.setVisibility(View.GONE);
                 //编辑
-                btn_add_editor.setVisibility(View.GONE);
+                btn_editor.setVisibility(View.GONE);
+                //总电量编辑
+                btn_eleeditor.setVisibility(View.GONE);
                 //保存
                 btn_save.setVisibility(View.VISIBLE);
                 //采集点配置layout.
@@ -800,15 +1046,19 @@ public class AmmeterFragment extends BaseFragment  {
                 ammeter_info2.setVisibility(View.GONE);
                 //二级提示视图
                 ammeter_LL2_hite.setVisibility(View.GONE);
+                layout_info_hite.setVisibility(View.GONE);
+                layout_info.setVisibility(View.VISIBLE);
                 break;
             case 4:
                 ammeter_title.setText("总电量信息");
                 //召测
                 btnGetMetsureStatus.setVisibility(View.GONE);
                 ////配置
-                btnAddTask.setVisibility(View.GONE);
+                btn_configuration.setVisibility(View.GONE);
                 //编辑
-                btn_add_editor.setVisibility(View.VISIBLE);
+                btn_editor.setVisibility(View.GONE);
+                //总电量配置
+                btn_eleeditor.setVisibility(View.VISIBLE);
                 //保存
                 btn_save.setVisibility(View.GONE);
                 //采集点配置layout.
@@ -823,9 +1073,20 @@ public class AmmeterFragment extends BaseFragment  {
                 ammeter_info2.setVisibility(View.GONE);
                 //二级提示视图
                 ammeter_LL2_hite.setVisibility(View.GONE);
+                layout_info_hite.setVisibility(View.GONE);
+                layout_info.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                layout_info_hite.setVisibility(View.VISIBLE);
+                layout_info.setVisibility(View.GONE);
+                //二级视图
+                ammeter_info2.setVisibility(View.VISIBLE);
+                //二级提示视图
+                ammeter_LL2_hite.setVisibility(View.GONE);
                 break;
 
         }
     }
+
 
 }

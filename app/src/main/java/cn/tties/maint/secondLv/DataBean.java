@@ -23,8 +23,55 @@ public class DataBean {
     private String parentRightTxt;
     private List<EquipmentLayoutBean> bean;
     private int itemid;
+    private int companyEquipmentId;
+    private int equipmentId;
+    private int pid;
     //记录是否叶结点
     private boolean isLeaf;
+    //是否要删除来自企业设备得信息
+    private boolean flag;
+    //记录企业设备信息
+    private Integer record;
+
+    public int getPid() {
+        return pid;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
+
+    public int getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(int equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
+    public Integer getRecord() {
+        return record;
+    }
+
+    public void setRecord(Integer record) {
+        this.record = record;
+    }
+
+    public int getCompanyEquipmentId() {
+        return companyEquipmentId;
+    }
+
+    public void setCompanyEquipmentId(int companyEquipmentId) {
+        this.companyEquipmentId = companyEquipmentId;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
 
     public boolean isLeaf() {
         return isLeaf;

@@ -9,7 +9,7 @@ import java.util.List;
  *
  */
 public enum LineInType {
-    LOW(1, "低压"),
+       LOW(1, "低压"),
     HIGH(2, "高压");
 
     private int type;

@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="100dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="60dp">
-
     <View
-        android:id="@+id/view_sel"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:background="@color/listview_check"
-        android:minHeight="30dp"
-        android:visibility="invisible" />
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#E9ECF3"
+        />
+    <RelativeLayout
+        android:id="@+id/arrow_Rl"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/listview_text"
+            android:textSize="14sp" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/text_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="@color/listview_text"
-        android:textSize="14sp" />
 
-    <ImageView
-        android:layout_width="10dp"
-        android:layout_height="16dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerInParent="true"
-        android:layout_marginRight="5dp"
-        android:background="@mipmap/ic_login_arrow_right" />
-</RelativeLayout>
+</LinearLayout>

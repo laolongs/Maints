@@ -111,9 +111,10 @@ public class MyEquipmentDetailsDialog extends BaseCustomDialog {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(!isAdd){
                 }else{
-                    DataBean dataBean=new DataBean();
+                    //修改接口没掉
                     List<EquipmentLayoutBean> dataList = AdapterD.getDataList();
                     dataBean.setBean(dataList);
                     dataBean.setParentLeftTxt(edit_value.getText().toString());
@@ -188,13 +189,14 @@ public class MyEquipmentDetailsDialog extends BaseCustomDialog {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final EquipmentLayoutBean bean = beanList.get(position);
-            ViewEditTextHolder vEditText = null;
+            ViewEditssTextHolder vEditText = null;
             ViewLeafHolder vLeaf = null;
             if (convertView == null) {
                 switch (bean.getType()) {
                     case EDITTEXT:
-                        convertView = View.inflate(x.app(), R.layout.layout_edittext, null);
-                        vEditText = new ViewEditTextHolder(convertView);
+//                        convertView = View.inflate(x.app(), R.layout.layout_edittext, null);
+                        convertView = View.inflate(x.app(), R.layout.activity_equipment_details_item, null);
+                        vEditText = new ViewEditssTextHolder(convertView);
                         convertView.setTag(vEditText);
                         break;
                     case LEAF:
@@ -206,7 +208,7 @@ public class MyEquipmentDetailsDialog extends BaseCustomDialog {
             } else {
                 switch (bean.getType()) {
                     case EDITTEXT:
-                        vEditText = (ViewEditTextHolder) convertView.getTag();
+                        vEditText = (ViewEditssTextHolder) convertView.getTag();
                         break;
                     case LEAF:
                         vLeaf = (ViewLeafHolder) convertView.getTag();
@@ -217,19 +219,32 @@ public class MyEquipmentDetailsDialog extends BaseCustomDialog {
             switch (bean.getType()) {
                 case EDITTEXT:
                     //清除焦点
-                    vEditText.value.clearFocus();
-                    //先清除之前的文本改变监听
-                    if (vEditText.value.getTag() instanceof TextWatcher) {
-                        vEditText.value.removeTextChangedListener((TextWatcher) (vEditText.value.getTag()));
-                    }
-                    vEditText.value.setOnClickListener(null);
-                    vEditText.value.setOnFocusChangeListener(null);
+//                    vEditText.value.clearFocus();
+//                    //先清除之前的文本改变监听
+//                    if (vEditText.value.getTag() instanceof TextWatcher) {
+//                        vEditText.value.removeTextChangedListener((TextWatcher) (vEditText.value.getTag()));
+//                    }
+//                    vEditText.value.setOnClickListener(null);
+//                    vEditText.value.setOnFocusChangeListener(null);
                     //设置数据
-                    vEditText.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
-                    vEditText.value.setText(TextUtils.isEmpty(bean.getValue()) ? "" : bean.getValue());
+//                    vEditText.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
+//                    vEditText.value.setText(TextUtils.isEmpty(bean.getValue()) ? "" : bean.getValue());
+                    vEditText.leafinfo.removeAllViews();
+                    vEditText.leafinfo.clearFocus();
+                    for (final EquipmentLayoutBean layoutBean : bean.getChildrenList()) {
+                        View layout = View.inflate(x.app(), R.layout.layout_edittext, null);
+                        ViewEditTextHolder holder = new ViewEditTextHolder(layout);
+                        holder.name.setText(layoutBean.getTextName());
+                        holder.value.setText(layoutBean.getValue());
+                        //根据输入类型，增加验证和默认值
+                        setInputType(layoutBean, holder.value);
+                        vEditText.leafinfo.clearFocus();
+                        vEditText.leafinfo.addView(layout);
+                    }
+
 
                     //根据输入类型，增加验证和默认值
-                    setInputType(bean,  vEditText.value);
+//                    setInputType(bean,  vEditText.value);
                     break;
                 case LEAF:
                     //设置数据
@@ -352,6 +367,15 @@ public class MyEquipmentDetailsDialog extends BaseCustomDialog {
             public ViewEditTextHolder(View convertView) {
                 name = (TextView) convertView.findViewById(R.id.text_name);
                 value = (EditText) convertView.findViewById(R.id.edit_value);
+            }
+        }
+
+        class ViewEditssTextHolder {
+            LinearLayout leafinfo;
+
+
+            public ViewEditssTextHolder(View convertView) {
+                leafinfo = (LinearLayout) convertView.findViewById(R.id.details_layout_info);
             }
         }
 

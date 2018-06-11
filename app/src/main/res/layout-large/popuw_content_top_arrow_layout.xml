@@ -4,6 +4,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:background="@drawable/bg_company_dialog"
         android:layout_marginTop="20dp"
         android:layout_marginRight="25dp"
         android:layout_width="300dp"
@@ -29,7 +30,6 @@
             <!--android:layout_marginRight="@dimen/y80"-->
             <!--android:background="@mipmap/popup_window_arrow" />-->
         <LinearLayout
-            android:background="@color/colorAccent"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/up_arrow"
             android:layout_width="match_parent"
@@ -85,12 +85,12 @@
                     android:text="企业名称"/>
             </LinearLayout>
             <View
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/bg_dotted_line"
+                android:background="@drawable/bg_dotted_lines"
                 android:layerType="software"
                 />
             <LinearLayout
@@ -132,9 +132,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <LinearLayout
+                    android:background="@color/root_check"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:layout_marginTop="5dp"
-                    android:layout_width="120dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp">
                     <TextView
                         android:id="@+id/btn"

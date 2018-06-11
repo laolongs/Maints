@@ -6,11 +6,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import cn.tties.maint.R;
+import cn.tties.maint.adapter.AllocationLeftListViewAdapter;
+import cn.tties.maint.adapter.AllocationRightListViewAdapter;
 import cn.tties.maint.adapter.CommonListViewAdapter;
 import cn.tties.maint.bean.CommonListViewInterface;
+import cn.tties.maint.bean.EventBusBean;
+import cn.tties.maint.common.EventKind;
 
 public class DistributionHolder {
 
@@ -26,10 +32,11 @@ public class DistributionHolder {
 
     public ImageView rightIv;
 
-    public CommonListViewAdapter leftAdapter;
+    public AllocationLeftListViewAdapter leftAdapter;
 
-    public CommonListViewAdapter rightAdapter;
+    public AllocationRightListViewAdapter rightAdapter;
 
+    public boolean isEditor=false;
 
     public DistributionHolder(View contentView) {
         this.textLeft = (TextView) contentView.findViewById(R.id.text_left);
@@ -43,7 +50,7 @@ public class DistributionHolder {
     }
 
     private void initListView() {
-        leftAdapter = new CommonListViewAdapter();
+        leftAdapter = new AllocationLeftListViewAdapter();
         listViewLeft.setAdapter(leftAdapter);
         listViewLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -57,7 +64,7 @@ public class DistributionHolder {
                 leftAdapter.notifyDataSetChanged();
             }
         });
-        rightAdapter = new CommonListViewAdapter();
+        rightAdapter = new AllocationRightListViewAdapter();
         listViewRight.setAdapter(rightAdapter);
         listViewRight.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,8 +93,13 @@ public class DistributionHolder {
                     leftAdapter.addItem(checkBean);
                     rightAdapter.removeItem(checkBean);
                 }
+                isEditor=true;
                 leftAdapter.notifyDataSetChanged();
                 rightAdapter.notifyDataSetChanged();
+                EventBusBean eventBusBean=new EventBusBean();
+                eventBusBean.setKind(EventKind.EVENT_COMPANY_ELEISEDITOR);
+                eventBusBean.setSuccess(isEditor);
+                EventBus.getDefault().post(eventBusBean);
             }
         });
         rightIv.setOnClickListener(new View.OnClickListener() {
@@ -102,10 +114,15 @@ public class DistributionHolder {
                     rightAdapter.addItem(checkBean);
                     leftAdapter.removeItem(checkBean);
                 }
+                isEditor=true;
                 rightAdapter.notifyDataSetChanged();
                 leftAdapter.notifyDataSetChanged();
-
+                EventBusBean eventBusBean=new EventBusBean();
+                eventBusBean.setKind(EventKind.EVENT_COMPANY_ELEISEDITOR);
+                eventBusBean.setSuccess(isEditor);
+                EventBus.getDefault().post(eventBusBean);
             }
         });
+
     }
 }

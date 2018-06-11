@@ -13,12 +13,17 @@ import cn.tties.maint.R;
 public class EquipmentDetailHolder extends BaseLayoutHolder {
     //管理档案
     public LinearLayout layout_equipment_info;
+    public LinearLayout layout_lv2;
 
     public SwipeMenuRecyclerView listview_lv1_2;
 
     public LinearLayout equipment_companyMessage;
 
     public LinearLayout equipment_eleConfiguration;
+
+    public LinearLayout equipment_eleLL;
+
+    public TextView equipment_eleRoom;
 
     public ImageView lv2_img;
 
@@ -93,9 +98,12 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
 
     public EquipmentDetailHolder(View view) {
         this.layout_equipment_info = (LinearLayout) view.findViewById(R.id.layout_equipment_info);
+        this.layout_lv2 = (LinearLayout) view.findViewById(R.id.layout_lv2);
         this.listview_lv1_2 = (SwipeMenuRecyclerView) view.findViewById(R.id.listview_lv1_2);
         this.equipment_companyMessage = (LinearLayout) view.findViewById(R.id.equipment_companyMessage);
         this.equipment_eleConfiguration = (LinearLayout) view.findViewById(R.id.equipment_eleConfiguration);
+        this.equipment_eleLL = (LinearLayout) view.findViewById(R.id.equipment_eleLL);
+        this.equipment_eleRoom = (TextView) view.findViewById(R.id.equipment_eleRoom);
         this.lv2_img = (ImageView) view.findViewById(R.id.lv2_img);
         this.lv2_tv = (TextView) view.findViewById(R.id.lv2_tv);
         this.layout_lv2_all = (LinearLayout) view.findViewById(R.id.layout_lv2_all);
@@ -133,5 +141,12 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
         this.ele_message_type = (TextView) view.findViewById(R.id.ele_message_type);
         this.lv3_ele_message_smrecy = (RecyclerView) view.findViewById(R.id.lv3_ele_message_smrecy);
         this.layout_lv3_ele_configuration = (LinearLayout) view.findViewById(R.id.layout_lv3_ele_configuration);
+//        equipment_eleConfiguration.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                equipment_eleLL
+//                equipment_eleRoom
+//            }
+//        });
     }
 }

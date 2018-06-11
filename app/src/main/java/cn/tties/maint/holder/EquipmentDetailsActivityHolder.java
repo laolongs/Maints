@@ -53,7 +53,7 @@ public class EquipmentDetailsActivityHolder extends BaseLayoutHolder {
         this.eq_de_list_feal_list = (ListView) view.findViewById(R.id.eq_de_list_feal_list);
         this.eq_de_list_lv4 = (SwipeMenuRecyclerView) view.findViewById(R.id.eq_de_list_lv4);
         this.eq_de_list_lv4_details = (SwipeMenuRecyclerView) view.findViewById(R.id.eq_de_list_lv4_details);
-        isCabinet = false;
+        isCabinet =false;
 //        是否有柜体
         this.eq_de_radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

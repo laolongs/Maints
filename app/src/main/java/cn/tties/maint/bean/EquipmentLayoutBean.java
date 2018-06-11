@@ -22,6 +22,9 @@ public class EquipmentLayoutBean {
     private List<EquipmentLayoutBean> childrenList;
     //用于存父级的name
     private String titleName;
+    private Integer equipmentInfoId;
+    private Integer companyEquipmentId;
+    private Integer pid;
     public EquipmentLayoutBean(int type, Integer itemId) {
         this.type = type;
         this.itemId = itemId;
@@ -36,6 +39,30 @@ public class EquipmentLayoutBean {
         this.dbId = dbId;
         childrenList = new ArrayList<>();
         inputType = ItemInputType.STRING.getType();
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
+    public Integer getCompanyEquipmentId() {
+        return companyEquipmentId;
+    }
+
+    public void setCompanyEquipmentId(Integer companyEquipmentId) {
+        this.companyEquipmentId = companyEquipmentId;
+    }
+
+    public Integer getEquipmentInfoId() {
+        return equipmentInfoId;
+    }
+
+    public void setEquipmentInfoId(Integer equipmentInfoId) {
+        this.equipmentInfoId = equipmentInfoId;
     }
 
     public String getTitleName() {

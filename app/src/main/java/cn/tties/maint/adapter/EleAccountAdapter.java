@@ -51,7 +51,7 @@ public class EleAccountAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_ele_account, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_company, parent, false);
             new ViewHolder(convertView);
         }
         ViewHolder holder = (ViewHolder) convertView.getTag();

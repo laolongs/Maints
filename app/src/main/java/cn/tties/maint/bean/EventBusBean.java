@@ -1,6 +1,10 @@
 package cn.tties.maint.bean;
 
 import java.io.Serializable;
+import java.util.List;
+
+import cn.tties.maint.httpclient.result.CompanyResult;
+import cn.tties.maint.secondLv.DataBean;
 
 public class EventBusBean implements Serializable {
 
@@ -21,6 +25,36 @@ public class EventBusBean implements Serializable {
     private boolean isNew;
 
     private int position;
+
+    private int eleID;
+
+    private List<DataBean> dataBeanList;
+
+    private List<CompanyResult> list;
+
+    public int getEleID() {
+        return eleID;
+    }
+
+    public void setEleID(int eleID) {
+        this.eleID = eleID;
+    }
+
+    public List<CompanyResult> getList() {
+        return list;
+    }
+
+    public void setList(List<CompanyResult> list) {
+        this.list = list;
+    }
+
+    public List<DataBean> getDataBeanList() {
+        return dataBeanList;
+    }
+
+    public void setDataBeanList(List<DataBean> dataBeanList) {
+        this.dataBeanList = dataBeanList;
+    }
 
     public String getName() {
         return name;

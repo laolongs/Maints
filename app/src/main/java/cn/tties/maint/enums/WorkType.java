@@ -8,11 +8,17 @@ import java.util.List;
  */
 public enum WorkType {
 
-    UPLOAD_ELE_BILL(0, "上传电费单", "去上传"),
-    UPLOAD_CONTRACT(1, "上传合同", "去上传"),
-    HANDOVER(2, "创建档案", "去创建"),
-    PATROL(3, "巡视", "去巡视"),
-    OVERHAUL(4, "检修", "去检修");
+    ADORN_AMMETER(0, "电表装置", "去配置"),
+    REMOVE_FAULT(1, "消缺", "去消缺"),
+    PRETTIFT(2, "美化安规", "去美化"),
+    PATROL(3, "电房巡视", "去巡视"),
+    REMOVE_DUST(4, "除尘清理", "去清理");
+    //---------------老的
+//    UPLOAD_ELE_BILL(0, "上传电费单", "去上传"),
+//    UPLOAD_CONTRACT(1, "上传合同", "去上传"),
+//    HANDOVER(2, "创建档案", "去创建"),
+//    PATROL(3, "巡视", "去巡视"),
+//    OVERHAUL(4, "检修", "去检修");
     private final int value;
     private final String info;
     private final String opr;

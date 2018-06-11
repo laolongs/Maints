@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -56,6 +57,7 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
     DataBean dataBean;
     //用于记录id位置便于回传。
     int position;
+    OnClick onClick;
     public EquipmentDetailsDialog(boolean isAdd,Context context, String name, List<EquipmentLayoutBean> beanList,Integer EquipmentId,boolean flag, View.OnClickListener clickListener) {
        super((Activity) context,clickListener);
         this.isAdd=isAdd;
@@ -64,6 +66,9 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         this.name=name;
         this.EquipmentId=EquipmentId;
         this.flag=flag;
+    }
+    public void setOnClick(OnClick onClick){
+        this.onClick=onClick;
     }
     public EquipmentDetailsDialog(int eqmid,int position,DataBean dataBean,boolean isAdd, Context context, String name, List<EquipmentLayoutBean> beanList, View.OnClickListener clickListener) {
         super((Activity) context,clickListener);
@@ -116,15 +121,11 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
                     busBean.setName(edit_value.getText().toString());
                     EventBus.getDefault().post(busBean);
                 }else{
-                    EventBusBean busBean = new EventBusBean();
-                    busBean.setKind(EventKind.EVENT_COMPANY_EDITOR);
-                    busBean.setObj(AdapterD.getDataList());
-                    busBean.setObjs(dataBean);
-                    busBean.setSuccess(true);
-                    busBean.setPosition(position);
-                    busBean.setName(edit_value.getText().toString());
-                    EventBus.getDefault().post(busBean);
-                    AdapterD.notifyDataSetChanged();
+//                    DataBean dataBean=new DataBean();
+                    List<EquipmentLayoutBean> dataList = AdapterD.getDataList();
+                    dataBean.setBean(dataList);
+                    dataBean.setParentLeftTxt(edit_value.getText().toString());
+                    onClick.OnClickListener(position,dataBean);
                 }
 
                 EquipmentDetailsDialog.this.dismiss();
@@ -195,13 +196,13 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final EquipmentLayoutBean bean = beanList.get(position);
-            ViewEditTextHolder vEditText = null;
+            ViewEditssTextHolder vEditText = null;
             ViewLeafHolder vLeaf = null;
             if (convertView == null) {
                 switch (bean.getType()) {
                     case EDITTEXT:
-                        convertView = View.inflate(x.app(), R.layout.layout_edittext, null);
-                        vEditText = new ViewEditTextHolder(convertView);
+                        convertView = View.inflate(x.app(), R.layout.activity_equipment_details_item, null);
+                        vEditText = new ViewEditssTextHolder(convertView);
                         convertView.setTag(vEditText);
                         break;
                     case LEAF:
@@ -213,7 +214,7 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
             } else {
                 switch (bean.getType()) {
                     case EDITTEXT:
-                        vEditText = (ViewEditTextHolder) convertView.getTag();
+                        vEditText = (ViewEditssTextHolder) convertView.getTag();
                         break;
                     case LEAF:
                         vLeaf = (ViewLeafHolder) convertView.getTag();
@@ -223,20 +224,32 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
             //根据不同布局加载不同数据
             switch (bean.getType()) {
                 case EDITTEXT:
-                    //清除焦点
-                    vEditText.value.clearFocus();
-                    //先清除之前的文本改变监听
-                    if (vEditText.value.getTag() instanceof TextWatcher) {
-                        vEditText.value.removeTextChangedListener((TextWatcher) (vEditText.value.getTag()));
+//                    //清除焦点
+//                    vEditText.value.clearFocus();
+//                    //先清除之前的文本改变监听
+//                    if (vEditText.value.getTag() instanceof TextWatcher) {
+//                        vEditText.value.removeTextChangedListener((TextWatcher) (vEditText.value.getTag()));
+//                    }
+//                    vEditText.value.setOnClickListener(null);
+//                    vEditText.value.setOnFocusChangeListener(null);
+//                    //设置数据
+//                    vEditText.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
+//                    vEditText.value.setText(TextUtils.isEmpty(bean.getValue()) ? "" : bean.getValue());
+//
+//                    //根据输入类型，增加验证和默认值
+//                    setInputType(bean,  vEditText.value);
+                    vEditText.leafinfo.removeAllViews();
+                    vEditText.leafinfo.clearFocus();
+                    for (final EquipmentLayoutBean layoutBean : bean.getChildrenList()) {
+                        View layout = View.inflate(x.app(), R.layout.layout_edittext, null);
+                        ViewEditTextHolder holder = new ViewEditTextHolder(layout);
+                        holder.name.setText(layoutBean.getTextName());
+                        holder.value.setText(layoutBean.getValue());
+                        //根据输入类型，增加验证和默认值
+                        setInputType(layoutBean, holder.value);
+                        vEditText.leafinfo.clearFocus();
+                        vEditText.leafinfo.addView(layout);
                     }
-                    vEditText.value.setOnClickListener(null);
-                    vEditText.value.setOnFocusChangeListener(null);
-                    //设置数据
-                    vEditText.name.setText(TextUtils.isEmpty(bean.getTextName()) ? "" : bean.getTextName());
-                    vEditText.value.setText(TextUtils.isEmpty(bean.getValue()) ? "" : bean.getValue());
-
-                    //根据输入类型，增加验证和默认值
-                    setInputType(bean,  vEditText.value);
                     break;
                 case LEAF:
                     //设置数据
@@ -361,7 +374,14 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
                 value = (EditText) convertView.findViewById(R.id.edit_value);
             }
         }
+        class ViewEditssTextHolder {
+            LinearLayout leafinfo;
 
+
+            public ViewEditssTextHolder(View convertView) {
+                leafinfo = (LinearLayout) convertView.findViewById(R.id.details_layout_info);
+            }
+        }
         public abstract class SimpeTextWather implements TextWatcher {
 
             @Override
@@ -435,5 +455,7 @@ public class EquipmentDetailsDialog extends BaseCustomDialog {
             cuys.show(editText.getText().toString());
         }
     }
-
+    public interface  OnClick{
+        public void OnClickListener(int pos,DataBean dataBean);
+    }
 }

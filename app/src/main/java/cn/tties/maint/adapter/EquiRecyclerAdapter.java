@@ -18,16 +18,32 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import cn.tties.maint.R;
+import cn.tties.maint.activity.EleRoomCheckFragment;
+import cn.tties.maint.activity.EquipmentCheckDetailsActivity;
+import cn.tties.maint.activity.EquipmentCheckFragment;
 import cn.tties.maint.bean.EquipmentLayoutBean;
 import cn.tties.maint.bean.EventBusBean;
+import cn.tties.maint.bean.UpdateEquipParam;
+import cn.tties.maint.bean.UpdateItemParam;
 import cn.tties.maint.common.EventKind;
+import cn.tties.maint.dao.EquipmentDao;
+import cn.tties.maint.entity.EquipmentEntity;
+import cn.tties.maint.httpclient.BaseAlertCallback;
+import cn.tties.maint.httpclient.HttpClientSend;
+import cn.tties.maint.httpclient.params.CopyCompanyEquipmentParams;
+import cn.tties.maint.httpclient.params.DeleteComEquParams;
+import cn.tties.maint.httpclient.params.UpdateComEquParams;
+import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
 import cn.tties.maint.secondLv.BaseViewHolder;
 import cn.tties.maint.secondLv.DataBean;
+import cn.tties.maint.util.JsonUtils;
+import cn.tties.maint.view.AllCancelDialog;
 import cn.tties.maint.view.EquipmentDetailsDialog;
 import cn.tties.maint.view.MyEquipmentDetailsDialog;
 
@@ -56,6 +72,7 @@ public class EquiRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
      */
     private int opened = -1;
     OnClickTextViewData listener;
+    OnClickDeleteData   deleteData;
     public EquiRecyclerAdapter(Context context) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
@@ -65,6 +82,9 @@ public class EquiRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
     public void setOnClickTextViewData(OnClickTextViewData listener){
         this.listener=listener;
+    }
+    public void setOnClickDeleteData(OnClickDeleteData   deleteData){
+        this.deleteData=deleteData;
     }
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -122,7 +142,9 @@ public class EquiRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             child_delete = (LinearLayout) view.findViewById(R.id.re_item_child_delete);
             //新建
             child_new = (LinearLayout) view.findViewById(R.id.re_item_child_new);
-            recy.setLayoutManager(new GridLayoutManager(context,2));
+            GridLayoutManager gridLayoutManager=new GridLayoutManager(context,2);
+            recy.setLayoutManager(gridLayoutManager);
+//            recy.addItemDecoration(new GridSpacingItemDecoration(30));
             MyEquipmentLayout_EquiRecyAdapter adapter=new MyEquipmentLayout_EquiRecyAdapter(context,dataBean.getBean());
             recy.setAdapter(adapter);
             containerLayout.setOnClickListener(this);
@@ -137,11 +159,13 @@ public class EquiRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             if (pos == opened){
                 parentDashedView.setVisibility(View.VISIBLE);
                 parentRightView.setText("收起");
-                rotationExpandIcon(0, 90);
+                expand.setImageResource(R.mipmap.details_down);
+//                rotationExpandIcon(0, 90);
             } else{
                 parentDashedView.setVisibility(View.GONE);
                 parentRightView.setText("详情");
-                rotationExpandIcon(90, 0);
+                expand.setImageResource(R.mipmap.details_up);
+//                rotationExpandIcon(90, 0);
             }
 
         }
@@ -173,61 +197,159 @@ public class EquiRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     dialog.setOnClick(new MyEquipmentDetailsDialog.OnClick() {
                         @Override
                         public void OnClickListener(int pos, DataBean dataBean) {
-                            dataBeanList.set(pos,dataBean);
-                            notifyDataSetChanged();
+                            updateCompanyEquip(dataBean);
+//                            notifyDataSetChanged();
+
+//                            dataBeanList.set(pos,dataBean);
+//                            notifyDataSetChanged();
+
                         }
                     });
                     break;
                 //删除
                 case R.id.re_item_child_delete:
-                    dataBeanList.remove(getAdapterPosition());
-                    opened = -1;
-                    notifyDataSetChanged();
-                    break;
-                //新建
-                case R.id.re_item_child_new:
-                    DataBean dataBean = dataBeanList.get(getAdapterPosition());
-                    String parentLeftTxt = dataBean.getParentLeftTxt();
-                    List<EquipmentLayoutBean> bean = dataBean.getBean();
-                    int itemid = dataBean.getItemid();
-                    DataBean dataBean1=new DataBean();
-                    if(parentLeftTxt.contains("复制")){
-                        dataBean1.setParentLeftTxt(parentLeftTxt);
-                    }else{
-                        dataBean1.setParentLeftTxt(parentLeftTxt+"复制");
-                    }
-                    dataBean1.setBean(bean);
-                    dataBean1.setItemid(itemid);
-                    dataBeanList.add(dataBean1);
-                    Collections.sort(dataBeanList, new Comparator<DataBean>() {
+                    final AllCancelDialog dialog1=new AllCancelDialog();
+                    dialog1.loadDialog("您确定要删除该设备？", new AllCancelDialog.OnClickIsConfirm() {
                         @Override
-                        public int compare(DataBean dataBean, DataBean t1) {
-                            return  Integer.valueOf(dataBean.getItemid()).compareTo(Integer.valueOf(t1.getItemid()));
+                        public void OnClickIsConfirmListener() {
+                            //发起请求
+                            sendDelInfo(dataBeanList.get(getAdapterPosition()).getCompanyEquipmentId()+"");
+                        }
+                    }, new AllCancelDialog.OnClickIsCancel() {
+                        @Override
+                        public void OnClickIsCancelListener() {
+
                         }
                     });
-                    listener.OnClickTextViewDataListener(dataBeanList.size());
-                    notifyDataSetChanged();
                     break;
-            }
-        }
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-        public void rotationExpandIcon(float from, float to) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);//属性动画
-                valueAnimator.setDuration(1000);
-                valueAnimator.setInterpolator(new DecelerateInterpolator());
-                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        expand.setRotation((Float) valueAnimator.getAnimatedValue());
+                //新建   接口未调
+                case R.id.re_item_child_new:
+                    String name=null;
+                    DataBean dataBean = dataBeanList.get(getAdapterPosition());
+                    String parentLeftTxt = dataBean.getParentLeftTxt();
+//                    DataBean dataBean1=new DataBean();
+                    if(parentLeftTxt.contains("复制")){
+                        name=parentLeftTxt;
+                    }else{
+                        name=parentLeftTxt+"复制";
                     }
-                });
-                valueAnimator.start();
+                    sendCopyAddInfo(name,dataBean.getCompanyEquipmentId());
+                    break;
             }
         }
     }
     public interface  OnClickTextViewData{
         public void OnClickTextViewDataListener(int text);
     }
+    public interface  OnClickDeleteData{
+        public void OnClickDeleteDataListener();
+    }
+    //删除企业设备
+    private void sendDelInfo(final String cEqupIds) {
+        DeleteComEquParams params = new DeleteComEquParams();
+        params.setComEquIds(cEqupIds);
+        HttpClientSend.getInstance().send(params, new BaseAlertCallback("删除设备成功","删除设备失败") {
+            @Override
+            public void onSuccessed(String result) {
+                try {
+                    EquipmentCheckFragment.equipmentCheckFragmentInstance.showlv3refresh();
+//                    deleteData.OnClickDeleteDataListener();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                }
+            }
+        });
+    }
+    //编辑企业设备下得三四级
+    private void updateCompanyEquip(DataBean dataBean) {
+        List<EquipmentLayoutBean> bean = dataBean.getBean();
+        List<UpdateEquipParam> updateList = new ArrayList<>();
+        UpdateEquipParam updateEquipParam = new UpdateEquipParam();
+        updateEquipParam.setComEquId(dataBean.getCompanyEquipmentId());
+        updateEquipParam.setEquipId(dataBean.getEquipmentId());
+        updateEquipParam.setNewComEquName(dataBean.getParentLeftTxt());
+        updateEquipParam.setPid(dataBean.getPid());
+        updateList.add(updateEquipParam);
+        EquipmentEntity equipmentEntity = EquipmentDao.getInstance().queryById(dataBean.getEquipmentId());
+        //四级
+        if(!equipmentEntity.getIsLeafNode()){
+            //企业设备下级设备
+            for (int i = 0; i < bean.size(); i++) {
+                EquipmentLayoutBean leafBean = bean.get(i);
+                UpdateEquipParam param = new UpdateEquipParam();
+                param.setComEquId(leafBean.getCompanyEquipmentId());
+                param.setNewComEquName(leafBean.getTextName());
+                param.setEquipId(dataBean.getEquipmentId());
+                //? 为什么是三级得设备iD  因为三级得企业设备id就是四级得pid
+                param.setPid(dataBean.getCompanyEquipmentId());
+                List<UpdateItemParam> itemList = new ArrayList<>();
+                for (EquipmentLayoutBean itemBean : leafBean.getChildrenList()) {
+                    UpdateItemParam itemParam = new UpdateItemParam();
+                    itemParam.setEquipmentItemId(itemBean.getItemId());
+                    itemParam.setEquipmentInfoId(itemBean.getEquipmentInfoId());
+                    itemParam.setNewEquipmentInfo(itemBean.getValue());
+                    itemList.add(itemParam);
+                }
+                param.setUpdateEquItemInfo(itemList);
+                updateList.add(param);
+            }
+
+        }else{//三级
+            //企业设备下级设备
+            List<UpdateItemParam> itemList = new ArrayList<>();
+            for (int i = 0; i < bean.size(); i++) {
+                EquipmentLayoutBean bean1 = bean.get(i);
+                for (EquipmentLayoutBean itemBean : bean1.getChildrenList()) {
+                    UpdateItemParam itemParam = new UpdateItemParam();
+                    itemParam.setEquipmentItemId(itemBean.getItemId());
+                    itemParam.setEquipmentInfoId(itemBean.getEquipmentInfoId());
+                    itemParam.setNewEquipmentInfo(itemBean.getValue());
+                    itemList.add(itemParam);
+                }
+            }
+            updateEquipParam.setUpdateEquItemInfo(itemList);
+        }
+
+        sendUpdateInfo(updateList);
+    }
+    private void sendUpdateInfo(List<UpdateEquipParam> updateList) {
+        UpdateComEquParams params = new UpdateComEquParams();
+        params.setParamJson(JsonUtils.getJsonArrayStr(updateList));
+        Log.i(TAG, "sendUpdateInfo: "+params.getParamJson());
+        HttpClientSend.getInstance().send(params, new BaseAlertCallback("更新设备成功","更新设备失败") {
+            @Override
+            public void onSuccessed(String result) {
+                try {
+//                    deleteData.OnClickDeleteDataListener();
+//                    showMuiltListView(curPidResult);
+//                    EleRoomCheckFragment.eleRoomCheckFragmentInstance.getEleAccountComEqu();
+//                    EleRoomCheckFragment.eleRoomCheckFragmentInstance.getEleRoomComEqu();
+                    EquipmentCheckFragment.equipmentCheckFragmentInstance.showlv3refresh();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                }
+            }
+        });
+    }
+    //新建相同设备
+    private void sendCopyAddInfo(String name, Integer cEquipId) {
+        CopyCompanyEquipmentParams params = new CopyCompanyEquipmentParams();
+        params.setCompanyEquipmentName(name);
+        params.setCompanyEquipmentId(cEquipId);
+        HttpClientSend.getInstance().send(params, new BaseAlertCallback("新增设备成功","新增设备失败") {
+            @Override
+            public void onSuccessed(String result) {
+//                deleteData.OnClickDeleteDataListener();
+//                showMuiltListView(curPidResult, adapter, adapter2, false);
+//                // 更新电房管理中的未分配设备
+//                EleRoomCheckFragment.eleRoomCheckFragmentInstance.getEleAccountComEqu();
+//                //重置新增界面
+//                showAddCEquipLayout(EquipmentDao.getInstance().queryById(curHolder.id), adapter, adapter2);
+                EquipmentCheckFragment.equipmentCheckFragmentInstance.showlv3refresh();
+            }
+        });
+    }
+
 }

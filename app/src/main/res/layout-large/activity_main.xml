@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="horizontal">
     <LinearLayout
-        android:background="#4A0191"
+        android:background="#1B92EE"
         android:orientation="vertical"
         android:layout_width="140dp"
         android:layout_height="match_parent">
@@ -21,27 +20,272 @@
             android:background="@drawable/bg_dotted_line"
             android:layerType="software"
             />
+        <RelativeLayout
+            android:id="@+id/main_company_RL"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@mipmap/company_name"/>
+            <TextView
+                android:id="@+id/main_company_tv"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="全部"/>
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@mipmap/ele_left"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/main_ele_RL"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@mipmap/company_message"/>
+            <TextView
+                android:id="@+id/main_ele_tv"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="全部"/>
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@mipmap/ele_left"/>
+        </RelativeLayout>
         <include layout="@layout/layout_common_muilt_lv1"/>
         <ScrollView
-            android:layout_width="match_parent"
+            android:layout_width="140dp"
             android:scrollbars="none"
             android:layout_height="match_parent"
             android:fillViewport="true">
-            <RadioGroup
-                android:id="@+id/radiogroup"
+            <LinearLayout
+                android:id="@+id/mainl"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </RadioGroup>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+                <LinearLayout
+                    android:id="@+id/equipment"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+                    <ImageView
+                        android:id="@+id/equipment_img"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/mian_imgone" />
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/equipment_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="档案管理"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/wordorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+                    <ImageView
+                        android:id="@+id/wordorder_img"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/mian_imgtwo" />
+
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/wordorder_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="工单管理"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ele_configuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/ele_configuration_img"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/mian_imgthree" />
+
+                    <TextView
+                        android:id="@+id/ele_configuration_tv"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="电表配置"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ele_tour"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/ele_tour_img"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/mian_imgthree" />
+
+                    <TextView
+                        android:id="@+id/ele_tour_tv"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="电房巡视"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/eliminate"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/eliminate_img"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/mian_imgthree" />
+
+                    <TextView
+                        android:id="@+id/eliminate_tv"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="消缺"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/beautify"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/beautify_img"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/mian_imgthree" />
+
+                    <TextView
+                        android:id="@+id/beautify_tv"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="美化安规"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/dedusting"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/dedusting_img"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:src="@drawable/mian_imgthree" />
+
+                    <TextView
+                        android:id="@+id/dedusting_tv"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="除尘清理"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/question"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/question_img"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/mian_imgfour" />
+
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/question_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="问题列表"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/setting_img"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/mian_imgfive" />
+
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/setting_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="设置"
+                        android:textColor="@drawable/main_text" />
+                </LinearLayout>
+
+            </LinearLayout>
         </ScrollView>
+
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/realtabcontent"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
         android:background="@color/royalblue"
-        android:clipToPadding="true"
-        android:fitsSystemWindows="true" />
+        />
 
 
 

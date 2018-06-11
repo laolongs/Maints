@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/details_other_text_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+       android:paddingLeft="15dp"
+        android:text="重命名"
+        android:textColor="@color/gray" />
+
+    <TextView
+        android:id="@+id/details_other_edit_value"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_weight="4"
+        android:paddingLeft="10dp"
+        android:textSize="10sp"
+        android:textColor="@color/gray"
+        android:singleLine="true"
+        />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

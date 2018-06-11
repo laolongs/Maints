@@ -4,6 +4,7 @@
     xmlns:zhy="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DEE2ED"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -14,7 +15,8 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="150dp"
+            android:layout_marginTop="20dp"
+            android:layout_width="230dp"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -24,14 +26,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="25px"
                 android:textColor="#FF6B6B6B"
+                android:text="ddd"
                 android:textSize="18px" />
-
-            <ListView
-                android:id="@+id/listview_left"
+            <LinearLayout
+                android:layout_marginTop="8dp"
+                android:background="@color/common_bg"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#fff" />
-
+                android:layout_height="match_parent">
+                <View
+                    style="@style/common_linehight"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <View
+                        style="@style/common_linewidth"/>
+                    <ListView
+                        android:id="@+id/listview_left"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:divider="#00000000"
+                        android:dividerHeight="0dip"
+                        android:layout_height="wrap_content"
+                        android:background="#fff" />
+                    <View
+                        style="@style/common_linewidth"/>
+                </LinearLayout>
+                <View
+                    style="@style/common_linehight"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -48,17 +73,18 @@
             android:layout_height="63.5px"
             android:layout_marginBottom="50dp"
 
-            android:src="@mipmap/ic_arrow_left" />
+            android:src="@mipmap/ele_right" />
 
         <ImageView
             android:id="@+id/button_right"
             android:layout_width="63.5px"
             android:layout_height="63.5px"
             android:layout_marginBottom="40dp"
-            android:src="@mipmap/ic_arrow_right" />
+            android:src="@mipmap/ele_left" />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
@@ -66,7 +92,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="150dp"
+            android:layout_width="230dp"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -78,15 +104,35 @@
                 android:text="未分配"
                 android:textColor="#FF6B6B6B"
                 android:textSize="18px" />
-
-            <ListView
-                android:id="@+id/listview_right"
+            <LinearLayout
+                android:layout_marginTop="8dp"
+                android:background="@color/common_bg"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#fff">
-
-            </ListView>
-
+                android:layout_height="match_parent">
+                <View
+                    style="@style/common_linehight"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <View
+                        style="@style/common_linewidth"/>
+                    <ListView
+                        android:id="@+id/listview_right"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:divider="#00000000"
+                        android:dividerHeight="0dip"
+                        android:layout_height="wrap_content"
+                        android:background="#fff" />
+                    <View
+                        style="@style/common_linewidth"/>
+                </LinearLayout>
+                <View
+                    style="@style/common_linehight"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

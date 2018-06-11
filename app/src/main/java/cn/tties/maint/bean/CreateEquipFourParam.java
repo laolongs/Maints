@@ -9,6 +9,15 @@ import java.util.List;
 public class CreateEquipFourParam {
     private Integer equIdFour;
     private List<CreateEquipFiveParam> equItemFourArr;
+    private Integer companyEquipmentId;
+
+    public Integer getCompanyEquipmentId() {
+        return companyEquipmentId;
+    }
+
+    public void setCompanyEquipmentId(Integer companyEquipmentId) {
+        this.companyEquipmentId = companyEquipmentId;
+    }
 
     public Integer getEquIdFour() {
         return equIdFour;

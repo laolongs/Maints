@@ -21,7 +21,8 @@ import cn.tties.maint.httpclient.result.CompanyResult;
 
 public class MyPopupWindow {
     CompanyResult companyResult;
-    public MyPopupWindow(CompanyResult companyResult) {
+
+    public void setPopupWindowData(CompanyResult companyResult){
         this.companyResult=companyResult;
     }
 

@@ -2,14 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/table_dialog_layout">
 
-    <RelativeLayout style="@style/table_dialog_title">
-
-        <Button android:id="@+id/btn_cancel"
-            style="@style/table_dialog_btn_cancel" />
-
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_table_dialog_title">
         <TextView
-            style="@style/table_dialog_title_text"
-            android:text="创建电房" />
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新建电房" />
+        <Button android:id="@+id/btn_cancel"
+            android:layout_marginRight="80dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
+            android:background="@drawable/btn_dialog_cancel"
+            android:text="返回"
+            />
+        <Button
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btn_save"
+            android:layout_width="40dp"
+            android:layout_height="25dp"
+            android:background="@drawable/selector_btn_confirm_click"
+            android:text="保存" />
     </RelativeLayout>
 
     <LinearLayout
@@ -28,35 +47,38 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
-          <CheckBox
+        android:orientation="horizontal" >
+        <CheckBox
+            android:button="@null"
             android:id="@+id/high_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="高压电房"
-              android:paddingLeft="40dp"
-              android:textColor="@color/black"/>
+            android:paddingLeft="40dp"
+            android:textColor="@color/black"
+            android:background="@drawable/bg_check"/>
         <CheckBox
+            android:button="@null"
             android:id="@+id/low_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="低压电房"
             android:paddingLeft="40dp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:background="@drawable/bg_check"/>
         <CheckBox
+            android:button="@null"
             android:id="@+id/transformer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="变压器室"
             android:paddingLeft="40dp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:background="@drawable/bg_check"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_marginTop="20dp"
-        style="@style/table_dialog_btn_confirm"
-        android:text="创  建" />
+
 
 </LinearLayout>

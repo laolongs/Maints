@@ -101,6 +101,11 @@ public class PatrolFragment extends BaseEleAccountFragment {
         hideLayout(0);
     }
 
+    @Override
+    public void changeEleAccountNextStep() {
+
+    }
+
     /**
      * 初始化数据.
      */
@@ -147,12 +152,12 @@ public class PatrolFragment extends BaseEleAccountFragment {
         super.initLv2ListView();
     }
 
-    @Override
-    public void changeEleAccountNextStep() {
-        hideLayout(0);
-        clearHolder();
-        getWorkOrderId();
-    }
+//    @Override
+//    public void changeEleAccountNextStep() {
+//        hideLayout(0);
+//        clearHolder();
+//        getWorkOrderId();
+//    }
 
     @Override
     protected void rootListViewClick(CommonListViewInterface bean) {

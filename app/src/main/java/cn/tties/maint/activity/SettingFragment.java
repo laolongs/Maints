@@ -97,6 +97,7 @@ public class SettingFragment extends BaseFragment {
         });
     }
 
+
     @Event(value = {R.id.btn_setting_save_pwd, R.id.btn_setting_logout})
     private void getEvent(View view) {
         switch (view.getId()) {

@@ -7,12 +7,12 @@
             android:shape="rectangle">
             <solid
                 android:color="#FFFFFF"/>
-            <corners
-                android:radius="5dp"
-                />
+            <!--<corners-->
+                <!--android:radius="5dp"-->
+                <!--/>-->
             <stroke
                 android:width="0.5px"
-                android:color="#505050"/>
+                android:color="#F0F1F5"/>
         </shape>
     </item>
 </layer-list>

@@ -3,18 +3,24 @@ package cn.tties.maint.activity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
@@ -42,6 +48,7 @@ import cn.tties.maint.common.EventKind;
 import cn.tties.maint.common.MyApplication;
 import cn.tties.maint.dao.EquipmentDao;
 import cn.tties.maint.entity.EquipmentEntity;
+import cn.tties.maint.holder.MainHolder;
 import cn.tties.maint.httpclient.params.CompanyParams;
 import cn.tties.maint.httpclient.params.VersionParams;
 import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
@@ -50,6 +57,7 @@ import cn.tties.maint.httpclient.result.EleAccountResult;
 import cn.tties.maint.httpclient.send.CompanyListSend;
 import cn.tties.maint.httpclient.send.VersionSend;
 import cn.tties.maint.util.ACache;
+import cn.tties.maint.view.AllCancelDialog;
 import cn.tties.maint.view.BaseCustomDialog;
 import cn.tties.maint.view.ConfirmDialog;
 import cn.tties.maint.widget.DrawableUtil;
@@ -57,7 +65,8 @@ import cn.tties.maint.widget.MainFragmentManager;
 import cn.tties.maint.widget.TabClass;
 
 @ContentView(R.layout.activity_main)
-public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends BaseFragmentActivity implements View.OnClickListener {
+    private static final String TAG = "MainActivity";
     public static MainActivity mMainActivityInstance;
     public MainFragmentManager manager;
     private int mInitIndex;
@@ -72,16 +81,34 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
     protected int mChangeCompanyId = -1;
     protected Integer curEleId;
     protected String curEleNo;
-    protected CompanyResult curCompany;
-    @ViewInject(R.id.radiogroup)
-    private RadioGroup radioGroup;
+    protected CompanyResult curCompany=new CompanyResult();
+    @ViewInject(R.id.mainl)
+    private LinearLayout mainl;
     @ViewInject(R.id.listview_lv1)
     private ListView holdListView;
+    @ViewInject(R.id.main_company_RL)
+    private RelativeLayout companyRl;
+    @ViewInject(R.id.main_company_tv)
+    private TextView company_tv;
+    @ViewInject(R.id.main_ele_RL)
+    private RelativeLayout eleRL;
+    @ViewInject(R.id.main_ele_tv)
+    private TextView ele_tv;
+    private MainHolder curholder;
+    private ImageView ivCurrent;
+    private TextView tvCurrent;
+    private LinearLayout llCurrent;
+    private int whilte;
+    private int blue;
+    private EquipmentCheckFragment equipment;
+    private boolean iseditor;
+    private List<CompanyResult> list;
+    private Integer eleid;
+    private String eleNo;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainActivityInstance = this;
-        mTabHashMap = new HashMap<>();
         mFristChecked = false;
         new VersionSend().send(new VersionParams(), false);
         //获取公司信息
@@ -89,159 +116,216 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
         params.setMaintStaffId(MyApplication.getUserInfo().getStaffId());
         new CompanyListSend().send(params);
         ACache.getInstance().put(Constants.CACHE_COMPANYLIST, new ArrayList<>());
-        //展示公司信息并点击切换
-        initEleIdListView();
-        initCompanyList();
+
         //添加对应得fragment
-        initView();
     }
-    private void initCompanyList() {
-        companyList = new ArrayList<>();
-        eleAccountList = new ArrayList<>();
-        List<CompanyResult> list = ACache.getInstance().getAsObject(Constants.CACHE_COMPANYLIST);
-        if (list != null) {
-            for (CompanyResult companyResult : list) {
-                companyList.add(companyResult);
-                if (companyResult.getCompanyId() == mChangeCompanyId) {
-                    curCompany = companyResult;
-                }
-            }
-        }
-        if (companyList.size() > 0) {
-            if (mChangeCompanyId == -1) {
-                curCompany = companyList.get(0);
-            }
-            getEleAccountList();
-        }
-        mChangeCompanyId = -1;
-        EventBusBean busBean = new EventBusBean();
-        busBean.setKind(EventKind.EVENT_COMPANY_COMPANYBEAN);
-        busBean.setObjs(curCompany);
-        EventBus.getDefault().post(busBean);
-    }
-    protected void getEleAccountList() {
-        eleAccountList = curCompany.getEleAccountList();
-        if (eleAccountList.size() > 0) {
-            curEleId = eleAccountList.get(0).getEleAccountId();
-            curEleNo = eleAccountList.get(0).getEleNo();
-            //发送公司电表ID到baseFragment,便于请求公用
-            EventBusBean busBean = new EventBusBean();
-            busBean.setKind(EventKind.EVENT_COMPANY_CHANGEID);
-            busBean.setObj(curEleId);
-            busBean.setObjs(curCompany);
-            busBean.setMessage(curEleNo);
-            EventBus.getDefault().post(busBean);
-        } else {
-            curEleId = null;
-        }
-        eleAccountAdapter.setCurEleId(curEleId);
-        eleAccountAdapter.setCurCompany(curCompany);
-        eleAccountAdapter.setEleAccountList(eleAccountList);
-        eleAccountAdapter.notifyDataSetChanged();
 
-//        changeEleAccountNextStep();
-    }
-    protected void initEleIdListView() {
-        eleAccountAdapter = new EleAccountAdapter(this, this.eleAccountList);
-        holdListView.setAdapter(eleAccountAdapter);
-        holdListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void initfindId() {
+        whilte = Color.parseColor("#FFFFFF");
+        blue = Color.parseColor("#1B92EE");
+        curholder = new MainHolder(mainl);
+        curholder.equipment.setOnClickListener(this);
+        curholder.wordorder.setOnClickListener(this);
+        curholder.ele_configuration.setOnClickListener(this);
+        curholder.ele_tour.setOnClickListener(this);
+        curholder.eliminate.setOnClickListener(this);
+        curholder.beautify.setOnClickListener(this);
+        curholder.dedusting.setOnClickListener(this);
+        curholder.question.setOnClickListener(this);
+        curholder.setting.setOnClickListener(this);
+        curholder.equipment_img.setSelected(true);
+        curholder.equipment_tv.setSelected(true);
+        curholder.equipment.setBackgroundColor(whilte);
+        ivCurrent= curholder.equipment_img;
+        tvCurrent= curholder.equipment_tv;
+        llCurrent=curholder.equipment;
+        getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent,new EquipmentCheckFragment(eleid,curEleNo,curCompany)).commit();
+        companyRl.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                if (position == 0) {    //切换公司
-                    comapnyDialog = new ComapnyDialog(MainActivity.this, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            int companyId = comapnyDialog.radioCompany.getCheckedRadioButtonId();
-                            //如果切换公司
-                            if (curCompany != companyList.get(companyId)) {
-                                curCompany = companyList.get(companyId);
-                                //公司ID
-                                EventBusBean busBean = new EventBusBean();
-                                busBean.setKind(EventKind.EVENT_COMPANY_CHANGE);
-                                busBean.setObj(curCompany);
-                                EventBus.getDefault().post(busBean);
-                                getEleAccountList();
-
-                            }
-                            comapnyDialog.dismiss();
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: "+"电力  ");
+                comapnyDialog = new ComapnyDialog(MainActivity.this, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int companyId = comapnyDialog.radioCompany.getCheckedRadioButtonId();
+                        //如果切换公司
+                        if (curCompany != list.get(companyId)) {
+                            curCompany = list.get(companyId);
+                            eleid = curCompany.getEleAccountList().get(0).getEleAccountId();
+                            eleNo = curCompany.getEleAccountList().get(0).getEleNo();
+                            company_tv.setText(curCompany.getCompanyShortName());
+                            ele_tv.setText(eleNo);
+                            //公司ID
+//                            setCompanyId(curCompany);
+                            setEleId(eleid, eleNo,curCompany);
                         }
-                    });
-                    comapnyDialog.show();
-                } else {                // 切换用电户号
-                    curEleId = eleAccountList.get(position - 1).getEleAccountId();
-                    curEleNo = eleAccountList.get(position - 1).getEleNo();
-                    eleAccountAdapter.setCurEleId(curEleId);
-                    eleAccountAdapter.notifyDataSetChanged();
-                    //发送电表ID到baseFragment,便于请求公用
-                    EventBusBean busBean = new EventBusBean();
-                    busBean.setKind(EventKind.EVENT_COMPANY_CHANGEID);
-                    busBean.setObj(curEleId);
-                    busBean.setMessage(curEleNo);
-                    EventBus.getDefault().post(busBean);
-                }
+                        comapnyDialog.dismiss();
+                    }
+                });
+                comapnyDialog.show();
+            }
+        });
+        eleRL.setOnClickListener(new View.OnClickListener() {
+
+            private EleDialog eleDialog;
+
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: "+"     电力  ");
+                eleDialog = new EleDialog(MainActivity.this, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int companyId = eleDialog.radioCompany.getCheckedRadioButtonId();
+                        eleid=curCompany.getEleAccountList().get(companyId).getEleAccountId();
+                        eleNo=curCompany.getEleAccountList().get(companyId).getEleNo();
+                        ele_tv.setText(eleNo);
+//                        if(curCompany.getEleAccountList()!=curCompany.getEleAccountList().get(companyId)){
+//                            curCompany.getEleAccountList();
+//                        }
+                        setEleId(eleid, eleNo,curCompany);
+                        eleDialog.dismiss();
+                    }
+                });
+                eleDialog.show();
             }
         });
     }
-    /**
-     * 初始化组件
-     */
-    private void initView() {
-        UserInfoBean userInfoBean = ACache.getInstance().getAsObject(Constants.CACHE_USERINFO);
-        List<TabClass> array = new ArrayList<>();
-        for (TabClass tabClass : Constants.menuList) {
-            if (userInfoBean.getMenuList().contains(tabClass.getAlias())) {
-                array.add(tabClass);
+    @Override
+    public void onClick(View view) {
+        if(!iseditor){
+//            setCompanyId(curCompany);
+//            setEleId(eleid, eleNo,curCompany);
+            ivCurrent.setSelected(false);
+            tvCurrent.setSelected(false);
+            llCurrent.setBackgroundColor(blue);
+
+            switch (view.getId()) {
+                //档案管理
+                case R.id.equipment:
+                    //发送电表ID到baseFragment,便于请求公用
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new EquipmentCheckFragment(eleid,curEleNo, curCompany)).commit();
+                    curholder.equipment_img.setSelected(true);
+                    curholder.equipment_tv.setSelected(true);
+                    curholder.equipment.setBackgroundColor(whilte);
+                    ivCurrent = curholder.equipment_img;
+                    tvCurrent = curholder.equipment_tv;
+                    llCurrent = curholder.equipment;
+                    break;
+                //工单列表
+                case R.id.wordorder:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                    curholder.wordorder_img.setSelected(true);
+                    curholder.wordorder_tv.setSelected(true);
+                    curholder.wordorder.setBackgroundColor(whilte);
+                    ivCurrent = curholder.wordorder_img;
+                    tvCurrent = curholder.wordorder_tv;
+                    llCurrent = curholder.wordorder;
+                    break;
+                //电表配置
+                case R.id.ele_configuration:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new AmmeterFragment(eleid,curEleNo, curCompany)).commit();
+                    curholder.ele_configuration_img.setSelected(true);
+                    curholder.ele_configuration_tv.setSelected(true);
+                    curholder.ele_configuration.setBackgroundColor(whilte);
+                    ivCurrent = curholder.ele_configuration_img;
+                    tvCurrent = curholder.ele_configuration_tv;
+                    llCurrent = curholder.ele_configuration;
+                    break;
+                //电房巡视
+                case R.id.ele_tour:
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new PatrolFragment(eleid,curEleNo, curCompany)).commit();
+                    curholder.ele_tour_img.setSelected(true);
+                    curholder.ele_tour_tv.setSelected(true);
+                    curholder.ele_tour.setBackgroundColor(whilte);
+                    ivCurrent = curholder.ele_tour_img;
+                    tvCurrent = curholder.ele_tour_tv;
+                    llCurrent = curholder.ele_tour;
+                    break;
+                //消缺
+                case R.id.eliminate:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                    curholder.eliminate_img.setSelected(true);
+                    curholder.eliminate_tv.setSelected(true);
+                    curholder.eliminate.setBackgroundColor(whilte);
+                    ivCurrent = curholder.eliminate_img;
+                    tvCurrent = curholder.eliminate_tv;
+                    llCurrent = curholder.eliminate;
+                    break;
+                //美化安规
+                case R.id.beautify:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                    curholder.beautify_img.setSelected(true);
+                    curholder.beautify_tv.setSelected(true);
+                    curholder.beautify.setBackgroundColor(whilte);
+                    ivCurrent = curholder.beautify_img;
+                    tvCurrent = curholder.beautify_tv;
+                    llCurrent = curholder.beautify;
+                    break;
+                //除尘清理
+                case R.id.dedusting:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                    curholder.dedusting_img.setSelected(true);
+                    curholder.dedusting_tv.setSelected(true);
+                    curholder.dedusting.setBackgroundColor(whilte);
+                    ivCurrent = curholder.dedusting_img;
+                    tvCurrent = curholder.dedusting_tv;
+                    llCurrent = curholder.dedusting;
+                    break;
+                //问题列表
+                case R.id.question:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new QuestionFragment()).commit();
+                    curholder.question_img.setSelected(true);
+                    curholder.question_tv.setSelected(true);
+                    curholder.question.setBackgroundColor(whilte);
+                    ivCurrent = curholder.question_img;
+                    tvCurrent = curholder.question_tv;
+                    llCurrent = curholder.question;
+                    break;
+                //设置
+                case R.id.setting:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new SettingFragment()).commit();
+                    curholder.setting_img.setSelected(true);
+                    curholder.setting_tv.setSelected(true);
+                    curholder.setting.setBackgroundColor(whilte);
+                    ivCurrent = curholder.setting_img;
+                    tvCurrent = curholder.setting_tv;
+                    llCurrent = curholder.setting;
+                    break;
+            }
+        }else{
+            return;
+        }
+    }
+    public void setCompanyList(){
+        list = ACache.getInstance().getAsObject(Constants.CACHE_COMPANYLIST);
+        company_tv.setText(list.get(0).getCompanyShortName());
+        ele_tv.setText(list.get(0).getEleAccountList().get(0).getEleNo());
+        Integer companyId = list.get(0).getCompanyId();
+        curCompany=list.get(0);
+        for (int i = 0; i < list.size(); i++) {
+            if(companyId==list.get(i).getCompanyId()){
+                eleid = list.get(i).getEleAccountList().get(0).getEleAccountId();
+                eleNo = list.get(i).getEleAccountList().get(0).getEleNo();
             }
         }
 
-        radioGroup.removeAllViews();
-        radioGroup.setOnCheckedChangeListener(this);
-        manager = MainFragmentManager.getInstance(getSupportFragmentManager(), array, R.id.realtabcontent);
-        manager.showFragment(0);
-        for (TabClass tabClass : array) {
-            RadioButton button = (RadioButton) LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_radiobutton, radioGroup, false);
-            stateListDrawable = addStateDrawable(tabClass.getImage(), tabClass.getImagePressed());
-            button.setCompoundDrawablesWithIntrinsicBounds(stateListDrawable, null, null, null);
-            button.setText(tabClass.text);
-            radioGroup.addView(button);
-            mTabHashMap.put(tabClass.getAlias(), radioGroup.indexOfChild(button));
-        }
-        ((RadioButton) radioGroup.getChildAt(0)).setChecked(true);
-
+//        setCompanyId(curCompany);
+        setEleId(eleid, eleNo,curCompany);
+        initfindId();
     }
-
-    private StateListDrawable addStateDrawable(int idNormal, int idPressed) {
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        Drawable normal = idNormal == -1 ? null : getResources().getDrawable(idNormal);
-        if (null != normal) {
-            normal = DrawableUtil.zoomDrawable(normal, 41, 41);
-            normal.setBounds(0, 0, normal.getMinimumWidth(), normal.getMinimumHeight());
-        }
-        Drawable pressed = idPressed == -1 ? null : getResources().getDrawable(idPressed);
-        if (null != pressed) {
-            pressed = DrawableUtil.zoomDrawable(pressed, 41, 41);
-            pressed.setBounds(0, 0, pressed.getMinimumWidth(), pressed.getMinimumHeight());
-        }
-        stateListDrawable.addState(new int[]{android.R.attr.state_checked}, pressed);
-        stateListDrawable.addState(new int[]{}, normal);
-        return stateListDrawable;
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (!mFristChecked) {
-            mInitIndex = i - 1;
-            mFristChecked = true;
-        }
-        i -= mInitIndex;
-        int remainder =  i % (radioGroup.getChildCount());
-        int index = remainder == 0 ? radioGroup.getChildCount() :  remainder ;
-        int childCount = radioGroup.getChildCount();
-        manager.showFragment(index - 1);
-//            设置RadioButton选中后隐藏背景
-//        RadioButton childAt= (RadioButton)radioGroup.getChildAt(index - 1);
-
-
+//    public void setCompanyId(CompanyResult curCompany){
+//        EventBusBean busBean = new EventBusBean();
+//        busBean.setKind(EventKind.EVENT_COMPANY_COMPANYBEAN);
+//        busBean.setObj(curCompany);
+//        EventBus.getDefault().post(busBean);
+//    }
+    public void setEleId(int curEleId,String curEleNo,CompanyResult curCompany){
+        EventBusBean busBean = new EventBusBean();
+        busBean.setKind(EventKind.EVENT_COMPANY_CHANGEID);
+        busBean.setEleID(curEleId);
+        busBean.setObj(curCompany);
+        busBean.setMessage(curEleNo);
+        EventBus.getDefault().post(busBean);
     }
 
     @Override
@@ -265,14 +349,6 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
         super.onDestroy();
     }
 
-    public RadioGroup getRadioGroup() {
-        return radioGroup;
-    }
-
-    public HashMap<String, Integer> getmTabHashMap() {
-
-        return mTabHashMap;
-    }
     class ComapnyDialog extends BaseCustomDialog {
 
         public RadioGroup radioCompany;
@@ -285,10 +361,9 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
         protected void setContentView() {
             // 指定布局
             this.setContentView(R.layout.dialog_equipment_company);
-
             radioCompany = (RadioGroup) findViewById(R.id.radio_company);
             int i = 0;
-            for (CompanyResult entity : companyList) {
+            for (CompanyResult entity : list) {
                 RadioButton radioButton = new RadioButton(getContext());
                 radioButton.setText(entity.getCompanyShortName());
                 radioButton.setId(i++);
@@ -302,16 +377,155 @@ public class MainActivity extends BaseFragmentActivity implements RadioGroup.OnC
             super.setContentView();
         }
     }
+    class EleDialog extends BaseCustomDialog {
+
+        public RadioGroup radioCompany;
+
+        public EleDialog(Activity context, View.OnClickListener clickListener) {
+            super(context, clickListener);
+        }
+
+        @Override
+        protected void setContentView() {
+            // 指定布局
+            this.setContentView(R.layout.dialog_equipment_ele);
+            radioCompany = (RadioGroup) findViewById(R.id.radio_company);
+            int i = 0;
+            for (EleAccountResult eleAccountList : curCompany.getEleAccountList()) {
+                RadioButton radioButton = new RadioButton(getContext());
+                radioButton.setText(eleAccountList.getEleNo());
+                radioButton.setId(i++);
+                radioButton.setPadding(15, 15, 15, 15);
+                radioButton.setTextColor(ContextCompat.getColor(x.app(), R.color.black));
+                if (eleAccountList.getEleAccountId() == eleid) {
+                    radioButton.setChecked(true);
+                }
+                radioCompany.addView(radioButton);
+            }
+            super.setContentView();
+        }
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(EventBusBean bean) {
+        //全部公司信息
         if (bean.getKind().equals(EventKind.EVENT_COMPANYLIST)) {
-            initCompanyList();
+            setCompanyList();
         }
-        //公司id
-        if (bean.getKind().equals(EventKind.EVENT_COMPANY_CHANGE)) {
-            CompanyResult result = bean.getObj();
-            curCompany = result;
-            getEleAccountList();
+        //禁止导航栏跳转
+        if (bean.getKind().equals(EventKind.EVENT_COMPANY_ELEISEDITOR)) {
+            iseditor = bean.getSuccess();
+        }
+    }
+    public void dialog(){
+        AllCancelDialog dialog1=new AllCancelDialog();
+        dialog1.loadDialog("尚未保存当前页面，确认放弃？", new AllCancelDialog.OnClickIsConfirm() {
+            @Override
+            public void OnClickIsConfirmListener() {
+                iseditor=false;
+            }
+        }, new AllCancelDialog.OnClickIsCancel() {
+            @Override
+            public void OnClickIsCancelListener() {
+                return;
+            }
+        });
+    }
+    public void shwoFragment(int fragmentId){
+        ivCurrent.setSelected(false);
+        tvCurrent.setSelected(false);
+        llCurrent.setBackgroundColor(blue);
+        switch (fragmentId) {
+            //档案管理
+            case R.id.equipment:
+                //发送电表ID到baseFragment,便于请求公用
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new EquipmentCheckFragment(eleid,curEleNo, curCompany)).commit();
+                curholder.equipment_img.setSelected(true);
+                curholder.equipment_tv.setSelected(true);
+                curholder.equipment.setBackgroundColor(whilte);
+                ivCurrent = curholder.equipment_img;
+                tvCurrent = curholder.equipment_tv;
+                llCurrent = curholder.equipment;
+                break;
+            //工单列表
+            case R.id.wordorder:
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                curholder.wordorder_img.setSelected(true);
+                curholder.wordorder_tv.setSelected(true);
+                curholder.wordorder.setBackgroundColor(whilte);
+                ivCurrent = curholder.wordorder_img;
+                tvCurrent = curholder.wordorder_tv;
+                llCurrent = curholder.wordorder;
+                break;
+            //电表配置
+            case R.id.ele_configuration:
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new AmmeterFragment(eleid,curEleNo, curCompany)).commit();
+                curholder.ele_configuration_img.setSelected(true);
+                curholder.ele_configuration_tv.setSelected(true);
+                curholder.ele_configuration.setBackgroundColor(whilte);
+                ivCurrent = curholder.ele_configuration_img;
+                tvCurrent = curholder.ele_configuration_tv;
+                llCurrent = curholder.ele_configuration;
+                break;
+            //电房巡视
+            case R.id.ele_tour:
+//                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new PatrolFragment(eleid,curEleNo, curCompany)).commit();
+                curholder.ele_tour_img.setSelected(true);
+                curholder.ele_tour_tv.setSelected(true);
+                curholder.ele_tour.setBackgroundColor(whilte);
+                ivCurrent = curholder.ele_tour_img;
+                tvCurrent = curholder.ele_tour_tv;
+                llCurrent = curholder.ele_tour;
+                break;
+            //消缺
+            case R.id.eliminate:
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                curholder.eliminate_img.setSelected(true);
+                curholder.eliminate_tv.setSelected(true);
+                curholder.eliminate.setBackgroundColor(whilte);
+                ivCurrent = curholder.eliminate_img;
+                tvCurrent = curholder.eliminate_tv;
+                llCurrent = curholder.eliminate;
+                break;
+            //美化安规
+            case R.id.beautify:
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                curholder.beautify_img.setSelected(true);
+                curholder.beautify_tv.setSelected(true);
+                curholder.beautify.setBackgroundColor(whilte);
+                ivCurrent = curholder.beautify_img;
+                tvCurrent = curholder.beautify_tv;
+                llCurrent = curholder.beautify;
+                break;
+            //除尘清理
+            case R.id.dedusting:
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
+                curholder.dedusting_img.setSelected(true);
+                curholder.dedusting_tv.setSelected(true);
+                curholder.dedusting.setBackgroundColor(whilte);
+                ivCurrent = curholder.dedusting_img;
+                tvCurrent = curholder.dedusting_tv;
+                llCurrent = curholder.dedusting;
+                break;
+            //问题列表
+            case R.id.question:
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new QuestionFragment()).commit();
+                curholder.question_img.setSelected(true);
+                curholder.question_tv.setSelected(true);
+                curholder.question.setBackgroundColor(whilte);
+                ivCurrent = curholder.question_img;
+                tvCurrent = curholder.question_tv;
+                llCurrent = curholder.question;
+                break;
+            //设置
+            case R.id.setting:
+                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new SettingFragment()).commit();
+                curholder.setting_img.setSelected(true);
+                curholder.setting_tv.setSelected(true);
+                curholder.setting.setBackgroundColor(whilte);
+                ivCurrent = curholder.setting_img;
+                tvCurrent = curholder.setting_tv;
+                llCurrent = curholder.setting;
+                break;
         }
     }
 }

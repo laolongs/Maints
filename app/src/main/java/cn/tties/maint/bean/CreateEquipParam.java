@@ -11,13 +11,23 @@ public class CreateEquipParam {
     private Integer equipmentId;
     private Integer eleAccountId;
     private Integer pid;
+    private Integer companyEquipmentId;
 //    private CreateBoxBody boxBody;
-    private List<CreateBoxBody> boxBody;
+    private CreateBoxBody boxBody;
 
 //    private List<CreateEquipTwoParam> equNameArrTwo;
     private List<CreateEquipItemParam> equNameArrThree;
     private List<CreateEquipTwoParam> comItemTwo;
 //    private List<CreateEquipFourParam> equArrFour;
+
+
+    public Integer getCompanyEquipmentId() {
+        return companyEquipmentId;
+    }
+
+    public void setCompanyEquipmentId(Integer companyEquipmentId) {
+        this.companyEquipmentId = companyEquipmentId;
+    }
 
     public String getComEquName() {
         return comEquName;
@@ -51,11 +61,11 @@ public class CreateEquipParam {
         this.pid = pid;
     }
 
-    public List<CreateBoxBody> getBoxBody() {
+    public CreateBoxBody getBoxBody() {
         return boxBody;
     }
 
-    public void setBoxBody(List<CreateBoxBody> boxBody) {
+    public void setBoxBody(CreateBoxBody boxBody) {
         this.boxBody = boxBody;
     }
 

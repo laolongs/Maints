@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/radiobutton_order_status_press" android:state_selected="true" android:color="@color/white"/>
-    <item android:drawable="@drawable/radiobutton_order_status_press" android:state_checked="true"  android:color="@color/white"/>
-    <item android:drawable="@drawable/radiobutton_order_stutus_normal" android:state_selected="false"  android:color="@color/main_title_gray"/>
+    <item android:state_selected="true" android:color="#1B92EE"/>
+    <item android:state_checked="true"  android:color="#1B92EE"/>
+    <item android:state_selected="false"  android:color="#FFFFFF"/>
 </selector>

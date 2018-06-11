@@ -1,9 +1,11 @@
 package cn.tties.maint.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -99,11 +101,17 @@ public class CommonSwipListViewAdapter<T extends CommonListViewInterface> extend
 
     @Override
     public void onBindViewHolder(CommonSwipListViewAdapter.ViewHolder holder, int position) {
+        int unselect = Color.parseColor("#ffffff");
+        int select = Color.parseColor("#1B92EE");
+        int unselecttv = Color.parseColor("#000000");
+        int selecttv = Color.parseColor("#ffffff");
         holder.setData(mDataList.get(position));
         if (mDataList.get(position).isChecked()) {
-            holder.selView.setVisibility(View.VISIBLE);
+            holder.arrow_Rl.setBackgroundColor(select);
+            holder.nameText.setTextColor(selecttv);
         } else {
-            holder.selView.setVisibility(View.INVISIBLE);
+            holder.arrow_Rl.setBackgroundColor(unselect);
+            holder.nameText.setTextColor(unselecttv);
         }
     }
 
@@ -116,12 +124,12 @@ public class CommonSwipListViewAdapter<T extends CommonListViewInterface> extend
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
-        View selView;
+        RelativeLayout arrow_Rl;
 
         public ViewHolder(View itemView) {
             super(itemView);
             nameText = (TextView) itemView.findViewById(R.id.text_name);
-            selView = (View) itemView.findViewById(R.id.view_sel);
+            arrow_Rl = (RelativeLayout) itemView.findViewById(R.id.arrow_Rl);
         }
 
         public void setData(T title) {

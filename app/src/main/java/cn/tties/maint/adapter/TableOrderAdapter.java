@@ -65,20 +65,16 @@ public class TableOrderAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.table_order, null);
             TableOrderAdapter.ViewHolder viewHolder = new TableOrderAdapter.ViewHolder();
             viewHolder.layout = (LinearLayout) convertView.findViewById(R.id.layout_table);
-
             viewHolder.textWorkType = (TextView) convertView.findViewById(R.id.text_work_type);
             viewHolder.textCompanyName = (TextView) convertView.findViewById(R.id.text_company_name);
             viewHolder.textCompanyAddr = (TextView) convertView.findViewById(R.id.text_company_addr);
             viewHolder.textStartDate = (TextView) convertView.findViewById(R.id.text_start_date);
-            viewHolder.textBusinessName = (TextView) convertView.findViewById(R.id.text_business_name);
-            viewHolder.textBusinessTel = (TextView) convertView.findViewById(R.id.text_business_tel);
-            viewHolder.textFinanceName = (TextView) convertView.findViewById(R.id.text_finance_name);
-            viewHolder.textFinanceTel = (TextView) convertView.findViewById(R.id.text_finance_tel);
+            viewHolder.textQuestion = (TextView) convertView.findViewById(R.id.text_question);
+            viewHolder.textQuestionCount = (TextView) convertView.findViewById(R.id.text_question_count);
+            viewHolder.textTour = (TextView) convertView.findViewById(R.id.text_tour);
+            viewHolder.textTourCount = (TextView) convertView.findViewById(R.id.text_tour_count);
             viewHolder.textTechName = (TextView) convertView.findViewById(R.id.text_tech_name);
             viewHolder.textTechTel = (TextView) convertView.findViewById(R.id.text_tech_tel);
-            viewHolder.textXunshiCount = (TextView) convertView.findViewById(R.id.text_xunshi_count);
-            viewHolder.textCount = (TextView) convertView.findViewById(R.id.text_count);
-
             viewHolder.btnSave = (Button) convertView.findViewById(R.id.btn_save);
             convertView.setTag(viewHolder);
         }
@@ -90,16 +86,13 @@ public class TableOrderAdapter extends BaseAdapter {
         public TextView textCompanyName;
         public TextView textCompanyAddr;
         public TextView textStartDate;
-        public TextView textBusinessName;
-        public TextView textBusinessTel;
-        public TextView textFinanceName;
-        public TextView textFinanceTel;
+        public TextView textQuestion;
+        public TextView textQuestionCount;
+        public TextView textTour;
+        public TextView textTourCount;
         public TextView textTechName;
         public TextView textTechTel;
-        public TextView textXunshiCount;
-        public TextView textCount;
         public LinearLayout layout;
-
         public Button btnSave;
     }
 

@@ -36,29 +36,27 @@ public class MyEquipmentLayout_EquiRecyAdapter extends RecyclerView.Adapter<Recy
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType==EDITTEXT){
-            return new MyOtherViewHolder(inflater.inflate(R.layout.activity_equipment_details_item_other, parent, false));
+            return new MyOtherViewHolders(inflater.inflate(R.layout.activity_newequipment_details_items, parent, false));
         }
         if(viewType==LEAF){
-            return new MyViewHolder(inflater.inflate(R.layout.activity_equipment_details_item, parent, false));
+            return new MyViewHolder(inflater.inflate(R.layout.activity_newequipment_details_item, parent, false));
         }
         return null;
     }
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof MyOtherViewHolder) {
-
-            //清除焦点
-            ((MyOtherViewHolder) holder).othervalue.clearFocus();
-            ((MyOtherViewHolder) holder).othervalue.setFocusable(false);
-            //先清除之前的文本改变监听
-            if (((MyOtherViewHolder) holder).othervalue.getTag() instanceof TextWatcher) {
-                ((MyOtherViewHolder) holder).othervalue.removeTextChangedListener((TextWatcher) (((MyOtherViewHolder) holder).othervalue.getTag()));
+        if (holder instanceof MyOtherViewHolders) {
+            for (final EquipmentLayoutBean layoutBean : beanList.get(position).getChildrenList()) {
+                View layout = View.inflate(x.app(), R.layout.activity_newequipment_details_item_other, null);
+                MyOtherViewHolder otherholder = new MyOtherViewHolder(layout);
+                otherholder.othername.setText(layoutBean.getTextName());
+                otherholder.othervalue.setText(layoutBean.getValue());
+                ((MyOtherViewHolders) holder).infos.addView(layout);
             }
-            ((MyOtherViewHolder) holder).othervalue.setOnClickListener(null);
-            ((MyOtherViewHolder) holder).othervalue.setOnFocusChangeListener(null);
-            //设置数据
-            ((MyOtherViewHolder) holder).othername.setText(TextUtils.isEmpty(beanList.get(position).getTextName()) ? "" : beanList.get(position).getTextName());
-            ((MyOtherViewHolder) holder).othervalue.setText(TextUtils.isEmpty(beanList.get(position).getValue()) ? "" : beanList.get(position).getValue());
+
+//           //设置数据
+//            ((MyOtherViewHolder) holder).othername.setText(TextUtils.isEmpty(beanList.get(position).getTextName()) ? "" : beanList.get(position).getTextName());
+//            ((MyOtherViewHolder) holder).othervalue.setText(TextUtils.isEmpty(beanList.get(position).getValue()) ? "" : beanList.get(position).getValue());
 
 
         }
@@ -66,20 +64,11 @@ public class MyEquipmentLayout_EquiRecyAdapter extends RecyclerView.Adapter<Recy
             //设置数据
             ((MyViewHolder) holder).name.setText(TextUtils.isEmpty(beanList.get(position).getTextName()) ? "" : beanList.get(position).getTextName());
             ((MyViewHolder) holder).info.removeAllViews();
-            ((MyViewHolder) holder).info.clearFocus();
             for (final EquipmentLayoutBean layoutBean : beanList.get(position).getChildrenList()) {
-                View layout = View.inflate(x.app(), R.layout.activity_equipment_details_item_other, null);
+                View layout = View.inflate(x.app(), R.layout.activity_newequipment_details_item_other, null);
                 MyOtherViewHolder otherholder = new MyOtherViewHolder(layout);
                 otherholder.othername.setText(layoutBean.getTextName());
-                otherholder.othervalue.setFocusable(false);
                 otherholder.othervalue.setText(layoutBean.getValue());
-                otherholder.othervalue.setOnClickListener(null);
-                otherholder.othervalue.setOnFocusChangeListener(null);
-                otherholder.othervalue.clearFocus();
-                if (otherholder.othervalue.getTag() instanceof TextWatcher) {
-                    otherholder.othervalue.removeTextChangedListener((TextWatcher) (otherholder.othervalue.getTag()));
-                }
-                ((MyViewHolder) holder).info.clearFocus();
                 ((MyViewHolder) holder).info.addView(layout);
             }
         }
@@ -99,13 +88,22 @@ public class MyEquipmentLayout_EquiRecyAdapter extends RecyclerView.Adapter<Recy
     public int getItemCount() {
         return beanList==null?0:beanList.size();
     }
+
     public class MyOtherViewHolder extends RecyclerView.ViewHolder{
         TextView othername;
-        EditText othervalue;
+        TextView othervalue;
         public MyOtherViewHolder(View itemView) {
             super(itemView);
             othername= itemView.findViewById(R.id.details_other_text_name);
             othervalue= itemView.findViewById(R.id.details_other_edit_value);
+        }
+    }
+    public class MyOtherViewHolders extends RecyclerView.ViewHolder{
+        LinearLayout infos;
+
+        public MyOtherViewHolders(View itemView) {
+            super(itemView);
+            infos= itemView.findViewById(R.id.details_layout_infos);
         }
     }
     public class MyViewHolder extends RecyclerView.ViewHolder{

@@ -10,14 +10,22 @@ import java.util.List;
  */
 
 public class EquipmentcheckBean  {
-
+        private Integer parentEquipmentId;
         private TwoCompanyEquipmentBean twoCompanyEquipment;
         private List<TwoCompanyEquipmentItemBean> twoCompanyEquipmentItem;
         private List<ThreeCompanyEquipmentListBean> threeCompanyEquipmentList;
 
-        public TwoCompanyEquipmentBean getTwoCompanyEquipment() {
-            return twoCompanyEquipment;
+        public Integer getParentEquipmentId() {
+            return parentEquipmentId;
         }
+
+        public void setParentEquipmentId(Integer parentEquipmentId) {
+            this.parentEquipmentId = parentEquipmentId;
+        }
+
+        public TwoCompanyEquipmentBean getTwoCompanyEquipment() {
+                return twoCompanyEquipment;
+            }
 
         public void setTwoCompanyEquipment(TwoCompanyEquipmentBean twoCompanyEquipment) {
             this.twoCompanyEquipment = twoCompanyEquipment;
@@ -45,10 +53,17 @@ public class EquipmentcheckBean  {
         /**
          * equipmentItem : {"equipmentId":2,"equipmentItemId":1,"inputType":0,"itemName":"变电站名称","itemOrder":1}
          */
+        private Integer equipmentInfoId;
         private String equipmentInfo;
-
-
         private EquipmentItemBean equipmentItem;
+
+        public Integer getEquipmentInfoId() {
+            return equipmentInfoId;
+        }
+
+        public void setEquipmentInfoId(Integer equipmentInfoId) {
+            this.equipmentInfoId = equipmentInfoId;
+        }
 
         public String getEquipmentInfo() {
             return equipmentInfo;
@@ -67,6 +82,38 @@ public class EquipmentcheckBean  {
         }
 
         public  class EquipmentItemBean {
+            /**
+             * equipmentId : 2
+             * equipmentItemId : 1
+             * inputType : 0
+             * itemName : 变电站名称
+             * itemOrder : 1
+             */
+
+            private int equipmentId;
+            private int equipmentItemId;
+            private int inputType;
+            private String itemName;
+            private int itemOrder;
+            private String defaultValue;
+            private String unitName;
+
+            public String getDefaultValue() {
+                return defaultValue;
+            }
+
+            public void setDefaultValue(String defaultValue) {
+                this.defaultValue = defaultValue;
+            }
+
+            public String getUnitName() {
+                return unitName;
+            }
+
+            public void setUnitName(String unitName) {
+                this.unitName = unitName;
+            }
+
             public int getEquipmentId() {
                 return equipmentId;
             }
@@ -107,19 +154,7 @@ public class EquipmentcheckBean  {
                 this.itemOrder = itemOrder;
             }
 
-            /**
-             * equipmentId : 2
-             * equipmentItemId : 1
-             * inputType : 0
-             * itemName : 变电站名称
-             * itemOrder : 1
-             */
 
-            private int equipmentId;
-            private int equipmentItemId;
-            private int inputType;
-            private String itemName;
-            private int itemOrder;
 
 
         }
@@ -329,6 +364,15 @@ public class EquipmentcheckBean  {
 
                 private EquipmentItemBean equipmentItem;
                 private String equipmentInfo;
+                private Integer equipmentInfoId;
+
+                public Integer getEquipmentInfoId() {
+                    return equipmentInfoId;
+                }
+
+                public void setEquipmentInfoId(Integer equipmentInfoId) {
+                    this.equipmentInfoId = equipmentInfoId;
+                }
 
                 public EquipmentItemBean getEquipmentItem() {
                     return equipmentItem;
@@ -361,7 +405,24 @@ public class EquipmentcheckBean  {
                     private int inputType;
                     private int equipmentItemId;
                     private int equipmentId;
+                    private String defaultValue;
+                    private String unitName;
 
+                    public String getDefaultValue() {
+                        return defaultValue;
+                    }
+
+                    public void setDefaultValue(String defaultValue) {
+                        this.defaultValue = defaultValue;
+                    }
+
+                    public String getUnitName() {
+                        return unitName;
+                    }
+
+                    public void setUnitName(String unitName) {
+                        this.unitName = unitName;
+                    }
 
                     public String getItemName() {
                         return itemName;
@@ -514,6 +575,15 @@ public class EquipmentcheckBean  {
 
                     private EquipmentItemBeanX equipmentItem;
                     private String equipmentInfo;
+                    private Integer equipmentInfoId;
+
+                    public Integer getEquipmentInfoId() {
+                        return equipmentInfoId;
+                    }
+
+                    public void setEquipmentInfoId(Integer equipmentInfoId) {
+                        this.equipmentInfoId = equipmentInfoId;
+                    }
 
                     public EquipmentItemBeanX getEquipmentItem() {
                         return equipmentItem;
@@ -547,7 +617,24 @@ public class EquipmentcheckBean  {
                         private int inputType;
                         private int equipmentItemId;
                         private int equipmentId;
+                        private String defaultValue;
+                        private String unitName;
 
+                        public String getDefaultValue() {
+                            return defaultValue;
+                        }
+
+                        public void setDefaultValue(String defaultValue) {
+                            this.defaultValue = defaultValue;
+                        }
+
+                        public String getUnitName() {
+                            return unitName;
+                        }
+
+                        public void setUnitName(String unitName) {
+                            this.unitName = unitName;
+                        }
 
                         public String getItemName() {
                             return itemName;

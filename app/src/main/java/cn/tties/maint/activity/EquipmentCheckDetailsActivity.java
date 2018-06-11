@@ -1,5 +1,6 @@
 package cn.tties.maint.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
@@ -17,10 +18,14 @@ import org.xutils.view.annotation.ViewInject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.tties.maint.R;
 import cn.tties.maint.adapter.CommonSwipListViewAdapter;
+import cn.tties.maint.adapter.DetailsSwipListViewAdapter;
+import cn.tties.maint.adapter.EquiRecyclerAdapter;
 import cn.tties.maint.adapter.EquipmentLayoutAdapter;
 import cn.tties.maint.bean.CommonListViewInterface;
 import cn.tties.maint.bean.CreateBoxBody;
@@ -44,6 +49,7 @@ import cn.tties.maint.httpclient.HttpClientSend;
 import cn.tties.maint.httpclient.params.CreateNewComEquParams;
 import cn.tties.maint.httpclient.params.SelectCompanyEquipmentByCompanyParams;
 import cn.tties.maint.httpclient.result.BaseResult;
+import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
 import cn.tties.maint.secondLv.DataBean;
 import cn.tties.maint.adapter.RecyclerAdapter;
 import cn.tties.maint.util.JsonUtils;
@@ -64,39 +70,57 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
     @ViewInject(R.id.eq_de_layout_info)
     private LinearLayout layout_info;
     EquipmentDetailsActivityHolder curHolder;
-
-    protected CommonSwipListViewAdapter lv3Adapter2;
+    protected DetailsSwipListViewAdapter lv3Adapter2;
     //加载节点布局
     private EquipmentLayoutAdapter detailAdapter;
     private EquipmentEntity entity;
+    private CompanyEquipmentResult entitys;
     //二级列表展示
-    private List<DataBean> dataBeanList = new ArrayList<>();;
-    private DataBean dataBean;
+    private List<DataBean> dataBeanList = new ArrayList<>();
+    private List<DataBean> recorddataBeanList = new ArrayList<>();
     private RecyclerAdapter mAdapter;
     boolean cabinet=false;
     boolean isTowLeaf=false;
     private int curEleId;
     private int currentItemId;
     private boolean IsForEditor;
-
+    private Integer companyEquipmentId=0;
+    private Integer boxBodyId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         detailsActivity = this;
-        eEntity = (CommonListViewInterface) getIntent().getSerializableExtra("bean");
+
         curEleId = (Integer) getIntent().getSerializableExtra("curEleId");
         //编辑时得二级企业设备id
-//        currentItemId = (Integer) getIntent().getSerializableExtra("currentItemId");
+        currentItemId = (Integer) getIntent().getSerializableExtra("currentItemId");
         //判断是否来自编辑页面 true
         IsForEditor = (boolean) getIntent().getSerializableExtra("IsForEditor");
-        entity = (EquipmentEntity) eEntity;
+        //false 代表本地设备   true 代表企业设备
+        if(!IsForEditor){
+            eEntity = (CommonListViewInterface) getIntent().getSerializableExtra("bean");
+            entity = (EquipmentEntity) eEntity;
+            entity.getEquipmentId();
+        }else{
+            eEntity = (CommonListViewInterface) getIntent().getSerializableExtra("bean");
+            entitys = (CompanyEquipmentResult) eEntity;
+            entitys.getEquipmentId();
+        }
+
         initFindeViewById();
-        Log.i(TAG, "onCreate: " + eEntity.getItemId());
     }
 
     private void initFindeViewById() {
         curHolder = new EquipmentDetailsActivityHolder(layout_info);
-        curHolder.id=eEntity.getItemId();
+        if(!IsForEditor){
+            curHolder.id=eEntity.getItemId();
+            Log.i(TAG, "onCreate  本地: " + entity.getEquipmentId());
+        }else{
+            curHolder.id=entitys.getEquipmentId();
+            companyEquipmentId=entitys.getCompanyEquipmentId();
+            Log.i(TAG, "onCreate: 设备0100 " + entitys.getEquipmentId());
+            Log.i(TAG, "onCreate: 设备 222" + entitys.getCompanyEquipmentId());
+        }
         initView();
         initLv3ListView();
         initisCabinet();
@@ -106,7 +130,6 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         curHolder.eq_de_cancel.setOnClickListener(this);
         curHolder.eq_de_start.setOnClickListener(this);
         curHolder.eq_de_old.setOnClickListener(this);
-//        initDetailListView();
     }
 
 
@@ -114,9 +137,11 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
     //是否展示柜体可选
     private void initisCabinet() {
         if(!cabinet){
+            curHolder.isCabinet=false;
            curHolder.eq_de_radiogroup.setVisibility(View.GONE);
            curHolder.eq_de_CabinetTV.setVisibility(View.GONE);
         }else{
+            curHolder.isCabinet=true;
             curHolder.eq_de_radiogroup.setVisibility(View.VISIBLE);
             curHolder.eq_de_CabinetTV.setVisibility(View.VISIBLE);
         }
@@ -139,21 +164,41 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                 break;
             //恢复初始
             case R.id.eq_de_start:
-                dataBeanList.clear();
-                mAdapter.notifyDataSetChanged();
+                    if(!IsForEditor){
+                        if(dataBeanList!=null&&dataBeanList.size()>0){
+                            dataBeanList.clear();
+                            recorddataBeanList.clear();
+                            mAdapter.notifyDataSetChanged();
+                        }else{
+                            ToastUtil.showShort(this,"尚未添加子设备，请添加");
+                        }
+                    }else{
+                        initForEditor();
+                    }
                 break;
             //导入先前配置
             case R.id.eq_de_old:
-                break;
-                default:
-                    break;
+                if(isTowLeaf){
+                    ToastUtil.showShort(this,"当前为子设备，无导入");
+                    return;
+                }
 
+                Intent intent=new Intent(this,ImportConfigurationActivity.class);
+                //肯定要带点参数过去当限制条件得
+                if(!IsForEditor){
+                    intent.putExtra("equipmentId",entity.getEquipmentId());
+                }else{
+                    intent.putExtra("equipmentId",entitys.getEquipmentId());
+                }
+                startActivity(intent);
+                break;
         }
     }
     //编辑企业设备
     private void initForEditor() {
         if(IsForEditor){
             dataBeanList.clear();
+            recorddataBeanList.clear();
             mAdapter.notifyDataSetChanged();
             SelectCompanyEquipmentByCompanyParams params=new SelectCompanyEquipmentByCompanyParams();
             params.setCompanyEquipmentId(currentItemId);
@@ -184,7 +229,10 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                             final List<EquipmentLayoutBean> beanLists = new ArrayList<>();
                             //三级企业设备和设备对比赋值存放信息
                             final List<EquipmentLayoutBean> beanListall = new ArrayList<>();
-                            dataBean = new DataBean();
+                           DataBean dataBean = new DataBean();
+                            Log.i(TAG, "onSuccess: 三级企业设备iD"+threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getCompanyEquipmentId());
+                            dataBean.setCompanyEquipmentId(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getCompanyEquipmentId());
+                            dataBean.setRecord(1);
                             dataBean.setParentLeftTxt(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getName());
                             EquipmentEntity equipmentEntity = EquipmentDao.getInstance().queryById(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
                             //是三级节点
@@ -193,9 +241,10 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                                 List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
 
                                 for (int j = 0; j < itemList.size(); j++) {
+//
                                     EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(i).getEquipmentItemId());
                                     //用于排序
-                                    dataBean.setItemid(itemList.get(i).getEquipmentItemId());
+                                    dataBean.setItemid(itemList.get(i).getEquipmentId());
                                     itemBean.setInputType(itemList.get(j).getInputType());
                                     if (itemList.get(j).getUnitName() == null) {
                                         itemBean.setTextName(itemList.get(j).getItemName());
@@ -208,33 +257,40 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                                 //三級节点
                                 List<EquipmentcheckBean.ThreeCompanyEquipmentListBean.ThreeCompanyEquipmentItemBean> threeCompanyEquipmentItem = threeCompanyEquipmentList.get(i).getThreeCompanyEquipmentItem();
                                 //可能缺少数据，但是怎么补呢
+                                Map<Integer, String> itemMap = new HashMap<>();
+                                Map<Integer, Integer> itemMapinfoid = new HashMap<>();
                                 for (int j = 0; j < threeCompanyEquipmentItem.size(); j++) {
                                     EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId());
                                     itemBean.setValue(threeCompanyEquipmentItem.get(j).getEquipmentInfo());
+                                    itemMap.put(threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId(),threeCompanyEquipmentItem.get(j).getEquipmentInfo());
+                                    if(threeCompanyEquipmentItem.get(j).getEquipmentInfoId()==null){
+                                        itemMapinfoid.put(threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId(),0);
+                                    }else{
+                                        itemMapinfoid.put(threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId(),threeCompanyEquipmentItem.get(j).getEquipmentInfoId());
+                                    }
+                                    //企业设备属性iD
+                                    Log.i(TAG, "onSuccess: 三级企业设备属性iD"+threeCompanyEquipmentItem.get(j).getEquipmentInfoId());
+                                    itemBean.setEquipmentInfoId(threeCompanyEquipmentItem.get(j).getEquipmentInfoId());
                                     Log.i(TAG, "onSuccess: setValue"+itemBean.getValue());
                                     beanList.add(itemBean);
                                 }
 
+                                EquipmentLayoutBean itemBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, 0);
                                 for (int j = 0; j <beanLists.size() ; j++) {
-                                    int num=0;
-                                    EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(i).getEquipmentItemId());
+                                    EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(j).getEquipmentItemId());
                                     EquipmentLayoutBean bean1 = beanLists.get(j);
-                                    if(beanList.size()!=0){
-                                        for (int k = 0; k <beanList.size() ; k++) {
-                                            if(bean1.getItemId()==beanList.get(k).getItemId()){
-                                                num++;
-                                                itemBean.setValue(beanList.get(j).getValue());
-                                            }
-                                        }
-                                    }
-                                    if(num==0){
-                                        itemBean.setValue(bean1.getValue());
-                                    }
+                                    String info = itemMap.get(itemList.get(j).getEquipmentItemId());
+                                    Integer infoid = itemMapinfoid.get(itemList.get(j).getEquipmentItemId());
+                                    itemBean.setValue(info==null?bean1.getValue():info);
+                                        //企业设备属性iD
+                                    itemBean.setEquipmentInfoId(infoid);
                                     itemBean.setTextName(bean1.getTextName());
-                                    beanListall.add(itemBean);
-                                    dataBean.setBean(beanListall);
+                                    itemBeans.getChildrenList().add(itemBean);
                                 }
+                                beanListall.add(itemBeans);
+                                dataBean.setBean(beanListall);
                                 dataBeanList.add(dataBean);
+                                recorddataBeanList.add(dataBean);
                             }else{//四级设备
                                 //四级设备信息
                                 final List<EquipmentLayoutBean> beanListfour = new ArrayList<>();
@@ -242,7 +298,6 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                                 final List<EquipmentLayoutBean> beanListfours = new ArrayList<>();
                                 //四级企业设备和设备对比赋值存放信息
                                 final List<EquipmentLayoutBean> beanListfourall = new ArrayList<>();
-                                int num=0;
                                 //查询4级设备
                                 List<EquipmentEntity> ccEntityList = getInstance().queryByPidAndCequipId(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
                                 for (int k = 0; k <ccEntityList.size() ; k++) {
@@ -262,8 +317,8 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                                         } else {
                                             itemBean.setTextName(itemLists.get(l).getItemName() + "(" + itemLists.get(l).getUnitName() + ")");
                                         }
-                                        Log.i(TAG, "onSuccess: 四级默认名字"+itemLists.get(l).getItemName());
-                                        Log.i(TAG, "onSuccess: 四级默认属性"+itemLists.get(l).getDefaultValue());
+//                                        Log.i(TAG, "onSuccess: 四级默认名字"+itemLists.get(l).getItemName());
+//                                        Log.i(TAG, "onSuccess: 四级默认属性"+itemLists.get(l).getDefaultValue());
                                         itemBean.setValue(setNullEdit(itemLists.get(l).getDefaultValue()));
                                         leafBean.getChildrenList().add(itemBean);
                                     }
@@ -271,36 +326,52 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                                 }
                                 Log.i(TAG, "onSuccess: 本地查询出来得长度"+beanListfour.size());
                                 List<EquipmentcheckBean.ThreeCompanyEquipmentListBean.FourCompanyEquipmentListBean> fourCompanyEquipmentList = threeCompanyEquipmentList.get(i).getFourCompanyEquipmentList();
-                                EquipmentLayoutBean leafBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
                                 //四级------------------------
+                                //对应item 的Map
+                                Map<Integer, String> itemMap = new HashMap<>();
+                                Map<Integer, Integer> itemMapcomId = new HashMap<>();
+                                Map<Integer, Integer> itemMapinfoid = new HashMap<>();
                                 for (int j = 0; j <fourCompanyEquipmentList.size(); j++) {
+                                    EquipmentLayoutBean leafBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getEquipmentId());
                                     List<EquipmentcheckBean.ThreeCompanyEquipmentListBean.FourCompanyEquipmentListBean.FourCompanyEquipmentItemBean> fourCompanyEquipmentItem = fourCompanyEquipmentList.get(j).getFourCompanyEquipmentItem();
+                                    if(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getCompanyEquipmentId()==0){
+                                        itemMapcomId.put(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getEquipmentId(),0);
+                                    }else{
+                                        itemMapcomId.put(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getEquipmentId(),fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getCompanyEquipmentId());
+
+                                    }
+//                                    leafBean.setCompanyEquipmentId(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getCompanyEquipmentId());
+                                    Log.i(TAG, "onSuccess: 四级rrrr企业设备iD"+leafBean.getCompanyEquipmentId());
                                     for (int k = 0; k < fourCompanyEquipmentItem.size(); k++) {
                                         EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId());
+                                        //企业设备属性iD
+                                        itemBean.setEquipmentInfoId(fourCompanyEquipmentItem.get(k).getEquipmentInfoId());
+                                        Log.i(TAG, "onSuccess: 四级企业设备属性iD"+fourCompanyEquipmentItem.get(k).getEquipmentInfoId());
                                         itemBean.setValue(setNullEdit(fourCompanyEquipmentItem.get(k).getEquipmentInfo()));
-                                        leafBean.getChildrenList().add(itemBean);
+                                        itemMap.put(fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId(), fourCompanyEquipmentItem.get(k).getEquipmentInfo());
+                                        if(fourCompanyEquipmentItem.get(k).getEquipmentInfoId()==null){
+                                            itemMapinfoid.put(fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId(), 0);
+                                        }else{
+                                            itemMapinfoid.put(fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId(), fourCompanyEquipmentItem.get(k).getEquipmentInfoId());
+                                        }
+                                         leafBean.getChildrenList().add(itemBean);
                                     }
                                     beanListfours.add(leafBean);
                                 }
                                 for (int k = 0; k < beanListfour.size(); k++) {
-                                    EquipmentLayoutBean leafBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
+                                    EquipmentLayoutBean leafBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, beanListfour.get(k).getItemId());
                                     leafBeans.setTextName(beanListfour.get(k).getTextName());
+                                    Integer companyId = itemMapcomId.get(beanListfour.get(k).getItemId());
+                                    leafBeans.setCompanyEquipmentId(companyId);
+                                    Log.i(TAG, "onSuccess: 四级rrqqqqqqqqqqqqrr企业设备iD"+companyId);
                                     Log.i(TAG, "onSuccess:四级子长度 "+beanListfour.get(k).getChildrenList().size());
                                     for (int l = 0; l < beanListfour.get(k).getChildrenList().size(); l++) {//5
+                                        String bean1 = itemMap.get(beanListfour.get(k).getChildrenList().get(l).getItemId());
+                                        Integer infoid = itemMapinfoid.get(beanListfour.get(k).getChildrenList().get(l).getItemId());
                                         EquipmentLayoutBean leafBeanchild = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, beanListfour.get(k).getChildrenList().get(l).getItemId());
                                         Log.i(TAG, "onSuccess:四级本地子长度id "+beanListfour.get(k).getChildrenList().get(l).getItemId());
-                                        if(beanListfours.size()!=0){
-                                            for (int m = 0; m <beanListfours.get(l).getChildrenList().size() ; m++) {//5
-                                                Log.i(TAG, "onSuccess:四级查询  子长度id "+beanListfours.get(l).getChildrenList().get(m).getItemId());
-                                                if(beanListfour.get(k).getChildrenList().get(l).getItemId()==beanListfours.get(l).getChildrenList().get(m).getItemId()){
-                                                    num++;
-                                                    leafBeanchild.setValue(beanListfours.get(l).getChildrenList().get(m).getValue());
-                                                }
-                                            }
-                                        }
-                                        if(num==0){
-                                            leafBeanchild.setValue(beanListfour.get(k).getChildrenList().get(l).getValue());
-                                        }
+                                        leafBeanchild.setEquipmentInfoId(infoid);
+                                        leafBeanchild.setValue(bean1 == null ? beanListfour.get(k).getChildrenList().get(l).getValue() : bean1);
                                         leafBeanchild.setTextName(beanListfour.get(k).getChildrenList().get(l).getTextName());
                                         leafBeans.getChildrenList().add(leafBeanchild);
                                     }
@@ -308,6 +379,7 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                                 }
                                 dataBean.setBean(beanListfourall);
                                 dataBeanList.add(dataBean);
+                                recorddataBeanList.add(dataBean);
                             }
 
                         }
@@ -318,24 +390,53 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                                 return  Integer.valueOf(dataBean.getItemid()).compareTo(Integer.valueOf(t1.getItemid()));
                             }
                         });
-
                         mAdapter.setDataBeanList(dataBeanList);
+                        mAdapter.setRecordDataBeanList(recorddataBeanList);
                         mAdapter.notifyDataSetChanged();
                     }
                     List<EquipmentcheckBean.TwoCompanyEquipmentItemBean> twoCompanyEquipmentItem = eleRoomResultList.getTwoCompanyEquipmentItem();
                     if(twoCompanyEquipmentItem.size()!=0){
+                        //如果是二级节点得话，只展示list
+                        IsVisibility(false);
                         //二级节点 三级设备信息
+                        //查找设备零件
+                        List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(eleRoomResultList.getTwoCompanyEquipment().getEquipmentId());
+                        Log.i(TAG, "onSuccess  二级  : "+itemList.size());
+                        Log.i(TAG, "onSuccess: 二级 name"+itemList.get(0).getItemName());
+                        List<EquipmentLayoutBean> beanLists = new ArrayList<>();
+                        List<EquipmentLayoutBean> beanListall = new ArrayList<>();
+                        for (int i = 0; i < itemList.size(); i++) {
+                            EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(i).getEquipmentItemId());
+                            itemBean.setTextName(itemList.get(i).getItemName());
+                            itemBean.setValue(itemList.get(i).getDefaultValue());
+                            beanLists.add(itemBean);
+                        }
                         final List<EquipmentLayoutBean> beanList = new ArrayList<>();
                         Log.i(TAG, "onSuccess444: "+twoCompanyEquipmentItem.size());
+                        Map<Integer, String> itemMap = new HashMap<>();
+                        Map<Integer, Integer> itemMapinfoid = new HashMap<>();
                         for (int i = 0; i < twoCompanyEquipmentItem.size(); i++) {
                             EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId());
-                            itemBean.setTextName(twoCompanyEquipmentItem.get(i).getEquipmentItem().getItemName());
-                            itemBean.setValue(twoCompanyEquipmentItem.get(i).getEquipmentInfo());
+                            itemMap.put(twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId(),twoCompanyEquipmentItem.get(i).getEquipmentInfo());
+                            if(twoCompanyEquipmentItem.get(i).getEquipmentInfoId()==null){
+                                itemMapinfoid.put(twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId(), 0);
+                            }else {
+                                itemMapinfoid.put(twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId(), twoCompanyEquipmentItem.get(i).getEquipmentInfoId());
+                            }
                             beanList.add(itemBean);
                         }
-                        //叶子节点适配器
-                        detailAdapter.setDataList(beanList);
+                        for (int i = 0; i < beanLists.size(); i++) {
+                            EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, beanLists.get(i).getItemId());
+                            String info = itemMap.get(beanLists.get(i).getItemId());
+                            Integer infoid = itemMapinfoid.get(beanLists.get(i).getItemId());
+                            itemBean.setTextName(itemList.get(i).getItemName());
+                            itemBean.setValue(info==null?itemList.get(i).getDefaultValue():info);
+                            itemBean.setEquipmentInfoId(infoid==0?0:infoid);
+                            beanListall.add(itemBean);
+                        }
 
+                        //叶子节点适配器
+                        detailAdapter.setDataList(beanListall);
                         detailAdapter.notifyDataSetChanged();
                     }
                 }
@@ -348,13 +449,9 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         List<CreateEquipParam> twoList = new ArrayList<>();
         //企业设备下级设备
         List<CreateEquipItemParam> threeList = new ArrayList<>();
-        List<CreateEquipTwoParam> arrTwoList = new ArrayList<>();
         //二级子节点
         List<CreateEquipTwoParam> arrTwoLists = new ArrayList<>();
-        List<CreateEquipFourParam> arrFourList = new ArrayList<>();
         //是否又柜子
-        List<CreateBoxBody> boxBodyList = new ArrayList<>();
-
         //二级企业设备
         CreateEquipParam cEquipParam = new CreateEquipParam();
         //设备id 如果是二级子节点得话，curHolder.id就是刚跳转过来bean得ID
@@ -365,18 +462,22 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         cEquipParam.setComEquName(curHolder.edit_value.getText().toString());
         //顶级id 都是-1;
         cEquipParam.setPid(-1);
+        //设备id
+        cEquipParam.setCompanyEquipmentId(companyEquipmentId);
+        Log.i(TAG, "addCompanyEquip:companyEquipmentId "+companyEquipmentId);
 
         //是否有柜体
         if (curHolder.isCabinet) {
             CreateBoxBody boxBody=new CreateBoxBody();
-//                    传递过来得二级设备id
-            List<CreateEquipFiveParam> arrayLists = new ArrayList<>();
-            CreateEquipFiveParam createEquipFiveParam=new CreateEquipFiveParam();
-            createEquipFiveParam.setEquItemId(eEntity.getItemId());
-            arrayLists.add(createEquipFiveParam);
-            boxBody.setBoxBodyEquItemArr(arrayLists);
-            boxBodyList.add(boxBody);
-            cEquipParam.setBoxBody(boxBodyList);
+//          传递过来得二级设备id
+//            List<CreateEquipFiveParam> arrayLists = new ArrayList<>();
+//            CreateEquipFiveParam createEquipFiveParam=new CreateEquipFiveParam();
+//            createEquipFiveParam.setEquItemId(eEntity.getItemId());
+//            arrayLists.add(createEquipFiveParam);
+//            boxBody.setBoxBodyEquItemArr(arrayLists);
+            //柜体Id
+            boxBody.setBoxBodyId(boxBodyId);
+            cEquipParam.setBoxBody(boxBody);
         }
         //是否是二级节点
         if(isTowLeaf){
@@ -394,34 +495,56 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
             }
             cEquipParam.setComItemTwo(arrTwoLists);
         }else{
-            for (int i = 0; i < dataBeanList.size(); i++) {
-                DataBean dataBean = dataBeanList.get(i);
+//            //添加三级得集合到二级
+//            cEquipParam.setEquNameArrThree(threeList);
+            for (int i = 0; i < recorddataBeanList.size(); i++) {
+                DataBean dataBean = recorddataBeanList.get(i);
                 //三级
                 CreateEquipItemParam threeParam = new CreateEquipItemParam();
                 //三级id
                 threeParam.setEquId(dataBean.getItemid());
                 //三级输入框值
                 threeParam.setEquName(dataBean.getParentLeftTxt());
-                for (int j = 0; j <dataBeanList.get(i).getBean().size() ; j++) {
-                    EquipmentLayoutBean bean = dataBeanList.get(i).getBean().get(j);
+                //是否删除过
+                threeParam.setFlag(dataBean.isFlag());
+                //企业设备id
+                threeParam.setCompanyEquipmentId(dataBean.getCompanyEquipmentId());
+                Log.i(TAG, "addCompanyEquipa: "+dataBean.getCompanyEquipmentId());
+                List<CreateEquipFourParam> arrFourList = new ArrayList<>();
+                for (int j = 0; j <recorddataBeanList.get(i).getBean().size() ; j++) {
+                    EquipmentLayoutBean bean = recorddataBeanList.get(i).getBean().get(j);
                     switch (bean.getType()){
                         //三级节点
                         case EquipmentLayoutAdapter.EDITTEXT:
-                            CreateEquipTwoParam createEquipTwoParam=new CreateEquipTwoParam();
-                            createEquipTwoParam.setEquItemId(bean.getItemId());
-                            createEquipTwoParam.setEquItemContent(bean.getValue());
-                            arrTwoList.add(createEquipTwoParam);
-                            //三级添加节点
-                            threeParam.setComItemThree(arrTwoList);
+                            List<CreateEquipFiveParam> arrTwoList = new ArrayList<>();
+
+                            Log.i(TAG, "addCompanyEquip:三级 "+bean.getChildrenList().size());
+                            for (EquipmentLayoutBean itemBean : bean.getChildrenList()) {
+                                //CreateEquipFiveParam  指得是节点
+                                CreateEquipFiveParam createEquipFiveParam=new CreateEquipFiveParam();
+
+                                //创建过得企业设备下得属性
+                                createEquipFiveParam.setEquipmentInfoId(itemBean.getEquipmentInfoId());
+                                createEquipFiveParam.setEquItemId(itemBean.getItemId());
+                                createEquipFiveParam.setEquItemContent(itemBean.getValue());
+                                arrTwoList.add(createEquipFiveParam);
+                                threeParam.setComItemThree(arrTwoList);
+                            }
                             break;
                         //三级含四级
                         case EquipmentLayoutAdapter.LEAF:
+
                             //四级
                             CreateEquipFourParam fourParam = new CreateEquipFourParam();
+                            fourParam.setCompanyEquipmentId(bean.getCompanyEquipmentId());
                             fourParam.setEquIdFour(bean.getItemId());
                             List<CreateEquipFiveParam> fourItemList = new ArrayList<>();
+                            Log.i(TAG, "addCompanyEquip:四级 "+bean.getChildrenList().size());
                             for (EquipmentLayoutBean itemBean : bean.getChildrenList()) {
+                                //CreateEquipFiveParam  指得是节点
                                 CreateEquipFiveParam createEquipFiveParam=new CreateEquipFiveParam();
+                                //创建过得企业设备下得属性
+                                createEquipFiveParam.setEquipmentInfoId(itemBean.getEquipmentInfoId());
                                 createEquipFiveParam.setEquItemId(itemBean.getItemId());
                                 createEquipFiveParam.setEquItemContent(itemBean.getValue());
                                 fourItemList.add(createEquipFiveParam);
@@ -459,26 +582,37 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
 //                    EleRoomCheckFragment.eleRoomCheckFragmentInstance.getEleAccountComEqu();
                     //重置新增界面
 //                    showAddCEquipLayout(EquipmentDao.getInstance().queryById(curHolder.id), adapter, adapter2);
+//                    EquipmentCheckFragment.equipmentCheckFragmentInstance.getEleAccountComEqu();
+                    EquipmentCheckFragment.equipmentCheckFragmentInstance.showlv2refresh();
+                    finish();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                 }
             }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Log.i(TAG, "onError: "+ex.toString());
+            }
         });
     }
 
     private void initView() {
-        //设备名称
-        curHolder.eq_de_name.setText(entity.getEquipmentName());
-        //设备重命名
-        curHolder.edit_value.setText(entity.getEquipmentName());
+        if(!IsForEditor){
+            //设备名称
+            curHolder.eq_de_name.setText(entity.getEquipmentName());
+            //设备重命名
+            curHolder.edit_value.setText(entity.getEquipmentName());
+        }
+
     }
     //四级请求数据展示
     protected void initLv3ListView() {
         //加载节点布局
         detailAdapter = new EquipmentLayoutAdapter(this, new ArrayList<EquipmentLayoutBean>());
         curHolder.eq_de_list_feal_list.setAdapter(detailAdapter);
-        lv3Adapter2 = new CommonSwipListViewAdapter();
+        lv3Adapter2 = new DetailsSwipListViewAdapter();
         //四级本地数据
         GridLayoutManager layoutManage = new GridLayoutManager(this, 4);
         curHolder.eq_de_list_lv4.setLayoutManager(layoutManage);
@@ -494,55 +628,73 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         curHolder.eq_de_list_lv4.setAdapter(lv3Adapter2);
         //页面元素list
         List<EquipmentLayoutBean> beanList = new ArrayList<>();
-        //是否是叶子节点
-        if (!entity.getIsLeafNode()) {
+        if(!IsForEditor){
+            //是否是叶子节点
+            if (!entity.getIsLeafNode()) {
+                IsVisibility(true);
+                //查询下级设备
+                List<EquipmentEntity> childist = getInstance().queryByPid(entity.getEquipmentId());
+                for (EquipmentEntity entity : childist) {
+                    switch (entity.getEquipmentType()) {
+                        //有柜体
+                        case CABINET:
+                            //柜体id
+                            boxBodyId=entity.getEquipmentId();
+                            cabinet=true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                lv3Adapter2.setmDataList(childist);
+                lv3Adapter2.notifyDataSetChanged();
+            } else {
+                //如果是二级节点得话，只展示list
+                IsVisibility(false);
+                //查找设备零件
+                List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(entity.getEquipmentId());
+
+                //生成零件页面
+                for (EquipmentItemEntity itemEntity : itemList) {
+                    EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemEntity.getEquipmentItemId());
+                    itemBean.setInputType(itemEntity.getInputType());
+                    if (itemEntity.getUnitName() == null) {
+                        itemBean.setTextName(itemEntity.getItemName());
+                    } else {
+                        itemBean.setTextName(itemEntity.getItemName() + "(" + itemEntity.getUnitName() + ")");
+                    }
+                    itemBean.setValue(setNullEdit(itemEntity.getDefaultValue()));
+                    beanList.add(itemBean);
+                }
+                //叶子节点适配器
+                detailAdapter.setDataList(beanList);
+                detailAdapter.notifyDataSetChanged();
+            }
+        }else{//用于查询编辑过来得数据是否包含柜体
             IsVisibility(true);
             //查询下级设备
-            List<EquipmentEntity> childist = getInstance().queryByPid(entity.getEquipmentId());
+            List<EquipmentEntity> childist = getInstance().queryByPid(entitys.getEquipmentId());
             for (EquipmentEntity entity : childist) {
                 switch (entity.getEquipmentType()) {
                     //有柜体
                     case CABINET:
                         cabinet=true;
-                        Log.i(TAG, "initLv3ListView---------: "+"有");
+                        boxBodyId=entity.getEquipmentId();
                         break;
                     //没有柜体
                     default:
-                        Log.i(TAG, "initLv3ListView---------: "+"没有");
                         break;
                 }
-//                listName.add(entity.getEquipmentName());
             }
             lv3Adapter2.setmDataList(childist);
             lv3Adapter2.notifyDataSetChanged();
-        } else {
-            //如果是二级节点得话，只展示list
-            IsVisibility(false);
-            //查找设备零件
-            List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(entity.getEquipmentId());
-
-            //生成零件页面
-            for (EquipmentItemEntity itemEntity : itemList) {
-                EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemEntity.getEquipmentItemId());
-                itemBean.setInputType(itemEntity.getInputType());
-                if (itemEntity.getUnitName() == null) {
-                    itemBean.setTextName(itemEntity.getItemName());
-                } else {
-                    itemBean.setTextName(itemEntity.getItemName() + "(" + itemEntity.getUnitName() + ")");
-                }
-                itemBean.setValue(setNullEdit(itemEntity.getDefaultValue()));
-                beanList.add(itemBean);
-            }
-            //叶子节点适配器
-            detailAdapter.setDataList(beanList);
-            detailAdapter.notifyDataSetChanged();
         }
+
     }
 
     protected void lv3DownListViewClick(final EquipmentEntity bean) {
         boolean flag=false;
         List<EquipmentLayoutBean> beanList = new ArrayList<>();
-//        curHolder.id=bean.getEquipmentId();
 //      //如果不是叶子节点
         if (!bean.getIsLeafNode()) {
             if (bean.getEquipmentLevel() > 2) {
@@ -561,6 +713,7 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                         } else {
                             itemBean.setTextName(itemEntity.getItemName() + "(" + itemEntity.getUnitName() + ")");
                         }
+
                         itemBean.setValue(setNullEdit(itemEntity.getDefaultValue()));
                         leafBean.getChildrenList().add(itemBean);
                     }
@@ -570,6 +723,8 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         }else {//如果是叶子节点
             //查找设备零件
             List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(bean.getEquipmentId());
+            //为了便于展示  id不准确
+            EquipmentLayoutBean itemBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, 0);
             //生成零件页面
             flag=true;
             for (EquipmentItemEntity itemEntity : itemList) {
@@ -581,8 +736,10 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                     itemBean.setTextName(itemEntity.getItemName() + "(" + itemEntity.getUnitName() + ")");
                 }
                 itemBean.setValue(setNullEdit(itemEntity.getDefaultValue()));
-                beanList.add(itemBean);
+//                beanList.add(itemBean);
+                itemBeans.getChildrenList().add(itemBean);
             }
+            beanList.add(itemBeans);
         }
         EquipmentDetailsDialog dialog = new EquipmentDetailsDialog(false,this, bean.getEquipmentName(), beanList, bean.getEquipmentId(),flag,new View.OnClickListener() {
             @Override
@@ -616,23 +773,25 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
             int equipmentId = Integer.parseInt(message);
             ClickDialogDetails(success,aNew,name,equipmentId,beans);
         }
-        if(bean.getKind().equals(EventKind.EVENT_COMPANY_EDITOR)){
-            boolean success = bean.getSuccess();
-            List<EquipmentLayoutBean> equipmentlayoutBean= bean.getObj();
-            String  equipmentlayoutBean_name = bean.getName();
-            int position = bean.getPosition();
-            DataBean dataBean = new DataBean();
-            dataBean.setBean(equipmentlayoutBean);
-            dataBean.setParentLeftTxt(equipmentlayoutBean_name);
-            mAdapter.setEditor(position,dataBean);
+        if(bean.getKind().equals(EventKind.EVENT_COMPANY_IMPORTLIST)){
+            List<DataBean> dataBeanList1= bean.getDataBeanList();
+            for (int i = 0; i < dataBeanList1.size(); i++) {
+                dataBeanList.add(dataBeanList1.get(i));
+                recorddataBeanList.add(dataBeanList1.get(i));
+            }
+            mAdapter.setDataBeanList(dataBeanList);
+            mAdapter.notifyDataSetChanged();
+            //包含设备数
+            curHolder.eq_de_num.setText(dataBeanList.size()+"");
         }
 
     }
 
     protected void ClickDialogDetails(final boolean flag,boolean isNew,String name,int equipmentId,List<EquipmentLayoutBean> beans) {
         List<EquipmentLayoutBean> beanList = new ArrayList<>();
-        dataBean = new DataBean();
+        DataBean dataBean = new DataBean();
         dataBean.setParentLeftTxt(name);
+        dataBean.setRecord(0);
 //      //如果不是叶子节点
         if (!flag) {
             //查询4级设备
@@ -642,11 +801,16 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                 if(!isNew){
                     dataBean.setParentLeftTxt(name);
                 }else{
-                    dataBean.setParentLeftTxt(name+"复制");
+                    if(name.contains("复制")){
+                        dataBean.setParentLeftTxt(name);
+                    }else{
+                        dataBean.setParentLeftTxt(name+"复制");
+                    }
                 }
 
                 //遍历添加二级数据
                 leafBean.setTextName(ccEntityList.get(i).getEquipmentName());
+                leafBean.setCompanyEquipmentId(0);
                 List<EquipmentItemEntity> itemList = ccEntityList.get(i).getItemList();
                 for (int j = 0; j < itemList.size(); j++) {
                     EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(j).getEquipmentItemId());
@@ -657,7 +821,8 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                     } else {
                         itemBean.setTextName(itemList.get(j).getItemName() + "(" + itemList.get(j).getUnitName() + ")");
                     }
-
+                    itemBean.setCompanyEquipmentId(0);
+                    itemBean.setEquipmentInfoId(0);
                     itemBean.setValue(beans.get(i).getChildrenList().get(j).getValue());
                     leafBean.getChildrenList().add(itemBean);
                 }
@@ -670,8 +835,21 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
             }
 
         }else {//如果是叶子节点
+            //记录是否叶结点
+            dataBean.setLeaf(flag);
+            if(!isNew){
+                dataBean.setParentLeftTxt(name);
+            }else{
+                if(name.contains("复制")){
+                    dataBean.setParentLeftTxt(name);
+                }else{
+                    dataBean.setParentLeftTxt(name+"复制");
+                }
+            }
             //查找设备零件
             List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(equipmentId);
+            //为了便于展示  id不准确
+            EquipmentLayoutBean itemBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, 0);
             //生成零件页面
             for (int i = 0; i < itemList.size(); i++) {
                 EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(i).getEquipmentItemId());
@@ -681,29 +859,20 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
                 } else {
                     itemBean.setTextName(itemList.get(i).getItemName() + "(" + itemList.get(i).getUnitName() + ")");
                 }
-                //记录是否叶结点
-                dataBean.setLeaf(flag);
 //              同级展示不好实现，所以添加到子条目里
-                itemBean.setValue(beans.get(i).getValue());
-                if(!isNew){
-                    dataBean.setParentLeftTxt(name);
-                }else{
-                    if(name.contains("复制")){
-                        dataBean.setParentLeftTxt(name);
-                    }else{
-                        dataBean.setParentLeftTxt(name+"复制");
-                    }
-
-                }
-                beanList.add(itemBean);
-                dataBean.setBean(beanList);
-                //排序比较
-                dataBean.setItemid(equipmentId);
+                itemBean.setCompanyEquipmentId(0);
+                itemBean.setEquipmentInfoId(0);
+                itemBean.setValue(beans.get(0).getChildrenList().get(i).getValue());
+                itemBeans.getChildrenList().add(itemBean);
             }
-
+            beanList.add(itemBeans);
+            dataBean.setBean(beanList);
+            //排序比较
+            dataBean.setItemid(equipmentId);
         }
         dataBean.setChildBean(dataBean);
         dataBeanList.add(dataBean);
+        recorddataBeanList.add(dataBean);
         Collections.sort(dataBeanList, new Comparator<DataBean>() {
             @Override
             public int compare(DataBean dataBean, DataBean t1) {
@@ -713,6 +882,8 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         //包含设备数
         curHolder.eq_de_num.setText(dataBeanList.size()+"");
         mAdapter.setDataBeanList(dataBeanList);
+        mAdapter.setRecordDataBeanList(recorddataBeanList);
+
         mAdapter.notifyDataSetChanged();
     }
     //四级设备   二级详情展示
@@ -722,6 +893,13 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         curHolder.eq_de_list_lv4_details.setAdapter(mAdapter);
         curHolder.eq_de_list_lv4_details.getItemAnimator().setChangeDuration(300);
         curHolder.eq_de_list_lv4_details.getItemAnimator().setMoveDuration(300);
+        mAdapter.setOnClickTextViewData(new RecyclerAdapter.OnClickTextViewData() {
+            @Override
+            public void OnClickTextViewDataListener(int text) {
+                //设备数量
+                curHolder.eq_de_num.setText(text+"");
+            }
+        });
     }
 
 }

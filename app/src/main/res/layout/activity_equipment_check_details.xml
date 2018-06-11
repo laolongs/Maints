@@ -7,6 +7,7 @@
     android:id="@+id/eq_de_layout_info"
     tools:context="cn.tties.maint.activity.EquipmentCheckDetailsActivity">
     <RelativeLayout
+        android:background="@color/white"
         android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -14,16 +15,16 @@
         <TextView
             android:id="@+id/eq_de_tv"
             android:layout_marginTop="30dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="20dp"
             android:textSize="22sp"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="编辑柜体信息"/>
+            android:text="新建设备"/>
         <LinearLayout
             android:id="@+id/eq_de_start"
             android:layout_below="@+id/eq_de_tv"
-            android:background="@color/colorAccent"
+            android:background="@color/btn_color"
             android:gravity="center"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
@@ -31,7 +32,7 @@
             android:layout_height="50dp">
             <TextView
                 android:textSize="18sp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="恢复初始"/>
@@ -39,7 +40,7 @@
         <LinearLayout
             android:id="@+id/eq_de_old"
             android:layout_below="@+id/eq_de_start"
-            android:background="@color/colorAccent"
+            android:background="@color/btn_color"
             android:gravity="center"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
@@ -47,7 +48,7 @@
             android:layout_height="50dp">
             <TextView
                 android:textSize="18sp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="导入先前配置"/>
@@ -62,27 +63,27 @@
             android:layout_height="wrap_content">
             <LinearLayout
                 android:id="@+id/eq_de_cancel"
-                android:background="@color/colorAccent"
+                android:background="@color/btn_color"
                 android:gravity="center"
                 android:layout_width="80dp"
                 android:layout_height="40dp">
                 <TextView
                     android:textSize="18sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="取消"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/eq_de_confirm"
-                android:background="@color/colorPrimary"
+                android:background="@color/listview_check"
                 android:layout_marginLeft="20dp"
                 android:gravity="center"
-                android:layout_width="80dp"
+                android:layout_width="100dp"
                 android:layout_height="40dp">
                 <TextView
                     android:textSize="18sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="保存"/>
@@ -90,9 +91,12 @@
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
+        android:background="#F0F1F5"
         android:orientation="vertical"
         android:layout_width="0dp"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -168,6 +172,7 @@
             android:divider="@color/colorTransparent">
         </com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
         <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            android:layout_marginTop="20dp"
             android:id="@+id/eq_de_list_lv4_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -52,7 +52,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.EquipmentCheckDetailsActivity"></activity>
+        <activity android:name=".activity.EquipmentCheckDetailsActivity" />
+        <activity android:name=".activity.ImportConfigurationActivity"></activity>
     </application>
 
 </manifest>

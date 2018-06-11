@@ -14,14 +14,10 @@ public class EventKind {
     public static final String EVENT_COMPANY_CHANGEID = "EVENT_COMPANY_CHANGEID";
     //activity创建  新建+更新添加过的二级列表
     public static final String EVENT_COMPANY_ADD = "EVENT_COMPANY_ADD";
-    //activity创建  编辑过的二级列表
-    public static final String EVENT_COMPANY_EDITOR = "EVENT_COMPANY_EDITOR";
-
-
-    //fragment创建  新建更新添加过的二级列表
-    public static final String EVENT_FRAGMENTCOMPANY_ADD = "EVENT_FRAGMENTCOMPANY_ADD";
-    //fragment创建  编辑过的二级列表
-    public static final String EVENT_FRAGMENTCOMPANY_EDITOR = "EVENT_FRAGMENTCOMPANY_EDITOR";
+    //activity导入配置list
+    public static final String EVENT_COMPANY_IMPORTLIST = "EVENT_COMPANY_IMPORTLIST";
+    //判断电房修改后是否保存
+    public static final String EVENT_COMPANY_ELEISEDITOR = "EVENT_COMPANY_ELEISEDITOR";
 
     //检查版本
     public static final String EVENT_VERSION_SYCN = "EVENT_VERSION_SYCN";

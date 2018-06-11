@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/table_dialog_layout">
+
+    <RelativeLayout style="@style/table_dialog_title">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/table_dialog_btn_cancel" />
+
+        <TextView
+            style="@style/table_dialog_title_text"
+            android:text="选择户号" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_above="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:fadingEdge="vertical"
+                android:scrollbars="vertical">
+
+                <RadioGroup
+                    android:id="@+id/radio_company"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="120dp">
+
+                </RadioGroup>
+
+            </ScrollView>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btn_save"
+            style="@style/table_dialog_btn_confirm"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="确定" />
+    </RelativeLayout>
+</LinearLayout>

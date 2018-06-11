@@ -111,7 +111,7 @@ public class EleRoomCheckFragment extends BaseEleAccountFragment {
                     @Override
                     public void onSuccessed(String result) {
                         // 更新巡视中的电房
-                        PatrolFragment.patrolFragmentInstance.getPatrolTypeList();
+//                        PatrolFragment.patrolFragmentInstance.getPatrolTypeList();
                         getEleAccountComEqu();
                         getEleRoomComEqu();
                     }

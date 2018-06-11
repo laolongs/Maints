@@ -9,6 +9,7 @@ import java.util.List;
 public class CreateEquipFiveParam {
     private String equItemContent;
     private Integer equItemId;
+    private Integer equipmentInfoId;
 
     public String getEquItemContent() {
         return equItemContent;
@@ -24,5 +25,13 @@ public class CreateEquipFiveParam {
 
     public void setEquItemId(Integer equItemId) {
         this.equItemId = equItemId;
+    }
+
+    public Integer getEquipmentInfoId() {
+        return equipmentInfoId;
+    }
+
+    public void setEquipmentInfoId(Integer equipmentInfoId) {
+        this.equipmentInfoId = equipmentInfoId;
     }
 }

@@ -2,11 +2,14 @@ package cn.tties.maint.activity;
 
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,18 +29,22 @@ import org.xutils.x;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.tties.maint.R;
 import cn.tties.maint.adapter.CommonAppendListViewAdapter;
 import cn.tties.maint.adapter.CommonSwipListViewAdapter;
 import cn.tties.maint.adapter.EquiRecyclerAdapter;
 import cn.tties.maint.adapter.EquipmentLayoutAdapter;
+import cn.tties.maint.adapter.EquipmentRootListViewAdapter;
 import cn.tties.maint.adapter.MyEquipmentCheckEleAdapter;
 import cn.tties.maint.bean.CommonListViewInterface;
 import cn.tties.maint.bean.EquipmentLayoutBean;
 import cn.tties.maint.bean.EquipmentcheckBean;
 import cn.tties.maint.bean.EventBusBean;
+import cn.tties.maint.common.Constants;
 import cn.tties.maint.common.EventKind;
 import cn.tties.maint.dao.EquipmentDao;
 import cn.tties.maint.dao.EquipmentItemDao;
@@ -48,7 +55,9 @@ import cn.tties.maint.holder.EquipmentDetailHolder;
 import cn.tties.maint.httpclient.BaseAlertCallback;
 import cn.tties.maint.httpclient.BaseStringCallback;
 import cn.tties.maint.httpclient.HttpClientSend;
+import cn.tties.maint.httpclient.params.CopyCompanyEquipmentParams;
 import cn.tties.maint.httpclient.params.CreateEleRoomParams;
+import cn.tties.maint.httpclient.params.DeleteComEquParams;
 import cn.tties.maint.httpclient.params.DeleteEleRoomParams;
 import cn.tties.maint.httpclient.params.QueryComEquParams;
 import cn.tties.maint.httpclient.params.SaveCompanyEquipmentByRoomIdParams;
@@ -59,12 +68,16 @@ import cn.tties.maint.httpclient.params.SelectEquipmentByEleRoomParams;
 import cn.tties.maint.httpclient.params.UpdateEleRoomParams;
 import cn.tties.maint.httpclient.result.BaseResult;
 import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
+import cn.tties.maint.httpclient.result.CompanyResult;
 import cn.tties.maint.httpclient.result.EleRoomResult;
+import cn.tties.maint.httpclient.result.EquipmentInfoResult;
 import cn.tties.maint.secondLv.DataBean;
 import cn.tties.maint.adapter.RecyclerAdapter;
+import cn.tties.maint.util.ACache;
 import cn.tties.maint.util.JsonUtils;
 import cn.tties.maint.util.NoFastClickUtils;
 import cn.tties.maint.util.ToastUtil;
+import cn.tties.maint.view.AllCancelDialog;
 import cn.tties.maint.view.ConfirmDialog;
 import cn.tties.maint.view.CreateEleRoomDialog;
 import cn.tties.maint.view.MyPopupWindow;
@@ -76,6 +89,7 @@ import static cn.tties.maint.dao.EquipmentDao.getInstance;
 /**
  * 管理档案
  */
+@SuppressLint("ValidFragment")
 @ContentView(R.layout.fragment_equipment_check)
 public class EquipmentCheckFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "EquipmentCheckFragment";
@@ -89,26 +103,29 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     boolean iselecheck=false;
     public EquipmentDetailHolder curHolder;
     //二级top
-    protected CommonSwipListViewAdapter rootAdapter;
+    protected EquipmentRootListViewAdapter rootAdapter;
 
     protected CommonSwipListViewAdapter lv2Adapter1;
 
     protected CommonAppendListViewAdapter lv2Adapter2;
 
-    protected CommonSwipListViewAdapter lv3Adapter1;
-
     protected SwipeItemClickListener rootListener;
 
     protected SwipeItemClickListener lv2Listener;
 
-    protected CommonAppendListViewAdapter lv3Adapter2;
     //加载节点布局
     private EquipmentLayoutAdapter detailAdapter;
     private MyPopupWindow popupWindow;
     private CompanyEquipmentResult curPidResult;
     private boolean cabinet=false;
     public static EquipmentCheckFragment equipmentCheckFragmentInstance;
+    //后台请求得二三四级数据
+    private EquipmentcheckBean eleRoomResultList;
+    private CommonListViewInterface selBean;
 // -------------电房-----------
+    int unselect = Color.parseColor("#BDC8D8");
+    int select = Color.parseColor("#ffffff");
+    int textselect = Color.parseColor("#1B92EE");
     protected CommonSwipListViewAdapter lv2eleAdapter1;
     protected SwipeItemClickListener lv2eleListener;
     private CreateEleRoomDialog createEleRoomDialog;
@@ -122,7 +139,13 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     private List<EquipmentEntity> list;
     private CompanyEquipmentResult ceBean;
     private Integer currentItemId;
-    private CommonListViewInterface isforeditorbeans;
+    private CommonListViewInterface beans;
+
+//
+    private CompanyResult curCompany;
+    private Integer curEleId;
+    String curEleNo;
+    private final List<EquipmentEntity> dataList;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -130,11 +153,24 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         equipmentCheckFragmentInstance = this;
         initListView();
     }
+
+    @SuppressLint("ValidFragment")
+    public EquipmentCheckFragment(Integer curEleId,String curEleNo, CompanyResult curCompany){
+        popupWindow = new MyPopupWindow();
+        this.curEleId=curEleId;
+        this.curEleNo=curEleNo;
+        this.curCompany=curCompany;
+        dataList = EquipmentDao.getInstance().queryByLevel(1);
+        Log.i(TAG, "changeEleAccountNextStep: 电号-"+ curEleId);
+        Log.i(TAG, "changeEleAccountNextStep: 公司号-"+ curCompany.getCompanyId());
+        popupWindow.setPopupWindowData(curCompany);
+    }
     private void initListView() {
         curHolder = new EquipmentDetailHolder(layoutInfo);
         holder = new DistributionHolder(curHolder.layout_lv3_ele_configuration);
         initCheck();
         initRootListView();
+//        changeEleAccount();
         initLv2ListView();
         //电房配置二级
         initLv2EleListView();
@@ -155,6 +191,9 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         curHolder.btn_ele_update.setOnClickListener(this);
         curHolder.btn_ele_del.setOnClickListener(this);
         curHolder.btn_ele_editor.setOnClickListener(this);
+
+
+
     }
     @Override
     public void onClick(View view) {
@@ -171,22 +210,29 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 break;
             //电房配置
             case R.id.equipment_eleConfiguration:
-                if(iselecheck){
-                  showHoulder(3);
-                }else{
-                    ToastUtil.showShort(getActivity(),"当前无任何设备");
-                }
+                curHolder.equipment_eleLL.setBackgroundColor(select);
+                curHolder.equipment_eleRoom.setTextColor(textselect);
+                    if(iselecheck){
+                        showHoulder(3);
+                        getEleRoomList();
+                    }else{
+                        ToastUtil.showShort(getActivity(),"当前无任何设备");
+                    }
                 break;
             //新建电房
             case R.id.lv2_ele_img:
-                showHoulder(3);
-                createEleRoomDialog = new CreateEleRoomDialog(this, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        createEleRoomDialog.validator.validate();
-                    }
-                });
-                createEleRoomDialog.show();
+                if(!holder.isEditor){
+                    showHoulder(3);
+                    createEleRoomDialog = new CreateEleRoomDialog(this, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            createEleRoomDialog.validator.validate();
+                        }
+                    });
+                    createEleRoomDialog.show();
+                }else{
+                    dialog();
+                }
                 break;
             //电房删除
             case R.id.btn_ele_del:
@@ -194,16 +240,22 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 break;
             //电房信息修改
             case R.id.btn_ele_update:
-                updateEleRoomDialog = new UpdateEleRoomDialog(EquipmentCheckFragment.this, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        updateEleRoomDialog.validator.validate();
-                    }
-                }, eleRoomResult);
-                updateEleRoomDialog.show();
+                if(!holder.isEditor){
+                    updateEleRoomDialog = new UpdateEleRoomDialog(EquipmentCheckFragment.this, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            updateEleRoomDialog.validator.validate();
+                        }
+                    }, eleRoomResult);
+                    updateEleRoomDialog.show();
+                }else{
+                    dialog();
+                }
+
                 break;
             //电房保存
             case R.id.btn_ele_save:
+                holder.isEditor=false;
                 saveEle();
                 break;
             //电房编辑
@@ -214,37 +266,89 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
             //编辑   带一个当前二级选中得企业设备id  去EquipmentCheckDetailsActivity在走查询
             case R.id.btn_editor:
                 Intent intent=new Intent(getActivity(),EquipmentCheckDetailsActivity.class);
-                intent.putExtra("bean",isforeditorbeans);
+                intent.putExtra("bean",beans);
                 intent.putExtra("IsForEditor",true);
+                intent.putExtra("currentItemId",currentItemId);
                 intent.putExtra("curEleId",curEleId);
                 startActivity(intent);
                 break;
             //删除
             case R.id.btn_del:
+                AllCancelDialog dialog1=new AllCancelDialog();
+                dialog1.loadDialog("您确定要删除该设备？", new AllCancelDialog.OnClickIsConfirm() {
+                    @Override
+                    public void OnClickIsConfirmListener() {
+                        showHoulder(1);
+                        CompanyEquipmentResult beans1 = (CompanyEquipmentResult) beans;
+                       //发起请求
+                        sendDelInfo(beans1.getCompanyEquipmentId()+"",lv2Adapter1,lv2Adapter2);
+                    }
+                }, new AllCancelDialog.OnClickIsCancel() {
+                    @Override
+                    public void OnClickIsCancelListener() {
 
+                    }
+                });
                 break;
             //新建
             case R.id.btn_new:
-
+                sendCopyAddInfo();
                 break;
         }
     }
-
-
-
-    //有了公司电表Id后查询本体设备类型  二级数据
-    @Override
-    public void changeEleAccountNextStep() {
-        super.changeEleAccountNextStep();
-        List<EquipmentEntity> dataList = EquipmentDao.getInstance().queryByLevel(1);
-        rootAdapter.setmDataList(dataList);
-        rootAdapter.notifyDataSetChanged();
-        popupWindow = new MyPopupWindow(curCompany);
-        getEleRoomList();
+    //新建相同设备
+    private void sendCopyAddInfo() {
+        CopyCompanyEquipmentParams params = new CopyCompanyEquipmentParams();
+        //判断是否复制过。是得话就不在添加复制了
+        if(eleRoomResultList.getTwoCompanyEquipment().getName().contains("复制")){
+            params.setCompanyEquipmentName(eleRoomResultList.getTwoCompanyEquipment().getName());
+        }else{
+            params.setCompanyEquipmentName(eleRoomResultList.getTwoCompanyEquipment().getName()+"复制");
+        }
+        params.setCompanyEquipmentId(eleRoomResultList.getTwoCompanyEquipment().getCompanyEquipmentId());
+        HttpClientSend.getInstance().send(params, new BaseAlertCallback("新增设备成功","新增设备失败") {
+            @Override
+            public void onSuccessed(String result) {
+                showMuiltListView(curPidResult, lv2Adapter1, lv2Adapter2, true);
+                // 更新电房管理中的未分配设备
+//                EleRoomCheckFragment.eleRoomCheckFragmentInstance.getEleAccountComEqu();
+                //重置新增界面
+//                showAddCEquipLayout(EquipmentDao.getInstance().queryById(curHolder.id), adapter, adapter2);
+            }
+        });
     }
+    //删除企业设备
+    private void sendDelInfo(final String cEqupIds, final CommonSwipListViewAdapter adapter, final CommonAppendListViewAdapter adapter2) {
+        DeleteComEquParams params = new DeleteComEquParams();
+        params.setComEquIds(cEqupIds);
+        HttpClientSend.getInstance().send(params, new BaseAlertCallback("删除设备成功","删除设备失败") {
+            @Override
+            public void onSuccessed(String result) {
+                try {
+                    showMuiltListView(curPidResult, adapter, adapter2, true);
+//                    EleRoomCheckFragment.eleRoomCheckFragmentInstance.getEleAccountComEqu();
+//                    EleRoomCheckFragment.eleRoomCheckFragmentInstance.getEleRoomComEqu();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                }
+            }
+        });
+    }
+
+//    有了公司电表Id后查询本体设备类型  二级数据
+    @Override
+    public void changeEleAccountNextSteps(Integer curEleId, String curEleNo, CompanyResult curCompany) {
+        this.curEleId=curEleId;
+        this.curEleNo=curEleNo;
+        this.curCompany=curCompany;
+        popupWindow.setPopupWindowData(curCompany);
+        rootAdapter.notifyDataSetChanged();
+    }
+
     //二级数据库数据展示
     protected void initRootListView() {
-        rootAdapter = new CommonSwipListViewAdapter();
+        rootAdapter = new EquipmentRootListViewAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         curHolder.listview_lv1_2.setLayoutManager(manager);
@@ -257,14 +361,24 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 if (selBean.isChecked()) {
                     return;
                 } else {//切换操作
-                    rootAdapter.setChecked(selBean);
-                    rootAdapter.notifyDataSetChanged();
-                    rootListViewClick(selBean);
+                    if(!holder.isEditor){
+                        rootAdapter.setChecked(selBean);
+                        rootAdapter.notifyDataSetChanged();
+                        curHolder.equipment_eleLL.setBackgroundColor(unselect);
+                        curHolder.equipment_eleRoom.setTextColor(select);
+                        rootListViewClick(selBean);
+
+                    }else{
+                        dialog();
+                    }
+
                 }
             }
         };
         curHolder.listview_lv1_2.setSwipeItemClickListener(rootListener);
         curHolder.listview_lv1_2.setAdapter(rootAdapter);
+        rootAdapter.setmDataList(dataList);
+        rootAdapter.notifyDataSetChanged();
     }
     //二级节点 或三级节点展示
     protected void initLV3LeafListView() {
@@ -274,13 +388,11 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     //二级点击请求三级数据
     public void rootListViewClick(CommonListViewInterface bean) {
         showHoulder(1);
-        showHoulder(5);
         //重置选中及文本
         ischeck=false;
         curHolder.lv2_tv.setText("新建");
         lv2Adapter1.remove();
         lv2Adapter2.remove();
-//        lv3Adapter1.remove();
         EquipmentEntity selBean = (EquipmentEntity) bean;
         ceBean = new CompanyEquipmentResult();
         ceBean.setEquipmentEntity(selBean);
@@ -290,8 +402,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         //三级网络请求
         showMuiltListView(ceBean, lv2Adapter1, lv2Adapter2, true);
         curPidResult = ceBean;
-        curHolder.lv2_img.setVisibility(View.VISIBLE);
-        curHolder.lv2_tv.setVisibility(View.VISIBLE);
+        Log.i(TAG, "rootListViewClick: 心灵"+selBean.getEquipmentId());
         //设备类型
         list = EquipmentDao.getInstance().queryByPid(selBean.getEquipmentId());
 
@@ -302,9 +413,10 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         curHolder.listview_lv2.setLayoutManager(new LinearLayoutManager(getActivity()));
         curHolder.listview_lv2.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(x.app(), R.color.dialog_title), 1, 1, -1));
         lv2Listener = new SwipeItemClickListener() {
+
             @Override
             public void onItemClick(View itemView, int position) {
-                CommonListViewInterface selBean = lv2Adapter1.getItem(position);
+                selBean = lv2Adapter1.getItem(position);
                 if (selBean.isChecked()) {
                     return;
                 } else {//切换操作
@@ -327,7 +439,6 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 lv2DownListViewClick(selBean);
             }
         });
-//        setLv2ListViewMenu();
         curHolder.listview_lv2.setAdapter(lv2Adapter1);
         curHolder.listview_lv2_2.setAdapter(lv2Adapter2);
     }
@@ -349,14 +460,17 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     }
 //  点击二级数据请求三  四级数据 请求后台
     protected void lv2UpListViewClick(final CommonListViewInterface bean) {
-//        currentItemId = bean.getItemId();
-        isforeditorbeans = bean;
+        beans = bean;
+        currentItemId = bean.getItemId();
         dataBeanList.clear();
         mAdapter.notifyDataSetChanged();
         SelectCompanyEquipmentByCompanyParams params=new SelectCompanyEquipmentByCompanyParams();
         params.setCompanyEquipmentId(bean.getItemId());
         Log.i(TAG, "lv2UpListViewClick+bean.getItemId: "+bean.getItemId());
         HttpClientSend.getInstance().send(params,new BaseStringCallback(){
+
+
+
             @Override
             public void onSuccess(String result) {
                 BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
@@ -364,7 +478,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                     Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                EquipmentcheckBean eleRoomResultList = JsonUtils.deserialize(ret.getResult(),EquipmentcheckBean.class);
+                eleRoomResultList = JsonUtils.deserialize(ret.getResult(),EquipmentcheckBean.class);
                 showHoulder(6);
                 curHolder.text_name.setText(eleRoomResultList.getTwoCompanyEquipment().getName());
 
@@ -380,10 +494,11 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                             break;
                         //没有柜体
                         default:
+                            cabinet=false;
                             Log.i(TAG, "initLv3ListView---------: "+"没有");
                             break;
                     }
-                    if(list.get(i).getItemId()==eleRoomResultList.getTwoCompanyEquipment().getEquipmentId()){
+                    if(list.get(i).getItemId()== eleRoomResultList.getTwoCompanyEquipment().getEquipmentId()){
                         //类型名称
                         curHolder.lv2_details_name.setText(list.get(i).getItemName());
                     }
@@ -410,7 +525,13 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                         //三级企业设备和设备对比赋值存放信息
                         final List<EquipmentLayoutBean> beanListall = new ArrayList<>();
                         dataBean = new DataBean();
+                        Log.i(TAG, "onSuccess: 三级企业设备iD"+threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getCompanyEquipmentId());
+                        dataBean.setCompanyEquipmentId(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getCompanyEquipmentId());
+                        dataBean.setRecord(1);
+                        dataBean.setPid(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getPid());
                         dataBean.setParentLeftTxt(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getName());
+                        //用于判断当前条目是否是节点
+                        dataBean.setEquipmentId(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
                         EquipmentEntity equipmentEntity = EquipmentDao.getInstance().queryById(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
                         //是三级节点
                         if(equipmentEntity.getIsLeafNode()){
@@ -418,9 +539,10 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                             List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
 
                             for (int j = 0; j < itemList.size(); j++) {
+//
                                 EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(i).getEquipmentItemId());
                                 //用于排序
-                                dataBean.setItemid(itemList.get(i).getEquipmentItemId());
+                                dataBean.setItemid(itemList.get(i).getEquipmentId());
                                 itemBean.setInputType(itemList.get(j).getInputType());
                                 if (itemList.get(j).getUnitName() == null) {
                                     itemBean.setTextName(itemList.get(j).getItemName());
@@ -433,32 +555,38 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                             //三級节点
                             List<EquipmentcheckBean.ThreeCompanyEquipmentListBean.ThreeCompanyEquipmentItemBean> threeCompanyEquipmentItem = threeCompanyEquipmentList.get(i).getThreeCompanyEquipmentItem();
                             //可能缺少数据，但是怎么补呢
+                            Map<Integer, String> itemMap = new HashMap<>();
+                            Map<Integer, Integer> itemMapinfoid = new HashMap<>();
                             for (int j = 0; j < threeCompanyEquipmentItem.size(); j++) {
                                 EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId());
                                 itemBean.setValue(threeCompanyEquipmentItem.get(j).getEquipmentInfo());
+                                itemMap.put(threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId(),threeCompanyEquipmentItem.get(j).getEquipmentInfo());
+                                if(threeCompanyEquipmentItem.get(j).getEquipmentInfoId()==null){
+                                    itemMapinfoid.put(threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId(),0);
+                                }else{
+                                    itemMapinfoid.put(threeCompanyEquipmentItem.get(j).getEquipmentItem().getEquipmentItemId(),threeCompanyEquipmentItem.get(j).getEquipmentInfoId());
+                                }
+                                //企业设备属性iD
+                                Log.i(TAG, "onSuccess: 三级企业设备属性iD"+threeCompanyEquipmentItem.get(j).getEquipmentInfoId());
+                                itemBean.setEquipmentInfoId(threeCompanyEquipmentItem.get(j).getEquipmentInfoId());
                                 Log.i(TAG, "onSuccess: setValue"+itemBean.getValue());
                                 beanList.add(itemBean);
                             }
 
+                            EquipmentLayoutBean itemBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, 0);
                             for (int j = 0; j <beanLists.size() ; j++) {
-                                int num=0;
-                                EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(i).getEquipmentItemId());
+                                EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(j).getEquipmentItemId());
                                 EquipmentLayoutBean bean1 = beanLists.get(j);
-                                if(beanList.size()!=0){
-                                    for (int k = 0; k <beanList.size() ; k++) {
-                                        if(bean1.getItemId()==beanList.get(k).getItemId()){
-                                            num++;
-                                            itemBean.setValue(beanList.get(j).getValue());
-                                        }
-                                    }
-                                }
-                                if(num==0){
-                                    itemBean.setValue(bean1.getValue());
-                                }
+                                String info = itemMap.get(itemList.get(j).getEquipmentItemId());
+                                Integer infoid = itemMapinfoid.get(itemList.get(j).getEquipmentItemId());
+                                itemBean.setValue(info==null?bean1.getValue():info);
+                                //企业设备属性iD
+                                itemBean.setEquipmentInfoId(infoid);
                                 itemBean.setTextName(bean1.getTextName());
-                                beanListall.add(itemBean);
-                                dataBean.setBean(beanListall);
+                                itemBeans.getChildrenList().add(itemBean);
                             }
+                            beanListall.add(itemBeans);
+                            dataBean.setBean(beanListall);
                             dataBeanList.add(dataBean);
                         }else{//四级设备
                             //四级设备信息
@@ -467,7 +595,6 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                             final List<EquipmentLayoutBean> beanListfours = new ArrayList<>();
                             //四级企业设备和设备对比赋值存放信息
                             final List<EquipmentLayoutBean> beanListfourall = new ArrayList<>();
-                            int num=0;
                             //查询4级设备
                             List<EquipmentEntity> ccEntityList = getInstance().queryByPidAndCequipId(threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
                             for (int k = 0; k <ccEntityList.size() ; k++) {
@@ -487,8 +614,8 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                                     } else {
                                         itemBean.setTextName(itemLists.get(l).getItemName() + "(" + itemLists.get(l).getUnitName() + ")");
                                     }
-                                    Log.i(TAG, "onSuccess: 四级默认名字"+itemLists.get(l).getItemName());
-                                    Log.i(TAG, "onSuccess: 四级默认属性"+itemLists.get(l).getDefaultValue());
+//                                        Log.i(TAG, "onSuccess: 四级默认名字"+itemLists.get(l).getItemName());
+//                                        Log.i(TAG, "onSuccess: 四级默认属性"+itemLists.get(l).getDefaultValue());
                                     itemBean.setValue(setNullEdit(itemLists.get(l).getDefaultValue()));
                                     leafBean.getChildrenList().add(itemBean);
                                 }
@@ -496,43 +623,60 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                             }
                             Log.i(TAG, "onSuccess: 本地查询出来得长度"+beanListfour.size());
                             List<EquipmentcheckBean.ThreeCompanyEquipmentListBean.FourCompanyEquipmentListBean> fourCompanyEquipmentList = threeCompanyEquipmentList.get(i).getFourCompanyEquipmentList();
-                            EquipmentLayoutBean leafBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
                             //四级------------------------
+                            //对应item 的Map  写得真烂
+                            Map<Integer, String> itemMap = new HashMap<>();
+                            Map<Integer, Integer> itemMapcomId = new HashMap<>();
+                            Map<Integer, Integer> itemMapinfoid = new HashMap<>();
                             for (int j = 0; j <fourCompanyEquipmentList.size(); j++) {
+                                EquipmentLayoutBean leafBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getEquipmentId());
                                 List<EquipmentcheckBean.ThreeCompanyEquipmentListBean.FourCompanyEquipmentListBean.FourCompanyEquipmentItemBean> fourCompanyEquipmentItem = fourCompanyEquipmentList.get(j).getFourCompanyEquipmentItem();
+                                if(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getCompanyEquipmentId()==0){
+                                    itemMapcomId.put(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getEquipmentId(),0);
+                                }else{
+                                    itemMapcomId.put(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getEquipmentId(),fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getCompanyEquipmentId());
+
+                                }
+//                                    leafBean.setCompanyEquipmentId(fourCompanyEquipmentList.get(j).getFourCompanyEquipment().getCompanyEquipmentId());
+                                Log.i(TAG, "onSuccess: 四级rrrr企业设备iD"+leafBean.getCompanyEquipmentId());
                                 for (int k = 0; k < fourCompanyEquipmentItem.size(); k++) {
                                     EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId());
+                                    //企业设备属性iD
+                                    itemBean.setEquipmentInfoId(fourCompanyEquipmentItem.get(k).getEquipmentInfoId());
+                                    Log.i(TAG, "onSuccess: 四级企业设备属性iD"+fourCompanyEquipmentItem.get(k).getEquipmentInfoId());
                                     itemBean.setValue(setNullEdit(fourCompanyEquipmentItem.get(k).getEquipmentInfo()));
+                                    itemMap.put(fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId(), fourCompanyEquipmentItem.get(k).getEquipmentInfo());
+                                    if(fourCompanyEquipmentItem.get(k).getEquipmentInfoId()==null){
+                                        itemMapinfoid.put(fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId(), 0);
+                                    }else{
+                                        itemMapinfoid.put(fourCompanyEquipmentItem.get(k).getEquipmentItem().getEquipmentItemId(), fourCompanyEquipmentItem.get(k).getEquipmentInfoId());
+                                    }
                                     leafBean.getChildrenList().add(itemBean);
                                 }
                                 beanListfours.add(leafBean);
                             }
                             for (int k = 0; k < beanListfour.size(); k++) {
-                                    EquipmentLayoutBean leafBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, threeCompanyEquipmentList.get(i).getThreeCompanyEquipment().getEquipmentId());
-                                    leafBeans.setTextName(beanListfour.get(k).getTextName());
-                                    Log.i(TAG, "onSuccess:四级子长度 "+beanListfour.get(k).getChildrenList().size());
-                                    for (int l = 0; l < beanListfour.get(k).getChildrenList().size(); l++) {//5
-                                        EquipmentLayoutBean leafBeanchild = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, beanListfour.get(k).getChildrenList().get(l).getItemId());
-                                        Log.i(TAG, "onSuccess:四级本地子长度id "+beanListfour.get(k).getChildrenList().get(l).getItemId());
-                                        if(beanListfours.size()!=0){
-                                            for (int m = 0; m <beanListfours.get(l).getChildrenList().size() ; m++) {//5
-                                                Log.i(TAG, "onSuccess:四级查询  子长度id "+beanListfours.get(l).getChildrenList().get(m).getItemId());
-                                                if(beanListfour.get(k).getChildrenList().get(l).getItemId()==beanListfours.get(l).getChildrenList().get(m).getItemId()){
-                                                    num++;
-                                                    leafBeanchild.setValue(beanListfours.get(l).getChildrenList().get(m).getValue());
-                                                }
-                                            }
-                                        }
-                                        if(num==0){
-                                            leafBeanchild.setValue(beanListfour.get(k).getChildrenList().get(l).getValue());
-                                        }
-                                        leafBeanchild.setTextName(beanListfour.get(k).getChildrenList().get(l).getTextName());
-                                        leafBeans.getChildrenList().add(leafBeanchild);
-                                    }
-                                    beanListfourall.add(leafBeans);
+                                EquipmentLayoutBean leafBeans = new EquipmentLayoutBean(EquipmentLayoutAdapter.LEAF, beanListfour.get(k).getItemId());
+                                leafBeans.setTextName(beanListfour.get(k).getTextName());
+                                Integer companyId = itemMapcomId.get(beanListfour.get(k).getItemId());
+                                leafBeans.setCompanyEquipmentId(companyId);
+                                Log.i(TAG, "onSuccess: 四级rrqqqqqqqqqqqqrr企业设备iD"+companyId);
+                                Log.i(TAG, "onSuccess:四级子长度 "+beanListfour.get(k).getChildrenList().size());
+                                for (int l = 0; l < beanListfour.get(k).getChildrenList().size(); l++) {//5
+                                    String bean1 = itemMap.get(beanListfour.get(k).getChildrenList().get(l).getItemId());
+                                    Integer infoid = itemMapinfoid.get(beanListfour.get(k).getChildrenList().get(l).getItemId());
+                                    EquipmentLayoutBean leafBeanchild = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, beanListfour.get(k).getChildrenList().get(l).getItemId());
+                                    Log.i(TAG, "onSuccess:四级本地子长度id "+beanListfour.get(k).getChildrenList().get(l).getItemId());
+                                    leafBeanchild.setEquipmentInfoId(infoid);
+                                    leafBeanchild.setValue(bean1 == null ? beanListfour.get(k).getChildrenList().get(l).getValue() : bean1);
+                                    leafBeanchild.setTextName(beanListfour.get(k).getChildrenList().get(l).getTextName());
+                                    leafBeans.getChildrenList().add(leafBeanchild);
                                 }
+                                beanListfourall.add(leafBeans);
+                            }
                             dataBean.setBean(beanListfourall);
                             dataBeanList.add(dataBean);
+//                            recorddataBeanList.add(dataBean);
                         }
 
                     }
@@ -547,22 +691,49 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                     mAdapter.setDataBeanList(dataBeanList);
                     mAdapter.notifyDataSetChanged();
                 }
+                //----------------二级节点
                 List<EquipmentcheckBean.TwoCompanyEquipmentItemBean> twoCompanyEquipmentItem = eleRoomResultList.getTwoCompanyEquipmentItem();
                 if(twoCompanyEquipmentItem.size()!=0){
-                    //二级节点 三级设备信息
-                    final List<EquipmentLayoutBean> beanList = new ArrayList<>();
                     curHolder.lv3_leaf_list.setVisibility(View.VISIBLE);
                     curHolder.recy_detail.setVisibility(View.GONE);
+                    //二级节点 三级设备信息
+                    //查找设备零件
+                    List<EquipmentItemEntity> itemList = EquipmentItemDao.getInstance().queryByEquipId(eleRoomResultList.getTwoCompanyEquipment().getEquipmentId());
+                    Log.i(TAG, "onSuccess  二级  : "+itemList.size());
+                    Log.i(TAG, "onSuccess: 二级 name"+itemList.get(0).getItemName());
+                    List<EquipmentLayoutBean> beanLists = new ArrayList<>();
+                    List<EquipmentLayoutBean> beanListall = new ArrayList<>();
+                    for (int i = 0; i < itemList.size(); i++) {
+                        EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, itemList.get(i).getEquipmentItemId());
+                        itemBean.setTextName(itemList.get(i).getItemName());
+                        itemBean.setValue(itemList.get(i).getDefaultValue());
+                        beanLists.add(itemBean);
+                    }
+                    final List<EquipmentLayoutBean> beanList = new ArrayList<>();
                     Log.i(TAG, "onSuccess444: "+twoCompanyEquipmentItem.size());
+                    Map<Integer, String> itemMap = new HashMap<>();
+                    Map<Integer, Integer> itemMapinfoid = new HashMap<>();
                     for (int i = 0; i < twoCompanyEquipmentItem.size(); i++) {
                         EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId());
-                        itemBean.setTextName(twoCompanyEquipmentItem.get(i).getEquipmentItem().getItemName());
-                        itemBean.setValue(twoCompanyEquipmentItem.get(i).getEquipmentInfo());
+                        itemMap.put(twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId(),twoCompanyEquipmentItem.get(i).getEquipmentInfo());
+                        if(twoCompanyEquipmentItem.get(i).getEquipmentInfoId()==null){
+                            itemMapinfoid.put(twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId(), 0);
+                        }else {
+                            itemMapinfoid.put(twoCompanyEquipmentItem.get(i).getEquipmentItem().getEquipmentItemId(), twoCompanyEquipmentItem.get(i).getEquipmentInfoId());
+                        }
                         beanList.add(itemBean);
                     }
+                    for (int i = 0; i < beanLists.size(); i++) {
+                        EquipmentLayoutBean itemBean = new EquipmentLayoutBean(EquipmentLayoutAdapter.EDITTEXT, beanLists.get(i).getItemId());
+                        String info = itemMap.get(beanLists.get(i).getItemId());
+                        Integer infoid = itemMapinfoid.get(beanLists.get(i).getItemId());
+                        itemBean.setTextName(itemList.get(i).getItemName());
+                        itemBean.setValue(info==null?itemList.get(i).getDefaultValue():info);
+                        itemBean.setEquipmentInfoId(infoid==0?0:infoid);
+                        beanListall.add(itemBean);
+                    }
                     //叶子节点适配器
-                    detailAdapter.setDataList(beanList);
-
+                    detailAdapter.setDataList(beanListall);
                     detailAdapter.notifyDataSetChanged();
                 }
             }
@@ -581,17 +752,21 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         Intent intent=new Intent(getActivity(),EquipmentCheckDetailsActivity.class);
         intent.putExtra("bean",bean);
         intent.putExtra("IsForEditor",false);
+        intent.putExtra("currentItemId",0);
         intent.putExtra("curEleId",curEleId);
         startActivity(intent);
     }
     //请求三级数据及三级本地同设备类型
     private void showMuiltListView(final CompanyEquipmentResult selBean, final CommonSwipListViewAdapter adapter, final CommonAppendListViewAdapter adapter2, final boolean flag) {
-
+        curHolder.listview_lv2.setVisibility(View.VISIBLE);
         final List<CompanyEquipmentResult> mDataList = new ArrayList<>();
         QueryComEquParams params = new QueryComEquParams();
         params.setEquipmentId(selBean.getEquipmentId());
         params.setEleAccountsId(curEleId);
         params.setPid(selBean.getCompanyEquipmentId());
+        Log.i(TAG, "showMuiltListView111111: "+selBean.getEquipmentId());
+        Log.i(TAG, "showMuiltListView22222: "+curEleId);
+        Log.i(TAG, "showMuiltListView333333: "+selBean.getCompanyEquipmentId());
         //二级后台返回数据
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
             @Override
@@ -612,8 +787,10 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 if(flag){
                     if(orgList.size()==0){
                         curHolder.layout_lv2_all.setVisibility(View.GONE);
+                        curHolder.layout_lv2_hite.setVisibility(View.VISIBLE);
                     }else{
                         curHolder.layout_lv2_all.setVisibility(View.VISIBLE);
+                        curHolder.layout_lv2_hite.setVisibility(View.GONE);
                     }
                 }
 
@@ -640,10 +817,14 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                     ra.start();
                     curHolder.lv2_tv.setText("取消");
                     ischeck=true;
+                    curHolder.listview_lv2.setVisibility(View.GONE);
+                    curHolder.listview_lv2_2.setVisibility(View.VISIBLE);
                     List<EquipmentEntity> list = EquipmentDao.getInstance().queryByPid(selBean.getEquipmentId());
                     adapter2.setmDataList(list);
                     adapter2.notifyDataSetChanged();
                 }else{
+                    curHolder.listview_lv2.setVisibility(View.VISIBLE);
+                    curHolder.listview_lv2_2.setVisibility(View.GONE);
                     ObjectAnimator ra = ObjectAnimator.ofFloat(curHolder.lv2_img,"rotation", 0f, -90f);
                     ra.setDuration(500);
                     ra.start();
@@ -668,10 +849,15 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 if (selBean.isChecked()) {
                     return;
                 } else {//切换操作
-                    //设置选中
-                    lv2eleAdapter1.setChecked(selBean);
-                    lv2eleAdapter1.notifyDataSetChanged();
-                    lv2UpEleListViewClick(selBean);
+                    if(!holder.isEditor){
+                        //设置选中
+                        lv2eleAdapter1.setChecked(selBean);
+                        lv2eleAdapter1.notifyDataSetChanged();
+                        lv2UpEleListViewClick(selBean);
+                    }else{
+                        dialog();
+                    }
+
                 }
             }
         };
@@ -681,6 +867,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     private void getEleRoomList() {
         SelectEleRoomParams params = new SelectEleRoomParams();
         params.setAccountId(curEleId);
+        Log.i(TAG, "getEleRoomList: "+"电号"+curEleId);
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
             @Override
             public void onSuccess(String result) {
@@ -736,6 +923,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         final MyEquipmentCheckEleAdapter adapter=new MyEquipmentCheckEleAdapter();
         curHolder.lv3_ele_message_smrecy.setAdapter(adapter);
         SelectEquipmentByEleRoomParams selectEquipmentByEleRoomParams = new SelectEquipmentByEleRoomParams();
+        Log.i(TAG, "getEleRoomList: "+"sssss"+lv2eleAdapter1.getChecked().getItemId());
         selectEquipmentByEleRoomParams.setRoomId(lv2eleAdapter1.getChecked().getItemId());
         HttpClientSend.getInstance().send(selectEquipmentByEleRoomParams, new BaseStringCallback() {
             @Override
@@ -779,6 +967,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
 //                PatrolFragment.patrolFragmentInstance.getPatrolTypeList();
                 getEleAccountComEqu();
                 getEleRoomComEqu();
+                showHoulder(2);
             }
         });
     }
@@ -870,8 +1059,6 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     }
     /**
      * 查询电房下企业设备
-     *
-     * @author lizhen
      */
     public void getEleRoomComEqu() {
         SelectEquipmentByEleRoomParams selectEquipmentByEleRoomParams = new SelectEquipmentByEleRoomParams();
@@ -926,7 +1113,10 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         switch (type){
             case 1:
                 curHolder.layout_equipment_info.setVisibility(View.VISIBLE);
+                curHolder.layout_lv2.setVisibility(View.VISIBLE);
                 curHolder.layout_ele_info.setVisibility(View.GONE);
+                curHolder.layout_lv3_all.setVisibility(View.GONE);
+                curHolder.layout_lv3_hite.setVisibility(View.VISIBLE);
                 break;
                 //电房配置
             case 2:
@@ -959,8 +1149,8 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 curHolder.text_ele_name.setText("电房配置");
                 curHolder.layout_equipment_info.setVisibility(View.GONE);
                 curHolder.layout_ele_info.setVisibility(View.VISIBLE);
-                curHolder.layout_lv2_ele_all.setVisibility(View.GONE);
-                curHolder.layout_lv2_ele_hite.setVisibility(View.VISIBLE);
+                curHolder.layout_lv2_ele_all.setVisibility(View.VISIBLE);
+                curHolder.layout_lv2_ele_hite.setVisibility(View.GONE);
                 curHolder.layout_lv3_ele_all.setVisibility(View.GONE);
                 curHolder.layout_lv3_ele_hite.setVisibility(View.VISIBLE);
                 curHolder.layout_ele_lv2.setVisibility(View.GONE);
@@ -973,14 +1163,38 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 break;
             //后台是否有数据
             case 5:
-                curHolder.layout_lv3_ele_all.setVisibility(View.VISIBLE);
-                curHolder.layout_lv3_ele_hite.setVisibility(View.GONE);
+                curHolder.layout_lv3_all.setVisibility(View.GONE);
+                curHolder.layout_lv3_hite.setVisibility(View.VISIBLE);
                 break;
             //后台是否有数据
             case 6:
-                curHolder.layout_lv3_ele_all.setVisibility(View.GONE);
-                curHolder.layout_lv3_ele_hite.setVisibility(View.VISIBLE);
+                curHolder.layout_lv3_all.setVisibility(View.VISIBLE);
+                curHolder.layout_lv3_hite.setVisibility(View.GONE);
                 break;
         }
+    }
+    public void dialog(){
+        AllCancelDialog dialog1=new AllCancelDialog();
+        dialog1.loadDialog("尚未保存当前页面，确认放弃？", new AllCancelDialog.OnClickIsConfirm() {
+            @Override
+            public void OnClickIsConfirmListener() {
+                holder.isEditor=false;
+                EventBusBean eventBusBean=new EventBusBean();
+                eventBusBean.setKind(EventKind.EVENT_COMPANY_ELEISEDITOR);
+                eventBusBean.setSuccess(holder.isEditor);
+                EventBus.getDefault().post(eventBusBean);
+            }
+        }, new AllCancelDialog.OnClickIsCancel() {
+            @Override
+            public void OnClickIsCancelListener() {
+                return;
+            }
+        });
+    }
+    public void showlv2refresh(){
+        showMuiltListView(ceBean,lv2Adapter1,lv2Adapter2,true);
+    }
+    public void showlv3refresh(){
+        lv2UpListViewClick(selBean);
     }
 }

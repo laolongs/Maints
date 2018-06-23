@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerInside"
         android:adjustViewBounds="true"
+        android:src="@mipmap/img_deletemax"
     />
 
 </LinearLayout>

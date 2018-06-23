@@ -9,14 +9,13 @@
     <RelativeLayout
         android:background="@color/white"
         android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="@dimen/x374"
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/eq_de_tv"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="20dp"
-            android:textSize="22sp"
+            android:layout_marginTop="@dimen/y60"
+            android:layout_marginLeft="@dimen/x40"
+            android:textSize="26sp"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,14 +23,14 @@
         <LinearLayout
             android:id="@+id/eq_de_start"
             android:layout_below="@+id/eq_de_tv"
-            android:background="@color/btn_color"
+            android:background="@drawable/btn_cancel"
             android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_width="150dp"
-            android:layout_height="50dp">
+            android:layout_marginTop="@dimen/y22"
+            android:layout_marginLeft="@dimen/x53"
+            android:layout_width="@dimen/x288"
+            android:layout_height="@dimen/y52">
             <TextView
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,14 +39,14 @@
         <LinearLayout
             android:id="@+id/eq_de_old"
             android:layout_below="@+id/eq_de_start"
-            android:background="@color/btn_color"
+            android:background="@drawable/btn_cancel"
             android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_width="150dp"
-            android:layout_height="50dp">
+            android:layout_marginTop="@dimen/y20"
+            android:layout_marginLeft="@dimen/x53"
+            android:layout_width="@dimen/x288"
+            android:layout_height="@dimen/y52">
             <TextView
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,19 +55,18 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="@dimen/y40"
+            android:layout_marginLeft="@dimen/x53"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <LinearLayout
                 android:id="@+id/eq_de_cancel"
-                android:background="@color/btn_color"
+                android:background="@drawable/btn_cancel"
                 android:gravity="center"
-                android:layout_width="80dp"
-                android:layout_height="40dp">
+                android:layout_width="@dimen/x119"
+                android:layout_height="@dimen/y52">
                 <TextView
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -76,13 +74,13 @@
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/eq_de_confirm"
-                android:background="@color/listview_check"
-                android:layout_marginLeft="20dp"
+                android:background="@drawable/btn_confirm_normal"
+                android:layout_marginLeft="11dp"
                 android:gravity="center"
-                android:layout_width="100dp"
-                android:layout_height="40dp">
+                android:layout_width="@dimen/x158"
+                android:layout_height="@dimen/y52">
                 <TextView
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,15 +89,16 @@
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp"
-        android:background="#F0F1F5"
+        android:paddingLeft="@dimen/x21"
+        android:paddingRight="@dimen/y49"
+        android:background="#EFF1F4"
         android:orientation="vertical"
         android:layout_width="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:layout_height="match_parent">
         <LinearLayout
-            android:layout_marginTop="30dp"
+            android:layout_marginBottom="@dimen/y26"
+            android:layout_marginTop="@dimen/y66"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -108,17 +107,18 @@
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#333333"
                 android:text="高压开关柜"/>
             <TextView
                 android:id="@+id/eq_de_CabinetTV"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/x54"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="是否有柜体"
-                android:textColor="@color/gray" />
+                android:textColor="@color/common_text_min_gray" />
 
             <RadioGroup
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/x15"
                 android:id="@+id/eq_de_radiogroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -129,19 +129,21 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="是"
-                    android:textColor="@color/gray" />
+                    android:textSize="14sp"
+                    android:textColor="@color/common_text_max_gray" />
                 <RadioButton
                     android:id="@+id/eq_de_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="@dimen/x20"
                     android:text="否"
-                    android:textColor="@color/gray" />
+                    android:textSize="14sp"
+                    android:textColor="@color/common_text_max_gray" />
             </RadioGroup>
         </LinearLayout>
         <include layout="@layout/layout_edittext"/>
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/y37"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -149,30 +151,34 @@
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/common_text_max_gray"
                 android:text="包含设备"/>
             <TextView
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/x10"
                 android:layout_gravity="center"
                 android:id="@+id/eq_de_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/gray" />
+                android:textSize="20sp"
+                android:textColor="@color/common_text_max_gray" />
         </LinearLayout>
         <ListView
+            android:layout_marginTop="@dimen/y20"
             android:id="@+id/eq_de_list_feal_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         </ListView>
         <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+            android:layout_marginTop="@dimen/y20"
             android:id="@+id/eq_de_list_lv4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/colorTransparent">
         </com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView>
         <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/y20"
             android:id="@+id/eq_de_list_lv4_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

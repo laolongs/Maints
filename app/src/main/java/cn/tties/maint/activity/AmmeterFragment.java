@@ -21,6 +21,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -36,7 +37,9 @@ import cn.tties.maint.adapter.MyEquipmentCheckEleAdapter;
 import cn.tties.maint.adapter.OrderEleAllListViewAdapter;
 import cn.tties.maint.bean.CommonListViewBean;
 import cn.tties.maint.bean.CommonListViewInterface;
+import cn.tties.maint.bean.EventBusBean;
 import cn.tties.maint.common.Constants;
+import cn.tties.maint.common.EventKind;
 import cn.tties.maint.dao.RateDao;
 import cn.tties.maint.entity.RateEntity;
 import cn.tties.maint.enums.AmmeterType;
@@ -60,6 +63,7 @@ import cn.tties.maint.httpclient.HttpClientSend;
 import cn.tties.maint.httpclient.params.AddAutoTaskParams;
 import cn.tties.maint.httpclient.params.AddEnereyCompanyParams;
 import cn.tties.maint.httpclient.params.AddUserEnergyActionParams;
+import cn.tties.maint.httpclient.params.AmmeterDeletrParams;
 import cn.tties.maint.httpclient.params.CompanyParamsById;
 import cn.tties.maint.httpclient.params.GetAutoBatchStatusParams;
 import cn.tties.maint.httpclient.params.GetMetsureStatusParams;
@@ -69,6 +73,7 @@ import cn.tties.maint.httpclient.params.QueryMeterListParams;
 import cn.tties.maint.httpclient.params.QueryTotalElectricityMeterParams;
 import cn.tties.maint.httpclient.params.SaveOrUpdateMeterConfigParams;
 import cn.tties.maint.httpclient.params.UpdateTotalElectricityMeterParams;
+import cn.tties.maint.httpclient.result.AmmeterDeleteResult;
 import cn.tties.maint.httpclient.result.BaseResult;
 import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
 import cn.tties.maint.httpclient.result.CompanyResult;
@@ -81,6 +86,8 @@ import cn.tties.maint.util.ACache;
 import cn.tties.maint.util.JsonUtils;
 import cn.tties.maint.util.NoFastClickUtils;
 import cn.tties.maint.util.ToastUtil;
+import cn.tties.maint.view.AllCancelDialog;
+import cn.tties.maint.view.AllEditorDialog;
 import cn.tties.maint.view.CriProgressDialog;
 import cn.tties.maint.view.InfoDialog;
 import cn.tties.maint.view.MeterInfoDialog;
@@ -208,7 +215,8 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
     String curEleNo;
     private OrderEleAllListViewAdapter adapter;
     private ArrayList<String> strGPRSarray;
-
+    private Integer meterId;
+    int workOrderId;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -226,11 +234,11 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
         getAmmeterTypeListView();
     }
     @SuppressLint("ValidFragment")
-    public AmmeterFragment(Integer curEleId,String curEleNo, CompanyResult curCompany){
+    public AmmeterFragment(Integer curEleId,String curEleNo, CompanyResult curCompany,int workOrderId){
         this.curEleId=curEleId;
         this.curEleNo=curEleNo;
         this.curCompany=curCompany;
-
+        this.workOrderId=workOrderId;
     }
     @Override
     public void changeEleAccountNextSteps(Integer curEleId, String curEleNo, CompanyResult curCompany) {
@@ -254,9 +262,14 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
                 if (selBean.isChecked()) {
                     return;
                 } else {//切换操作
-                    rootAdapter.setChecked(selBean);
-                    rootAdapter.notifyDataSetChanged();
-                    rootListViewClick(selBean);
+                    if(!totalElectricHolder.isEditor){
+                        rootAdapter.setChecked(selBean);
+                        rootAdapter.notifyDataSetChanged();
+                        rootListViewClick(selBean);
+                    }else{
+                        dialog();
+                    }
+
                 }
             }
         };
@@ -276,9 +289,14 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
                     return;
                 } else {//切换操作
                     //设置选中
-                    lv2Adapter.setChecked(selBean);
-                    lv2Adapter.notifyDataSetChanged();
-                    showUpdateDetail(selBean);
+                    if(!totalElectricHolder.isEditor){
+                        lv2Adapter.setChecked(selBean);
+                        lv2Adapter.notifyDataSetChanged();
+                        showUpdateDetail(selBean);
+                    }else{
+                        dialog();
+                    }
+
                 }
             }
         };
@@ -381,11 +399,40 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
                     return;
                 }
                //发起请求
-                showHoulder(2);
-                //刷新采集点列表
-                getCollection();
+                AllCancelDialog dialog1=new AllCancelDialog();
+                dialog1.loadDialog("确认刪除该采集点？", new AllCancelDialog.OnClickIsConfirm() {
+                    @Override
+                    public void OnClickIsConfirmListener() {
+                        deleteAmmeter(meterId);
+                    }
+                }, new AllCancelDialog.OnClickIsCancel() {
+                    @Override
+                    public void OnClickIsCancelListener() {
+                        return;
+                    }
+                });
                 break;
         }
+    }
+
+    private void deleteAmmeter(int meterId) {
+        showHoulder(2);
+        AmmeterDeletrParams params=new AmmeterDeletrParams();
+        params.setMeterId(40);
+        HttpClientSend.getInstance().send(params,new BaseStringCallback(){
+            @Override
+            public void onSuccess(String result) {
+                super.onSuccess(result);
+                AmmeterDeleteResult ret = JsonUtils.deserialize(result, AmmeterDeleteResult.class);
+                if (ret.getErrorCode() != 0) {
+                    Toast.makeText(x.app(), "删除采集点失败", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(x.app(), "删除采集点成功", Toast.LENGTH_SHORT).show();
+                //刷新采集点列表
+                getCollection();
+            }
+        });
     }
 
     /**
@@ -469,6 +516,7 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
     private void showCollectionDetail(final CommonListViewInterface bean) {
         final MeterResult result = (MeterResult) bean;
         collectionHolder.clear();
+        meterId = result.getMeterId();
         collectionHolder.editAmmeterNumber.setText(setNullEdit(result.getAmmeterNumber()));
         collectionHolder.editCollectonPointName.setText(setNullEdit(result.getMeterName()));
         collectionHolder.editTerminalAddress.setText(setNullEdit(result.getTerminalAddress()));
@@ -966,6 +1014,25 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
             taskDialog.dismiss();
         }
     };
+    public void dialog(){
+        AllEditorDialog dialog1=new AllEditorDialog();
+        dialog1.loadDialog("尚未保存当前页面，确认放弃？", new AllEditorDialog.OnClickIsConfirm() {
+            @Override
+            public void OnClickIsConfirmListener() {
+                return;
+            }
+        }, new AllEditorDialog.OnClickIsCancel() {
+            @Override
+            public void OnClickIsCancelListener() {
+                totalElectricHolder.isEditor=false;
+                EventBusBean eventBusBean=new EventBusBean();
+                eventBusBean.setKind(EventKind.EVENT_COMPANY_ELEISEDITOR);
+                eventBusBean.setSuccess(totalElectricHolder.isEditor);
+                EventBus.getDefault().post(eventBusBean);
+
+            }
+        });
+    }
     private void showHoulder(int type) {
         switch (type){
             case 1:

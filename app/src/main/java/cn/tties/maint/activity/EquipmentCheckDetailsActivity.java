@@ -3,6 +3,7 @@ package cn.tties.maint.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -116,6 +117,7 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
             curHolder.id=eEntity.getItemId();
             Log.i(TAG, "onCreate  本地: " + entity.getEquipmentId());
         }else{
+            curHolder.eq_de_tv.setText("编辑设备信息");
             curHolder.id=entitys.getEquipmentId();
             companyEquipmentId=entitys.getCompanyEquipmentId();
             Log.i(TAG, "onCreate: 设备0100 " + entitys.getEquipmentId());

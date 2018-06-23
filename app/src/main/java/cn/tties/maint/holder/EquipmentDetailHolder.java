@@ -43,11 +43,11 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
 
     public  TextView text_name;
 
-    public Button btn_editor;
+    public LinearLayout btn_editor;
 
-    public Button btn_del;
+    public LinearLayout btn_del;
 
-    public Button btn_new;
+    public LinearLayout btn_new;
 
     public TextView lv2_details_iscabinet;
 
@@ -78,13 +78,13 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
 
     public  TextView text_ele_name;
 
-    public Button btn_ele_del;
+    public LinearLayout btn_ele_del;
 
-    public Button btn_ele_update;
+    public LinearLayout btn_ele_update;
 
-    public Button btn_ele_save;
+    public LinearLayout btn_ele_save;
 
-    public Button btn_ele_editor;
+    public LinearLayout btn_ele_editor;
 
     public LinearLayout layout_lv3_ele_message;
 
@@ -113,9 +113,9 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
         this.layout_lv3_hite = (LinearLayout) view.findViewById(R.id.layout_lv3_hite);
         this.layout_lv3_all = (LinearLayout) view.findViewById(R.id.layout_lv3_all);
         this.text_name = (TextView) view.findViewById(R.id.text_name);
-        this.btn_editor = (Button) view.findViewById(R.id.btn_editor);
-        this.btn_del = (Button) view.findViewById(R.id.btn_del);
-        this.btn_new = (Button) view.findViewById(R.id.btn_new);
+        this.btn_editor = (LinearLayout) view.findViewById(R.id.btn_editor);
+        this.btn_del = (LinearLayout) view.findViewById(R.id.btn_del);
+        this.btn_new = (LinearLayout) view.findViewById(R.id.btn_new);
         this.lv2_details_iscabinet = (TextView) view.findViewById(R.id.lv2_details_iscabinet);
         this.lv2_details_name = (TextView) view.findViewById(R.id.lv2_details_name);
         this.lv2_details_num = (TextView) view.findViewById(R.id.lv2_details_num);
@@ -132,10 +132,10 @@ public class EquipmentDetailHolder extends BaseLayoutHolder {
         this.layout_lv3_ele_hite = (LinearLayout) view.findViewById(R.id.layout_lv3_ele_hite);
         this.layout_lv3_ele_all = (LinearLayout) view.findViewById(R.id.layout_lv3_ele_all);
         this.text_ele_name = (TextView) view.findViewById(R.id.text_ele_name);
-        this.btn_ele_del = (Button) view.findViewById(R.id.btn_ele_del);
-        this.btn_ele_update = (Button) view.findViewById(R.id.btn_ele_update);
-        this.btn_ele_save = (Button) view.findViewById(R.id.btn_ele_save);
-        this.btn_ele_editor = (Button) view.findViewById(R.id.btn_ele_editor);
+        this.btn_ele_del = (LinearLayout) view.findViewById(R.id.btn_ele_del);
+        this.btn_ele_update = (LinearLayout) view.findViewById(R.id.btn_ele_update);
+        this.btn_ele_save = (LinearLayout) view.findViewById(R.id.btn_ele_save);
+        this.btn_ele_editor = (LinearLayout) view.findViewById(R.id.btn_ele_editor);
         this.layout_lv3_ele_message = (LinearLayout) view.findViewById(R.id.layout_lv3_ele_message);
         this.ele_message_name = (TextView) view.findViewById(R.id.ele_message_name);
         this.ele_message_type = (TextView) view.findViewById(R.id.ele_message_type);

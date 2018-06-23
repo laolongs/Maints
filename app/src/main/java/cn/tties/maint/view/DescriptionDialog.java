@@ -132,7 +132,7 @@ public class DescriptionDialog extends BaseCustomDialog {
 
                 UploadImgDescriptionParam params = new UploadImgDescriptionParam();
                 params.setQuestionId(questionId);
-                params.setStaffId(staffId);
+                params.setMaintStaffId(staffId);
                 params.setContent(title);
                 List<File> fileList = new ArrayList<>();
                 for (ImageItem imageItem : imageItemsList) {

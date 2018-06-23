@@ -36,11 +36,41 @@ public class QuertionResult {
 
     private String companyName;
 
+    private Integer[] companyIds;
+
+    private String  createTimeEnd;
+
+    private String  createTimeStart;
+
     private List<AdviceResult> adviceList;
 
     private List<DescriptionResult> descriptionList;
 
     private List<QuestionScheduleResult> scheduleList;
+
+    public String getCreateTimeEnd() {
+        return createTimeEnd;
+    }
+
+    public void setCreateTimeEnd(String createTimeEnd) {
+        this.createTimeEnd = createTimeEnd;
+    }
+
+    public String getCreateTimeStart() {
+        return createTimeStart;
+    }
+
+    public void setCreateTimeStart(String createTimeStart) {
+        this.createTimeStart = createTimeStart;
+    }
+
+    public Integer[] getCompanyIds() {
+        return companyIds;
+    }
+
+    public void setCompanyIds(Integer[] companyIds) {
+        this.companyIds = companyIds;
+    }
 
     public Integer getQuestionId() {
         return questionId;

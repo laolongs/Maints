@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/table_dialog_layout"
+    android:layout_width="500dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="30dp"
+    android:background="#F0F1F5"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="问题描述"
+                android:textSize="20dp"
+                android:textColor="@color/black"/>
+
+        </RelativeLayout>
+       <EditText
+           android:layout_marginTop="8dp"
+           android:id="@+id/edit_describe"
+           android:layout_width="match_parent"
+           android:layout_height="100dp"
+           android:background="@drawable/bg_listview_gray"
+           android:gravity="left|top"
+           android:textSize="15dp"
+           android:hint="输入描述内容"
+           android:textColor="@color/black"
+           android:inputType="textMultiLine"
+           android:minLines="6" />
+   </LinearLayout>
+
+    <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp"
+            android:padding="5dp">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:choiceMode="singleChoice"
+                android:divider="@null"
+                android:fadingEdge="none"
+                android:listSelector="@android:color/transparent"
+                android:scrollbarStyle="outsideOverlay"
+                app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                app:spanCount="4"
+                tools:listitem="@layout/listview_image"/>
+            <LinearLayout
+                android:gravity="right"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:background="@color/btn_color"
+                    android:textColor="@color/white"
+                    android:text="取 消" />
+                <Button
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/btn_add"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:background="@color/listview_check"
+                    android:textColor="@color/white"
+                    android:text="添 加" />
+            </LinearLayout>
+
+        </LinearLayout>
+</LinearLayout>

@@ -25,13 +25,13 @@ public enum FaultType {
     public String getInfo() {
         return info;
     }
-    public static FaultType get(int type) {
+    public static int get(int type) {
         for (FaultType itemType : FaultType.values()) {
             if (itemType.getType() == type) {
-                return itemType;
+                return itemType.getType();
             }
         }
-        return null;
+        throw new RuntimeException("不支持的级别类型");
     }
 
     public static String getInfo(Integer value) {

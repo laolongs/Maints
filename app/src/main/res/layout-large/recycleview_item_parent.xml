@@ -6,7 +6,7 @@
    >
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="5dp"
         />
     <RelativeLayout
         android:background="#fff"
@@ -15,11 +15,11 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/expend"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="16dp"
             android:src="@mipmap/details_up"/>
 
         <LinearLayout
@@ -34,7 +34,8 @@
                 android:layout_weight="4"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:textSize="24sp"/>
+                android:textColor="@color/common_text_max_gray"
+                android:textSize="22sp"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -46,8 +47,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:textColor="@color/listview_check"
-                android:textSize="16sp"/>
+                android:textColor="@color/root_check"
+                android:textSize="18sp"/>
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout
@@ -64,53 +65,64 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
         <LinearLayout
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="32dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="40dp">
             <LinearLayout
                 android:layout_marginLeft="20dp"
                 android:id="@+id/re_item_child_compile"
-                android:layout_width="120dp"
+                android:layout_width="119dp"
                 android:gravity="center"
-                android:background="@color/root_check"
-                android:layout_height="match_parent">
-
+                android:background="@drawable/btn_confirm_normal"
+                android:layout_height="32dp">
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="20dp" />
                 <TextView
+                    android:layout_marginLeft="6dp"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="编辑"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/re_item_child_delete"
-                android:layout_marginLeft="20dp"
-                android:layout_width="120dp"
+                android:layout_marginLeft="16dp"
+                android:layout_width="119dp"
                 android:gravity="center"
-                android:background="@color/delete_check"
-                android:layout_height="match_parent">
+                android:background="@drawable/btn_delete_normal"
+                android:layout_height="32dp">
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
                     android:src="@mipmap/img_delete"/>
                 <TextView
+                    android:layout_marginLeft="6dp"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="删除"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/re_item_child_new"
-                android:layout_marginLeft="20dp"
-                android:layout_width="120dp"
+                android:layout_marginLeft="17dp"
+                android:layout_width="158dp"
                 android:gravity="center"
-                android:background="@color/root_check"
-                android:layout_height="match_parent">
+                android:background="@drawable/btn_confirm_normal"
+                android:layout_height="32dp">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="20dp" />
                 <TextView
+                    android:layout_marginLeft="6dp"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="新建相同设备"/>
             </LinearLayout>
          </LinearLayout>

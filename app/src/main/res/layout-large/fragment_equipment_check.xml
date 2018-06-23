@@ -5,53 +5,56 @@
     android:id="@+id/layout_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingBottom="5dp"
+    android:background="@color/common_root"
     android:orientation="vertical">
     <RelativeLayout
         android:background="@color/common_root"
         android:id="@+id/layout_lv1"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="57dp"
         android:orientation="vertical">
         <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
             android:id="@+id/listview_lv1_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <LinearLayout
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:id="@+id/equipment_companyMessage"
             android:gravity="center"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_width="100dp"
-            android:background="@color/white"
-            android:layout_height="match_parent">
+            android:layout_marginRight="25dp"
+            android:layout_width="120dp"
+            android:background="@drawable/btn_compay"
+            android:layout_height="47dp">
             <TextView
-                android:textColor="#6DABD0"
+                android:textColor="#1A92EE"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="企业信息"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/equipment_eleConfiguration"
-            android:gravity="center"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="200dp"
+            android:layout_marginRight="180dp"
             android:layout_width="100dp"
             android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/equipment_eleLL"
-                android:layout_marginTop="10dp"
-                android:background="@color/common_root"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
-                android:layout_width="80dp"
-                android:layout_height="50dp">
+                android:layout_width="84dp"
+                android:layout_height="42dp">
                 <TextView
                     android:id="@+id/equipment_eleRoom"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="电房配置"/>
             </LinearLayout>
 
@@ -60,45 +63,45 @@
     <View
         style="@style/common_linehight"/>
     <LinearLayout
-
+        android:background="#E9ECF2"
         android:id="@+id/layout_equipment_info"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <View
-            android:layout_width="8dp"
-            android:layout_height="match_parent"
-            android:background="@color/white"/>
+           style="@style/common_linewidth"/>
         <LinearLayout
-            android:background="@color/common_bg"
+            android:background="#E9ECF2"
             android:id="@+id/layout_lv2"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <ImageView
                 android:id="@+id/lv2_img"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_gravity="center"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="49dp"
+                android:layout_height="49dp"
                 android:src="@mipmap/file_new"/>
             <TextView
                 android:id="@+id/lv2_tv"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
                 android:layout_gravity="center"
+                android:textSize="16sp"
+                android:textColor="#FFA000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="新建"/>
             <LinearLayout
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:id="@+id/layout_lv2_all"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingEnd="2dp"
-                android:paddingStart="2dp"
-                android:paddingTop="15dp">
+                android:layout_marginTop="23dp"
+               >
                     <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
                         android:id="@+id/listview_lv2"
                         android:layout_width="match_parent"
@@ -141,17 +144,18 @@
         </LinearLayout>
 
         <LinearLayout
-                android:background="#E9ECF3"
+                android:background="#E9ECF2"
                 android:visibility="gone"
                 android:id="@+id/layout_lv3_all"
                 android:layout_width="0dp"
-                android:layout_weight="4"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
                 <LinearLayout
+                    android:layout_marginTop="12sp"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="32dp"
                     android:orientation="horizontal">
                     <RelativeLayout
                         android:id="@+id/layout_title"
@@ -165,35 +169,71 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@+id/selView"
                             android:text=""
-                            android:textSize="25sp"
+                            android:textSize="22sp"
                             android:textColor="@color/black" />
 
                     </RelativeLayout>
-
-                    <Button
-                        android:gravity="center"
-                        android:layout_marginRight="10dp"
+                    <LinearLayout
+                        android:layout_marginRight="16dp"
                         android:id="@+id/btn_editor"
-                        style="@style/form_btn_confirms"
-                        android:text="编辑" />
-                    <Button
+                        android:background="@drawable/btn_cancel"
                         android:gravity="center"
+                        android:layout_width="119dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:layout_width="17dp"
+                            android:layout_height="20dp" />
+                        <TextView
+                            android:layout_marginLeft="6dp"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="编辑"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginRight="17dp"
                         android:id="@+id/btn_del"
-                        style="@style/form_btn_confirms"
-                        android:layout_marginRight="10dp"
-                        android:text="删除" />
-
-                    <Button
+                        android:background="@drawable/btn_cancel"
                         android:gravity="center"
-                        android:layout_marginRight="10dp"
+                        android:layout_width="119dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:layout_width="17dp"
+                            android:layout_height="20dp" />
+                        <TextView
+                            android:layout_marginLeft="6dp"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="删除"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginRight="34dp"
                         android:id="@+id/btn_new"
-                        style="@style/form_btn_confirms"
-                        android:text="新建相同设备" />
+                        android:background="@drawable/btn_cancel"
+                        android:gravity="center"
+                        android:layout_width="158dp"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:layout_width="17dp"
+                            android:layout_height="20dp" />
+                        <TextView
+                            android:layout_marginLeft="6dp"
+                            android:textColor="@color/white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="新建相同设备"/>
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
+                    android:layout_marginTop="13dp"
                     android:id="@+id/layout_lv2_details"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <LinearLayout
                         android:orientation="horizontal"
@@ -203,13 +243,17 @@
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/common_text_min_gray"
                             android:text="是否有柜体"/>
                         <TextView
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="20dp"
                             android:id="@+id/lv2_details_iscabinet"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="当前没有任何设备"/>
+                            android:textSize="14sp"
+                            android:textColor="@color/common_text_min_gray"
+                            android:text="否"/>
                     </LinearLayout>
                     <LinearLayout
                         android:orientation="horizontal"
@@ -219,16 +263,21 @@
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="类型"/>
+                            android:textSize="14sp"
+                            android:textColor="@color/common_text_min_gray"
+                            android:text="分类"/>
                         <TextView
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="62dp"
                             android:id="@+id/lv2_details_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/common_text_min_gray"
                             android:text="高压开关柜"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
+                    android:layout_marginTop="30dp"
                     android:id="@+id/layout_detail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -242,25 +291,31 @@
                             android:layout_marginLeft="10dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
+                            android:textColor="@color/common_text_max_gray"
                             android:text="包含设备"/>
                         <TextView
-                            android:layout_marginLeft="30dp"
+                            android:layout_marginLeft="10dp"
                             android:id="@+id/lv2_details_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
+                            android:textColor="@color/common_text_max_gray"
                             android:text="0"/>
                     </LinearLayout>
                     <ListView
+                        android:layout_marginTop="9dp"
+                        android:paddingLeft="10dp"
+                        android:layout_marginRight="34dp"
                         android:id="@+id/lv3_leaf_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                     </ListView>
                     <android.support.v7.widget.RecyclerView
+                        android:layout_marginTop="9dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="34dp"
                         android:id="@+id/list_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -274,29 +329,32 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/layout_ele_info"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <View
             style="@style/common_linewidth"/>
         <LinearLayout
-            android:background="@color/common_bg"
+            android:background="#E9ECF2"
             android:id="@+id/layout_ele_lv2"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="200dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <ImageView
                 android:id="@+id/lv2_ele_img"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_gravity="center"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="49dp"
+                android:layout_height="49dp"
                 android:src="@mipmap/file_new"/>
             <TextView
                 android:id="@+id/lv2_ele_tv"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                android:textColor="#FFA000"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -306,24 +364,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingEnd="4dp"
-                android:paddingStart="8dp"
-                android:paddingTop="15dp">
-
+                android:layout_marginTop="30dp">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
-
                     <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
                         android:id="@+id/listview_ele_lv2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_listview_gray" />
                 </LinearLayout>
-
             </LinearLayout>
             <LinearLayout
                 android:background="@color/common_bg"
@@ -331,8 +382,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:gravity="center"
-                >
+                android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -343,13 +393,13 @@
             style="@style/common_linewidth"/>
         <!-- 展示三级设备-->
         <LinearLayout
-            android:background="@color/common_bg"
+            android:background="#DDE2EC"
             android:visibility="gone"
             android:gravity="center"
             android:id="@+id/layout_lv3_ele_hite"
             android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
@@ -357,90 +407,133 @@
                 android:text="请选择电表或新建电表"/>
         </LinearLayout>
         <LinearLayout
-            android:background="@color/common_bg"
+            android:background="#DDE2EC"
             android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_weight="4"
+            android:layout_weight="1"
             android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/layout_lv3_ele_all"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="102dp"
+                    android:background="#E9ECF2"
                     android:orientation="horizontal">
                     <LinearLayout
+                        android:paddingLeft="20dp"
+                        android:layout_marginTop="25dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
                         <TextView
+                            android:layout_marginTop="2dp"
                             android:id="@+id/text_ele_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="电房配置"
-                            android:textSize="25sp"
+                            android:textSize="28sp"
                             android:textColor="@color/black" />
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="52dp"
                             android:gravity="right"
                             android:orientation="horizontal">
-                            <Button
+                            <LinearLayout
+                                android:layout_marginRight="10dp"
                                 android:id="@+id/btn_ele_del"
-                                style="@style/form_btn_confirms"
-                                android:layout_gravity="right"
+                                android:background="@drawable/btn_delete_normal"
+                                android:gravity="center"
+                                android:layout_width="119dp"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:textColor="@color/white"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:text="删除"/>
+                            </LinearLayout>
+                            <LinearLayout
                                 android:layout_marginRight="10dp"
-                                android:text="删除" />
-
-                            <Button
                                 android:id="@+id/btn_ele_update"
-                                style="@style/form_btn_confirms"
-                                android:layout_gravity="right"
-                                android:layout_marginRight="10dp"
-                                android:text="修改基本信息" />
-                            <Button
-                                android:id="@+id/btn_ele_save"
-                                style="@style/form_btn_confirms"
-                                android:layout_gravity="right"
-                                android:layout_marginRight="10dp"
-                                android:text="保存" />
-                            <Button
+                                android:background="@drawable/btn_cancel"
+                                android:gravity="center"
+                                android:layout_width="119dp"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:textColor="@color/white"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:text="修改基本信息"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginRight="24dp"
                                 android:id="@+id/btn_ele_editor"
-                                style="@style/form_btn_confirms"
-                                android:layout_gravity="right"
-                                android:layout_marginRight="10dp"
-                                android:text="编辑" />
+                                android:background="@drawable/btn_cancel"
+                                android:gravity="center"
+                                android:layout_width="119dp"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:textColor="@color/white"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:text="编辑"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_marginRight="24dp"
+                                android:id="@+id/btn_ele_save"
+                                android:background="@drawable/btn_confirm_normal"
+                                android:gravity="center"
+                                android:layout_width="158dp"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:textColor="@color/white"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:text="保存"/>
+                            </LinearLayout>
+
                         </LinearLayout>
                     </LinearLayout>
 
                 </LinearLayout>
                 <LinearLayout
+                    android:paddingLeft="20dp"
                     android:id="@+id/layout_lv3_ele_message"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
+                        android:layout_marginTop="36dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textColor="@color/common_text_max_gray"
                         android:text="基本信息"/>
                     <LinearLayout
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="18dp"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/common_text_min_gray"
+                            android:textSize="15sp"
                             android:text="名称"/>
                         <TextView
                             android:id="@+id/ele_message_name"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="38dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/common_text_min_gray"
+                            android:textSize="15sp"
                             android:text="psdfpdsfs"/>
                        </LinearLayout>
                     <LinearLayout
@@ -449,22 +542,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
+                            android:textColor="@color/common_text_min_gray"
+                            android:textSize="15sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="类型"/>
                         <TextView
                             android:id="@+id/ele_message_type"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="38dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/common_text_min_gray"
+                            android:textSize="15sp"
                             android:text="高压电访"/>
                     </LinearLayout>
                     <TextView
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="33dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textColor="@color/common_text_max_gray"
                         android:text="柜体/变压器"/>
                     <android.support.v7.widget.RecyclerView
+                        android:layout_marginTop="7dp"
                         android:id="@+id/lv3_ele_message_smrecy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -478,5 +578,6 @@
         <View
             style="@style/common_linewidth"/>
     </LinearLayout>
-
+    <View
+        style="@style/common_linehightdown"/>
 </LinearLayout>

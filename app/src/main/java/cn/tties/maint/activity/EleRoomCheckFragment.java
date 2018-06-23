@@ -264,7 +264,7 @@ public class EleRoomCheckFragment extends BaseEleAccountFragment {
                     getEleRoomList();
                     createEleRoomDialog.dismiss();
                     // 更新巡视中的电房
-                    PatrolFragment.patrolFragmentInstance.getPatrolTypeList();
+//                    PatrolFragment.patrolFragmentInstance.getPatrolTypeList();
                     // 更新检修中的电房
                     OverhaulFragment.overhaulFragmentInstance.getCompanyEquipmentList();
                 } catch (Exception e) {
@@ -297,7 +297,7 @@ public class EleRoomCheckFragment extends BaseEleAccountFragment {
                         curHolder.nameText.setText(updateEleRoomDialog.eleRoomName.getText().toString().trim());
                         distributionHolder.textLeft.setText(updateEleRoomDialog.eleRoomName.getText().toString().trim());
                     }
-                    PatrolFragment.patrolFragmentInstance.getPatrolTypeList();
+//                    PatrolFragment.patrolFragmentInstance.getPatrolTypeList();
                     updateEleRoomDialog.dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();

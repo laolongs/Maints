@@ -10,6 +10,15 @@ public class UpdateOrderStatusParams extends ClinetRequestParams {
     private int workOrderId;
     private int status;
     private int isSend;
+    private int workType;
+
+    public int getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(int workType) {
+        this.workType = workType;
+    }
 
     public int getWorkOrderId() {
         return workOrderId;

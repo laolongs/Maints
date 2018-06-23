@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -36,7 +37,9 @@ import java.util.Map;
 import cn.tties.maint.R;
 import cn.tties.maint.adapter.CommonAppendListViewAdapter;
 import cn.tties.maint.adapter.CommonSwipListViewAdapter;
+import cn.tties.maint.adapter.DetailsLv2ListViewAdapter;
 import cn.tties.maint.adapter.EquiRecyclerAdapter;
+import cn.tties.maint.adapter.EquipmentAddressListViewAdapter;
 import cn.tties.maint.adapter.EquipmentLayoutAdapter;
 import cn.tties.maint.adapter.EquipmentRootListViewAdapter;
 import cn.tties.maint.adapter.MyEquipmentCheckEleAdapter;
@@ -78,6 +81,7 @@ import cn.tties.maint.util.JsonUtils;
 import cn.tties.maint.util.NoFastClickUtils;
 import cn.tties.maint.util.ToastUtil;
 import cn.tties.maint.view.AllCancelDialog;
+import cn.tties.maint.view.AllEditorDialog;
 import cn.tties.maint.view.ConfirmDialog;
 import cn.tties.maint.view.CreateEleRoomDialog;
 import cn.tties.maint.view.MyPopupWindow;
@@ -105,9 +109,9 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     //二级top
     protected EquipmentRootListViewAdapter rootAdapter;
 
-    protected CommonSwipListViewAdapter lv2Adapter1;
+    protected DetailsLv2ListViewAdapter lv2Adapter1;
 
-    protected CommonAppendListViewAdapter lv2Adapter2;
+    protected EquipmentAddressListViewAdapter lv2Adapter2;
 
     protected SwipeItemClickListener rootListener;
 
@@ -318,7 +322,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         });
     }
     //删除企业设备
-    private void sendDelInfo(final String cEqupIds, final CommonSwipListViewAdapter adapter, final CommonAppendListViewAdapter adapter2) {
+    private void sendDelInfo(final String cEqupIds, final DetailsLv2ListViewAdapter adapter, final EquipmentAddressListViewAdapter adapter2) {
         DeleteComEquParams params = new DeleteComEquParams();
         params.setComEquIds(cEqupIds);
         HttpClientSend.getInstance().send(params, new BaseAlertCallback("删除设备成功","删除设备失败") {
@@ -409,7 +413,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     }
     //三级请求数据展示
     protected void initLv2ListView() {
-        lv2Adapter1 = new CommonSwipListViewAdapter();
+        lv2Adapter1 = new DetailsLv2ListViewAdapter();
         curHolder.listview_lv2.setLayoutManager(new LinearLayoutManager(getActivity()));
         curHolder.listview_lv2.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(x.app(), R.color.dialog_title), 1, 1, -1));
         lv2Listener = new SwipeItemClickListener() {
@@ -429,7 +433,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         };
         curHolder.listview_lv2.setSwipeItemClickListener(lv2Listener);
 
-        lv2Adapter2 = new CommonAppendListViewAdapter();
+        lv2Adapter2 = new EquipmentAddressListViewAdapter();
         //三级数据库数据展示
         curHolder.listview_lv2_2.setLayoutManager(new LinearLayoutManager(getActivity()));
         curHolder.listview_lv2_2.setSwipeItemClickListener(new SwipeItemClickListener() {
@@ -757,7 +761,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         startActivity(intent);
     }
     //请求三级数据及三级本地同设备类型
-    private void showMuiltListView(final CompanyEquipmentResult selBean, final CommonSwipListViewAdapter adapter, final CommonAppendListViewAdapter adapter2, final boolean flag) {
+    private void showMuiltListView(final CompanyEquipmentResult selBean, final DetailsLv2ListViewAdapter adapter, final EquipmentAddressListViewAdapter adapter2, final boolean flag) {
         curHolder.listview_lv2.setVisibility(View.VISIBLE);
         final List<CompanyEquipmentResult> mDataList = new ArrayList<>();
         QueryComEquParams params = new QueryComEquParams();
@@ -811,7 +815,9 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
             @Override
             public void onClick(View view) {
                 if(!ischeck){
+                    int white = Color.parseColor("#ffffff");
                     curHolder.layout_lv2_all.setVisibility(View.VISIBLE);
+                    curHolder.layout_lv2.setBackgroundColor(white);
                     ObjectAnimator ra = ObjectAnimator.ofFloat(curHolder.lv2_img,"rotation", 0f, 90f);
                     ra.setDuration(500);
                     ra.start();
@@ -823,6 +829,8 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                     adapter2.setmDataList(list);
                     adapter2.notifyDataSetChanged();
                 }else{
+                    int gray = Color.parseColor("#E9ECF2");
+                    curHolder.layout_lv2.setBackgroundColor(gray);
                     curHolder.listview_lv2.setVisibility(View.VISIBLE);
                     curHolder.listview_lv2_2.setVisibility(View.GONE);
                     ObjectAnimator ra = ObjectAnimator.ofFloat(curHolder.lv2_img,"rotation", 0f, -90f);
@@ -1174,20 +1182,21 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
         }
     }
     public void dialog(){
-        AllCancelDialog dialog1=new AllCancelDialog();
-        dialog1.loadDialog("尚未保存当前页面，确认放弃？", new AllCancelDialog.OnClickIsConfirm() {
+        AllEditorDialog dialog1=new AllEditorDialog();
+        dialog1.loadDialog("尚未保存当前页面，确认放弃？", new AllEditorDialog.OnClickIsConfirm() {
             @Override
             public void OnClickIsConfirmListener() {
+                return;
+            }
+        }, new AllEditorDialog.OnClickIsCancel() {
+            @Override
+            public void OnClickIsCancelListener() {
                 holder.isEditor=false;
                 EventBusBean eventBusBean=new EventBusBean();
                 eventBusBean.setKind(EventKind.EVENT_COMPANY_ELEISEDITOR);
                 eventBusBean.setSuccess(holder.isEditor);
                 EventBus.getDefault().post(eventBusBean);
-            }
-        }, new AllCancelDialog.OnClickIsCancel() {
-            @Override
-            public void OnClickIsCancelListener() {
-                return;
+
             }
         });
     }

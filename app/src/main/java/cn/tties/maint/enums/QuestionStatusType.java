@@ -7,8 +7,9 @@ package cn.tties.maint.enums;
  */
 public enum QuestionStatusType {
 
-    HANDING(0, "处理中"),
-    END(1, "已处理");
+    UNSTART(0, "未进行"),
+    END(1, "已完成"),
+    HANDING(2, "进行中");
 
     private int type;
     private String info;
@@ -16,6 +17,9 @@ public enum QuestionStatusType {
     QuestionStatusType(int type, String info) {
         this.type = type;
         this.info = info;
+    }
+    public int getValue() {
+        return type;
     }
 
     public int getType() {

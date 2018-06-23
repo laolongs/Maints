@@ -1,239 +1,251 @@
 package cn.tties.maint.activity;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
-import com.zhy.view.flowlayout.FlowLayout;
-import com.zhy.view.flowlayout.TagAdapter;
-import com.zhy.view.flowlayout.TagFlowLayout;
-
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import cn.tties.maint.R;
+import cn.tties.maint.adapter.CommonSwipListViewAdapter;
 import cn.tties.maint.adapter.PatrolLayoutAdapter;
 import cn.tties.maint.bean.CommonListViewInterface;
+import cn.tties.maint.common.EventKind;
 import cn.tties.maint.common.MyApplication;
 import cn.tties.maint.dao.EquipmentDao;
 import cn.tties.maint.dao.PatrolItemDao;
 import cn.tties.maint.entity.EquipmentEntity;
 import cn.tties.maint.entity.PatrolItemEntity;
-import cn.tties.maint.enums.EquipmentType;
-import cn.tties.maint.enums.OtherPatrolInputType;
-import cn.tties.maint.enums.OtherPatrolItemType;
-import cn.tties.maint.holder.InfoHolder;
+import cn.tties.maint.holder.PatrolInfoHolder;
 import cn.tties.maint.httpclient.BaseAlertCallback;
 import cn.tties.maint.httpclient.BaseStringCallback;
 import cn.tties.maint.httpclient.HttpClientSend;
-import cn.tties.maint.httpclient.params.AddPatrolParam;
-import cn.tties.maint.httpclient.params.QueryComEquParams;
-import cn.tties.maint.httpclient.params.SelectCompanyEquipmentByAccountParams;
 import cn.tties.maint.httpclient.params.SelectEleRoomParams;
 import cn.tties.maint.httpclient.params.SelectEquipmentByEleRoomParams;
 import cn.tties.maint.httpclient.params.SelectPatrolItemParams;
 import cn.tties.maint.httpclient.params.SelectPatrolOrderParams;
 import cn.tties.maint.httpclient.result.BaseResult;
 import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
+import cn.tties.maint.httpclient.result.CompanyResult;
 import cn.tties.maint.httpclient.result.EleRoomResult;
 import cn.tties.maint.httpclient.result.OrderResult;
 import cn.tties.maint.httpclient.result.PatrolResult;
 import cn.tties.maint.util.JsonUtils;
-import cn.tties.maint.util.NoFastClickUtils;
-import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.view.ConfirmDialog;
 import cn.tties.maint.view.InfoDialog;
+import cn.tties.maint.view.Patrol_NewQuestionDialog;
+import cn.tties.maint.widget.PtrListViewOnScrollListener;
 import cn.tties.maint.widget.RecyclerManager;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 
 /**
  * 电房巡视
  * Created by Justin on 2018/1/9.
  */
-
+@SuppressLint("ValidFragment")
 @ContentView(R.layout.fragment_patrol)
-public class PatrolFragment extends BaseEleAccountFragment {
-
-    // 巡视设备详细list
-    @ViewInject(R.id.list_patrol_equipment_detail)
-    private TagFlowLayout patrolCEquipmentListView;
-
-    // 巡视项目类型list
-    @ViewInject(R.id.list_patrol_item)
-    private ListView patrolItemListView;
-
-    @ViewInject(R.id.layout_nodata)
-    private LinearLayout layoutNodata;
-
-
+public class PatrolFragment extends BaseFragment {
+    private static final String TAG = "PatrolFragment";
     public static PatrolFragment patrolFragmentInstance;
-
-    private MTagAdapter tagAdapter;
+    //详细界面 最大得布局 用于绑定id
+    @ViewInject(R.id.patrol_info)
+    private LinearLayout layoutInfo;
+    @ViewInject(R.id.ptrlayout_order)
+    private PtrClassicFrameLayout orderPtrlayout;
+    private PtrListViewOnScrollListener mPtrListViewOnScrollListener;
     private PatrolLayoutAdapter patrolItemAdapter;
-
-    private Map<String, Integer> otherEquipType;
-    private Map<Integer, OtherPatrolInputType> otherInputType;
     private Integer orderId;
-    protected InfoHolder curHolder;
     private ConfirmDialog dialog;
-
+    private CompanyResult curCompany;
+    private Integer curEleId;
+    private String curEleNo;
+    private PatrolInfoHolder curhodler;
+    CommonSwipListViewAdapter rootAdapter;
+    protected SwipeItemClickListener rootListener;
+    protected CommonSwipListViewAdapter lv2Adapter;
+    protected SwipeItemClickListener lv2Listener;
+    private List<PatrolItemEntity> showItemEntities;
+    private List<PatrolResult> recordResult;
+    private Patrol_NewQuestionDialog dialognew;
+    private CompanyEquipmentResult result;
+    int orderworkid=223;
+    int numFlag=0;//0 代表新建问题， 1 代表添加问题，2 代表有温度的问题
+    int workOrderId;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        initData();
-        initView();
         super.onViewCreated(view, savedInstanceState);
+        initView();
         patrolFragmentInstance = this;
-        hideLayout(0);
     }
-
+    @SuppressLint("ValidFragment")
+    public PatrolFragment(Integer curEleId,String curEleNo, CompanyResult curCompany,int workOrderId){
+        this.curEleId=curEleId;
+        this.curEleNo=curEleNo;
+        this.curCompany=curCompany;
+        this.workOrderId=workOrderId;
+    }
     @Override
-    public void changeEleAccountNextStep() {
-
+    public void changeEleAccountNextSteps(Integer curEleId, String curEleNo, CompanyResult curCompany) {
+        this.curEleId=curEleId;
+        this.curEleNo=curEleNo;
+        this.curCompany=curCompany;
     }
 
-    /**
-     * 初始化数据.
-     */
-    public void initData() {
-        otherEquipType = new HashMap<String, Integer>();
-        otherInputType  = new HashMap<Integer, OtherPatrolInputType>();
-        List<EquipmentEntity> baseEquipList = EquipmentDao.getInstance().queryByPid(-1);
-        for (EquipmentEntity entity : baseEquipList) {
-            for (OtherPatrolItemType e : OtherPatrolItemType.values()) {
-                if (e.getInfo().equals(entity.getEquipmentName())) {
-                    otherEquipType.put(e.getInfo(), entity.getEquipmentId());
+    //当前电房
+    protected void initRootListView() {
+        rootAdapter = new CommonSwipListViewAdapter();
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        curhodler.listview_root.setLayoutManager(manager);
+        curhodler.listview_root.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(x.app(), R.color.dialog_title), 1, 1, -1));
+        rootListener = new SwipeItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                CommonListViewInterface selBean = rootAdapter.getItem(position);
+                //如果是选中状态,执行取消操作
+                if (selBean.isChecked()) {
+                    return;
+                } else {//切换操作
+                    rootAdapter.setChecked(selBean);
+                    rootAdapter.notifyDataSetChanged();
+                    rootListViewClick(selBean);
                 }
             }
-        }
-        List<EquipmentEntity> allEquipList = EquipmentDao.getInstance().queryAll();
-        for (EquipmentEntity entity : allEquipList) {
-            for (OtherPatrolInputType e : OtherPatrolInputType.values()) {
-                if (entity.getEquipmentId() == 27) {
-                    System.out.print(entity.getEquipmentName());
-                }
-                if (e.getInfo().equals(entity.getEquipmentName())) {
-                    otherInputType.put(entity.getEquipmentId(), e);
+        };
+        curhodler.listview_root.setSwipeItemClickListener(rootListener);
+        curhodler.listview_root.setAdapter(rootAdapter);
+    }
+    //二级  获取采集点列表.
+    public void initLv2ListView() {
+        lv2Adapter = new CommonSwipListViewAdapter();
+        curhodler.listview_lv2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        curhodler.listview_lv2.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(x.app(), R.color.dialog_title), 1, 1, -1));
+        lv2Listener = new SwipeItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                CommonListViewInterface selBean = lv2Adapter.getItem(position);
+                if (selBean.isChecked()) {
+                    return;
+                } else {//切换操作
+                    //设置选中
+                    lv2Adapter.setChecked(selBean);
+                    lv2Adapter.notifyDataSetChanged();
+                    lv2UpListViewClick(selBean);
                 }
             }
-        }
+        };
+        curhodler.listview_lv2.setSwipeItemClickListener(lv2Listener);
+        curhodler.listview_lv2.setAdapter(lv2Adapter);
+
     }
     /**
      * 初始化界面.
      */
     private void initView() {
-        // 初始化企业设备列表
-        this.initTagListView();
-        // 初始化巡视项
-        this.initDetailListView();
-
+        curhodler = new PatrolInfoHolder(layoutInfo);
         dialog = new ConfirmDialog(PatrolFragment.this.getActivity());
-        curHolder = new InfoHolder(infoLayout);
-    }
-
-    @Override
-    protected void initLv2ListView() {
-        RecyclerManager.initParrolConfig(lv2ListView, getActivity());
-        lv2ListView.setSwipeMenuItemClickListener(new MenuItemClickListener());
-        super.initLv2ListView();
-    }
-
-//    @Override
-//    public void changeEleAccountNextStep() {
-//        hideLayout(0);
-//        clearHolder();
-//        getWorkOrderId();
-//    }
-
-    @Override
-    protected void rootListViewClick(CommonListViewInterface bean) {
-        if (orderId == null) {
-            getWorkOrderId();
-        }
-        clearHolder();
-        lv2Adapter1.clearCheck();
-        // 查询设备列表
-        EleRoomResult selectEleRoomResult = (EleRoomResult) bean;
-        if (selectEleRoomResult.getRoomId() == otherEquipType.get(OtherPatrolItemType.OUTSIDE.getInfo())) {
-            getOutSideEquipment();
-        } else if (selectEleRoomResult.getRoomId() == otherEquipType.get(OtherPatrolItemType.ENVIRONMENT.getInfo())) {
-            // XXX:特殊处理位附属环境设置显示的设备名.
-            curHolder.nameText.setText(selectEleRoomResult.getItemName());
-            getEnviromentEquipment();
-        } else if (selectEleRoomResult.getRoomId() == otherEquipType.get(OtherPatrolItemType.HEALTH.getInfo())) {
-            // XXX:特殊处理位清洁卫生设置显示的设备名.
-            curHolder.nameText.setText(selectEleRoomResult.getItemName());
-            getHealthEquipment();
-        } else if (selectEleRoomResult.getRoomId() == otherEquipType.get(OtherPatrolItemType.TOOL.getInfo())) {
-            getTool();
-        } else {
-            getEleRoomEquipment(bean);
-        }
-    }
-
-    @Override
-    protected void lv2UpListViewClick(CommonListViewInterface bean) {
-        CompanyEquipmentResult selEntity = (CompanyEquipmentResult) bean;
-        clearHolder();
-        lv3Adapter1.clearCheck();
-        //大于2级设备显示 详细页面
-        if (selEntity.getEquipmentEntity().getIsLeafNode()
-                || selEntity.getEquipmentEntity().getEquipmentLevel() > 2
-                || selEntity.getEquipmentEntity().getType() == EquipmentType.TRANSFORMER.getValue()) {
-            hideLayout(1);
-            if (selEntity.getName().equals(OtherPatrolItemType.ROOM.getInfo())
-                    || selEntity.getEquipmentEntity().getType() == EquipmentType.TRANSFORMER.getValue()) {
-                showPatrolItem(selEntity);
-            } else {
-                PatrolFragment.this.getTagListView(getSameEquip(selEntity.getEquipmentId(), lv2Adapter1));
-            }
-        } else {
-            showLv3ListView(selEntity);
-        }
-    }
-
-    @Override
-    protected void lv3UpListViewClick(CommonListViewInterface bean) {
-        clearHolder();
-        CompanyEquipmentResult selEntity = (CompanyEquipmentResult) bean;
-        Map<Integer, List<CompanyEquipmentResult>> map = lv3Adapter1.getMap();
-        List<CompanyEquipmentResult> list = new ArrayList<CompanyEquipmentResult>();
-        if (map.containsKey(selEntity.getEquipmentId())) {
-            for (CompanyEquipmentResult entity : map.get(selEntity.getEquipmentId())) {
-                if (entity.getEquipmentId() == selEntity.getEquipmentId()) {
-                    list.add(entity);
-                }
-            }
-        }
-        PatrolFragment.this.getTagListView(list);
-    }
-
-    /**
-     * 初始化企业设备列表.
-     */
-    private void initTagListView() {
-        tagAdapter = new MTagAdapter();
-        tagAdapter.setDataList(new ArrayList<CompanyEquipmentResult>());
-        patrolCEquipmentListView.setAdapter(tagAdapter);
-        patrolCEquipmentListView.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+        showItemEntities = new ArrayList<>();
+        initRootListView();
+        initLv2ListView();
+        // 初始化巡视项
+        initDetailListView();
+        getPatrolTypeList();
+        getWorkOrderId();
+        initPullRefresh();
+        //添加额外新问题
+        curhodler.patrol_addquestion.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTagClick(View view, int position, FlowLayout parent) {
-                showPatrolItem(tagAdapter.getItem(position));
-                return false;
+            public void onClick(View view) {
+                numFlag=0;
+//                dialognew.clearImage();
+                dialognew.loading();
+            }
+        });
+    }
+    //查询二级企业设备 查询当前电房下属设备项
+    protected void rootListViewClick(CommonListViewInterface bean) {
+        lv2Adapter.clearCheck();
+        EleRoomResult selectEleRoomResult = (EleRoomResult) bean;
+        SelectEquipmentByEleRoomParams params = new SelectEquipmentByEleRoomParams();
+        params.setEleAccountId(curEleId);
+        params.setRoomId(selectEleRoomResult.getRoomId());
+        Log.i(TAG, "rootListViewClick: "+selectEleRoomResult.getRoomId());
+        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
+            @Override
+            public void onSuccess(String result) {
+                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
+                if (ret.getErrorCode() != 0) {
+                    Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                List<CompanyEquipmentResult> companyEquipmentList = JsonUtils.deserialize(ret.getResult(),
+                        new TypeToken<List<CompanyEquipmentResult>>() {
+                        }.getType());
+                if(companyEquipmentList.size()>0){
+                    showHoulder(4);
+                    lv2Adapter.setmDataList(companyEquipmentList);
+                    lv2Adapter.notifyDataSetChanged();
+                }else{
+                    showHoulder(3);
+                }
+
+            }
+        });
+    }
+    //二级请求后天及本地数据库数据
+    protected void lv2UpListViewClick(CommonListViewInterface bean) {
+        showItemEntities.clear();
+        result = (CompanyEquipmentResult) bean;
+        Log.i(TAG, "lv2UpListViewClick: "+ result.getEquipmentId());
+        SelectPatrolItemParams params = new SelectPatrolItemParams();
+        params.setEleAccountId(curEleId);
+//        params.setWorkOrderId(orderId);
+        params.setWorkOrderId(223);
+        params.setCompanyEquipmentId(result.getCompanyEquipmentId());
+        params.setRoomId(result.getRoomId());
+        dialognew = new Patrol_NewQuestionDialog(PatrolFragment.this,result,orderworkid,curEleId,numFlag);
+        dialognew.setContentView();
+        Log.i(TAG, "lv2UpListViewClick: curEleId"+curEleId);
+        Log.i(TAG, "lv2UpListViewClick: orderId"+orderId);
+        Log.i(TAG, "lv2UpListViewClick: result.getCompanyEquipmentId()"+ result.getCompanyEquipmentId());
+        Log.i(TAG, "lv2UpListViewClick: result.getRoomId()"+ result.getRoomId());
+        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
+
+            @Override
+            public void onSuccess(String resultStr) {
+                BaseResult ret = JsonUtils.deserialize(resultStr, BaseResult.class);
+                if (ret.getErrorCode() != 0) {
+                    Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                recordResult = JsonUtils.deserialize(ret.getResult(),
+                        new TypeToken<List<PatrolResult>>() {
+                        }.getType());
+                showPatrolItem(recordResult, result);
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
             }
         });
     }
@@ -242,20 +254,39 @@ public class PatrolFragment extends BaseEleAccountFragment {
      * 初始化巡视项.
      */
     private void initDetailListView() {
-        patrolItemAdapter = new PatrolLayoutAdapter(new ArrayList<PatrolItemEntity>());
-        patrolItemListView.setAdapter(patrolItemAdapter);
+        patrolItemAdapter = new PatrolLayoutAdapter(new ArrayList<PatrolItemEntity>(),PatrolFragment.this);
+        this.mPtrListViewOnScrollListener = new PtrListViewOnScrollListener(this.orderPtrlayout, true, false);
+        curhodler.listview_lv3.setAdapter(patrolItemAdapter);
+        curhodler.listview_lv3.setOnScrollListener(this.mPtrListViewOnScrollListener);
+        patrolItemAdapter.setOnClick(new PatrolLayoutAdapter.OnClick() {
+            @Override
+            public void OnClickListenter(boolean flag) {
+//                dialognew.clearImage();
+                dialognew.setData(flag);
+                dialognew.loading();
+            }
+        });
+    }
+    /**
+     * 初始化刷新.
+     */
+    private void initPullRefresh() {
+        orderPtrlayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                PatrolFragment.this.showPatrolItem(recordResult, result);
+            }
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+        });
     }
 
     /**
      * 查询巡视类型列表.
      */
     public void getPatrolTypeList() {
-        if (orderId == null) {
-            hideLayout(-1);
-            layoutNodata.setVisibility(View.VISIBLE);
-            return;
-        }
-        layoutNodata.setVisibility(View.GONE);
         SelectEleRoomParams params = new SelectEleRoomParams();
         params.setAccountId(curEleId);
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
@@ -271,202 +302,17 @@ public class PatrolFragment extends BaseEleAccountFragment {
                 List<EleRoomResult> eleRoomResultList = JsonUtils.deserialize(ret.getResult(),
                         new TypeToken<List<EleRoomResult>>() {
                         }.getType());
-                // 加上室外、附属环境、工器具
-                for (OtherPatrolItemType e : OtherPatrolItemType.values()) {
-                    if (e.getInfo().equals(OtherPatrolItemType.ROOM.getInfo())) {
-                        continue;
-                    }
-                    EleRoomResult result1 = new EleRoomResult();
-                    result1.setRoomName(e.getInfo());
-                    result1.setRoomId(otherEquipType.get(e.getInfo()));
-                    eleRoomResultList.add(result1);
-                }
-                rootAdapter.setmDataList(eleRoomResultList);
-                rootAdapter.notifyDataSetChanged();
-                if (rootAdapter.getChecked() != null) {
-                    for (int i=0;i < rootAdapter.getMList().size();i++) {
-                        EleRoomResult result1 = (EleRoomResult)rootAdapter.getMList().get(i);
-                        if (result1.isChecked()) {
-                            rootAdapter.clearCheck();
-                            setRootClick(i);
-                            break;
-                        }
-                    }
+                if(eleRoomResultList.size()>0){
+                    showHoulder(2);
+                    rootAdapter.setmDataList(eleRoomResultList);
+                    rootAdapter.notifyDataSetChanged();
+                }else{
+                    showHoulder(1);
                 }
             }
         });
     }
-
-    //室外
-    private void getOutSideEquipment() {
-        SelectCompanyEquipmentByAccountParams params = new SelectCompanyEquipmentByAccountParams();
-        params.setEleAccountId(curEleId);
-        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
-            @Override
-            public void onSuccess(String result) {
-                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
-                if (ret.getErrorCode() != 0) {
-                    Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                List<CompanyEquipmentResult> companyEquipmentList = JsonUtils.deserialize(ret.getResult(),
-                        new TypeToken<List<CompanyEquipmentResult>>() {
-                        }.getType());
-                showLv2ListView(companyEquipmentList, false);
-            }
-        });
-    }
-
-    //附属环境
-    private void getEnviromentEquipment() {
-        hideLayout(0);
-        CompanyEquipmentResult result = new CompanyEquipmentResult();
-        result.setName(OtherPatrolItemType.ENVIRONMENT.getInfo());
-        result.setEquipmentId(otherEquipType.get(OtherPatrolItemType.ENVIRONMENT.getInfo()));
-        showPatrolItem(result);
-    }
-
-    //工具器
-    private void getTool() {
-        QueryComEquParams params = new QueryComEquParams();
-        params.setEquipmentId(otherEquipType.get(OtherPatrolItemType.TOOL.getInfo()));
-        params.setEleAccountsId(curEleId);
-        params.setPid(-1);
-        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
-            @Override
-            public void onSuccess(String result) {
-                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
-                if (ret.getErrorCode() != 0) {
-                    Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                List<CompanyEquipmentResult> companyEquipmentList = JsonUtils.deserialize(ret.getResult(),
-                        new TypeToken<List<CompanyEquipmentResult>>() {
-                        }.getType());
-                //处理企业设备项目
-                Iterator<CompanyEquipmentResult> newListIterator = companyEquipmentList.iterator();
-                while (newListIterator.hasNext()) {
-                    CompanyEquipmentResult equipment = newListIterator.next();
-                    EquipmentEntity equipmentEntity = EquipmentDao.getInstance().queryById(equipment.getEquipmentId());
-                    equipment.setEquipmentEntity(equipmentEntity);
-                }
-                showLv2ListView(companyEquipmentList, false);
-
-            }
-        });
-    }
-
-    /**
-     * 清洁卫生.
-     */
-    private void getHealthEquipment() {
-        hideLayout(0);
-        CompanyEquipmentResult result = new CompanyEquipmentResult();
-        result.setName(OtherPatrolItemType.HEALTH.getInfo());
-        result.setEquipmentId(otherEquipType.get(OtherPatrolItemType.HEALTH.getInfo()));
-        showPatrolItem(result);
-    }
-
-    //电房
-    private void getEleRoomEquipment(CommonListViewInterface bean) {
-        EleRoomResult selectEleRoomResult = (EleRoomResult) bean;
-        SelectEquipmentByEleRoomParams params = new SelectEquipmentByEleRoomParams();
-        params.setEleAccountId(curEleId);
-        params.setRoomId(selectEleRoomResult.getRoomId());
-        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
-            @Override
-            public void onSuccess(String result) {
-                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
-                if (ret.getErrorCode() != 0) {
-                    Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                List<CompanyEquipmentResult> companyEquipmentList = JsonUtils.deserialize(ret.getResult(),
-                        new TypeToken<List<CompanyEquipmentResult>>() {
-                        }.getType());
-                showLv2ListView(companyEquipmentList, true);
-            }
-        });
-    }
-
-    private void showLv2ListView(List<CompanyEquipmentResult> companyEquipmentList, boolean isRoom) {
-        hideLayout(1);
-        //处理企业设备项目
-        List<CompanyEquipmentResult> showCompanyEquipmentList = new ArrayList<>();
-        Iterator<CompanyEquipmentResult> newListIterator = companyEquipmentList.iterator();
-        while (newListIterator.hasNext()) {
-            CompanyEquipmentResult equipment = newListIterator.next();
-            EquipmentEntity equipmentEntity = EquipmentDao.getInstance().queryById(equipment.getEquipmentId());
-            if (!equipmentEntity.getHasPatrol()) {  // XXX:对查询出来设备不是巡视设备进行特殊处理
-                continue;
-            }
-            equipment.setEquipmentEntity(equipmentEntity);
-            showCompanyEquipmentList.add(equipment);
-        }
-
-        if (isRoom) {
-            CompanyEquipmentResult body = new CompanyEquipmentResult();
-            body.setName(OtherPatrolItemType.ROOM.getInfo());
-            body.setRoomId(((EleRoomResult) rootAdapter.getChecked()).getRoomId());
-            body.setEquipmentId(otherEquipType.get(OtherPatrolItemType.ROOM.getInfo()));
-            EquipmentEntity entity = new EquipmentEntity();
-            entity.setEquipmentName(OtherPatrolItemType.ROOM.getInfo());
-            entity.setIsLeafNode(true);
-            entity.setEquipmentLevel(3);
-            entity.setEquipmentId(otherEquipType.get(OtherPatrolItemType.ROOM.getInfo()));
-            body.setEquipmentEntity(entity);
-            showCompanyEquipmentList.add(0, body);
-        }
-        setMergeDataList(showCompanyEquipmentList, lv2Adapter1);
-        lv2Adapter1.notifyDataSetChanged();
-
-        // 默认点击第一行
-        if ((null != companyEquipmentList && companyEquipmentList.size() > 0) || showCompanyEquipmentList.size() > 0) {
-            setLv2Click(0);
-        }
-    }
-
-    private void showLv3ListView(CompanyEquipmentResult bean) {
-        hideLayout(2);
-        QueryComEquParams params = new QueryComEquParams();
-        params.setEquipmentId(bean.getEquipmentId());
-        params.setEleAccountsId(curEleId);
-        params.setPid(bean.getCompanyEquipmentId());
-        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
-            @Override
-            public void onSuccess(String result) {
-                BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
-                if (ret.getErrorCode() != 0) {
-                    Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                List<CompanyEquipmentResult> companyEquipmentList = JsonUtils.deserialize(ret.getResult(),
-                        new TypeToken<List<CompanyEquipmentResult>>() {
-                        }.getType());
-                //处理企业设备项目
-                Iterator<CompanyEquipmentResult> newListIterator = companyEquipmentList.iterator();
-                while (newListIterator.hasNext()) {
-                    CompanyEquipmentResult equipment = newListIterator.next();
-                    PatrolItemDao patrolItemDao = new PatrolItemDao();
-                    List<PatrolItemEntity> patrolItemEntityList = patrolItemDao.queryByEquipmentId(equipment.getEquipmentId());
-                    if (patrolItemEntityList.size() == 0) {
-                        newListIterator.remove();
-                    } else {
-                        EquipmentEntity equipmentEntity = EquipmentDao.getInstance().queryById(equipment.getEquipmentId());
-                        equipment.setEquipmentEntity(equipmentEntity);
-                    }
-                }
-                setMergeDataList(companyEquipmentList, lv3Adapter1);
-                lv3Adapter1.notifyDataSetChanged();
-
-                // 默认点击第一行
-                if (null != companyEquipmentList && companyEquipmentList.size() > 0) {
-                    setLv3Click(0);
-                }
-            }
-        });
-    }
-
+    //查询工单id
     public void getWorkOrderId() {
         SelectPatrolOrderParams params = new SelectPatrolOrderParams();
         params.setStaffId(MyApplication.getUserInfo().getStaffId());
@@ -480,93 +326,15 @@ public class PatrolFragment extends BaseEleAccountFragment {
                     return;
                 }
                 OrderResult result = JsonUtils.deserialize(ret.getResult(), OrderResult.class);
-                if (result.getWorkOrderId() == null) {
-                    curHolder.saveBtn.setVisibility(View.INVISIBLE);
-                    orderId = null;
-                    return;
-                }
-                curHolder.saveBtn.setVisibility(View.VISIBLE);
                 orderId = result.getWorkOrderId();
                 getPatrolTypeList();
             }
         });
     }
-
-
-    private void getTagListView(List<CompanyEquipmentResult> list) {
-        tagAdapter.setDataList(list);
-        tagAdapter.notifyDataChanged();
-        tagAdapter.setSelectedList(0);
-        //默认选中
-        showPatrolItem(list.get(0));
-    }
-
-    /**
-     * 查询企业设备列表.
-     */
-    private void showPatrolItem(final CompanyEquipmentResult result) {
-        infoLayout.setVisibility(View.VISIBLE);
-        if (result.getEquipmentEntity() == null) {
-            curHolder.nameText.setText(result.getName());
-        } else {
-            curHolder.nameText.setText(result.getEquipmentEntity().getEquipmentName());
-        }
-        curHolder.saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (NoFastClickUtils.isFastClick()) {
-                    return;
-                }
-                if (patrolItemAdapter.getDataList().size() < 0) {
-                    Toast.makeText(getActivity(), "未选泽设备", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (rootAdapter.getChecked() == null) {
-                    Toast.makeText(getActivity(), "未选泽电房", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (checkPatrol()) {
-                    InfoDialog infoDialog = new InfoDialog();
-                    infoDialog.loadDialog(false , "有未选择项目", "");
-                    return;
-                }
-                dialog.loadDialog("", "是否提交巡视报告", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        savePatrolInfo(result);
-                    }
-                });
-            }
-        });
-        if (orderId != null) {
-            SelectPatrolItemParams params = new SelectPatrolItemParams();
-            params.setEleAccountId(curEleId);
-            params.setWorkOrderId(orderId);
-            if (!result.getEquipmentId().equals(otherEquipType.get(OtherPatrolItemType.ROOM.getInfo()))) {
-                params.setCompanyEquipmentId(result.getCompanyEquipmentId());
-            }
-            params.setRoomId(result.getRoomId());
-            HttpClientSend.getInstance().send(params, new BaseStringCallback() {
-                @Override
-                public void onSuccess(String resultStr) {
-                    BaseResult ret = JsonUtils.deserialize(resultStr, BaseResult.class);
-                    if (ret.getErrorCode() != 0) {
-                        Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    List<PatrolResult> recordResult = JsonUtils.deserialize(ret.getResult(),
-                            new TypeToken<List<PatrolResult>>() {
-                            }.getType());
-                    showPatrolItem(recordResult, result);
-                }
-            });
-        } else {
-            showPatrolItem(new ArrayList<PatrolResult>(), result);
-        }
-
-    }
-
+//
     private void showPatrolItem(List<PatrolResult> recordResult, final CompanyEquipmentResult result) {
+        showHoulder(5);
+        Log.i(TAG, "showPatrolItem:二级设备id "+result.getEquipmentId());
         //已有record记录转成map
         Map<Integer, PatrolResult> recordMap = new HashMap<Integer, PatrolResult>();
         for (PatrolResult result1 : recordResult) {
@@ -576,7 +344,8 @@ public class PatrolFragment extends BaseEleAccountFragment {
         EleRoomResult roomResult = (EleRoomResult) rootAdapter.getChecked();
         //该设备巡视项目
         List<PatrolItemEntity> itemEntities = PatrolItemDao.getInstance().queryByEquipId(result.getEquipmentId());
-        List<PatrolItemEntity> showItemEntities = new ArrayList<>();
+        Log.i(TAG, "showPatrolItem:-------- "+itemEntities.size());
+
         for (PatrolItemEntity entity : itemEntities) {
             //过滤电房配置
             if (entity.getHigh() != null && entity.getHigh().booleanValue()
@@ -593,238 +362,92 @@ public class PatrolFragment extends BaseEleAccountFragment {
             }
             //如果已有巡视记录
             if (recordMap.containsKey(entity.getPatrolItemId())) {
+                entity.setInputType(PatrolLayoutAdapter.QUESTION);
                 entity.setResult(recordMap.get(entity.getPatrolItemId()));
             } else {
+                entity.setInputType(PatrolLayoutAdapter.NOQUESTION);
                 entity.setResult(new PatrolResult());
             }
+            //判断是否有温度 ，并且弹出温度框
+            if (entity.getHasTemperature() != null){
+                entity.setTemperature(1);
+            }
             //页面显示项目
-            entity.setInputType(PatrolLayoutAdapter.RADIO);
-            if (entity.getHasTemperature() != null || entity.getHasLineTemperature() != null || entity.getHasVoltage() != null || entity.getHasCurrent() != null || entity.getActivePower() != null) {
-                entity.setInputType(PatrolLayoutAdapter.INPUT);
-            } else if (otherInputType.containsKey(entity.getEquipmentId())) {
-                //如果巡视项目是计量柜柜体且是柜体数值项目
-                if (otherInputType.get(entity.getEquipmentId()) == OtherPatrolInputType.BODY && entity.getBody()) {
-                    entity.setInputType(PatrolLayoutAdapter.GAGUE_BODY);
-                }
-            }
-            //ew 附属环境 清洁卫生 特殊处理
-            if (otherEquipType.get(OtherPatrolItemType.ENVIRONMENT.getInfo()).equals(entity.getEquipmentId())) {
-                entity.setEquipType(OtherPatrolItemType.ENVIRONMENT.getInfo());
-            }
-            if (otherEquipType.get(OtherPatrolItemType.HEALTH.getInfo()).equals(entity.getEquipmentId())) {
-                entity.setEquipType(OtherPatrolItemType.HEALTH.getInfo());
-            }
             showItemEntities.add(entity);
         }
         patrolItemAdapter.setDataList(showItemEntities);
         patrolItemAdapter.notifyDataSetChanged();
+        orderPtrlayout.refreshComplete();
     }
-
-    private void clearHolder() {
-        curHolder.nameText.setText("请选择一个设备");
-        tagAdapter.setDataList(new ArrayList());
-        tagAdapter.notifyDataChanged();
-        patrolItemAdapter.setDataList(new ArrayList());
-        patrolItemAdapter.notifyDataSetChanged();
-        infoLayout.setVisibility(View.GONE);
-    }
-
-    private void savePatrolInfo(final CompanyEquipmentResult result) {
-        AddPatrolParam addPatrolParam = new AddPatrolParam();
-        List<PatrolResult> list = new ArrayList<PatrolResult>();
-        for (PatrolItemEntity entity : patrolItemAdapter.getDataList()) {
-            //新记录需要赋值
-            if (entity.getResult().getPatrolRecordId() == null) {
-                entity.getResult().setEleAccountId(curEleId);
-                entity.getResult().setPatrolItemId(entity.getPatrolItemId());
-                entity.getResult().setWorkOrderId(orderId);
-                //附属环境和清洁卫生 室外没有roomid
-                if (!entity.getEquipmentId().equals(otherEquipType.get(OtherPatrolItemType.ENVIRONMENT.getInfo()))
-                        && !entity.getEquipmentId().equals(otherEquipType.get(OtherPatrolItemType.HEALTH.getInfo()))
-                        && !entity.getEquipmentId().equals(otherEquipType.get(OtherPatrolItemType.OUTSIDE.getInfo()))) {
-                    entity.getResult().setRoomId((rootAdapter.getChecked().getItemId()));
-                    //电房本体没有设备id
-                    if (!entity.getEquipmentId().equals(otherEquipType.get(OtherPatrolItemType.ROOM.getInfo()))
-                            && (null != result.getEquipmentEntity() && result.getEquipmentEntity().getType() != EquipmentType.TRANSFORMER.getValue())) {
-                        entity.getResult().setCompanyEquipmentId(tagAdapter.getChecked().getCompanyEquipmentId());
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+            //添加图片返回
+            if (data != null && requestCode == EventKind.REQUEST_CODE_SELECT) {
+                List<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                if (images != null) {
+                    if (images.get(0).size > 5242880) {
+                        Toast.makeText(x.app(),"不能长传查过5M大小的图片", Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                    // 变压器特殊处理
-                    if (null != result.getEquipmentEntity() && result.getEquipmentEntity().getType() == EquipmentType.TRANSFORMER.getValue()) {
-                        entity.getResult().setCompanyEquipmentId(result.getCompanyEquipmentId());
-                    }
+                    dialognew.setImages(images);
+
                 }
             }
-            list.add(entity.getResult());
-        }
-        addPatrolParam.setPatrolRecordList(list);
-        sendSaveInfo(addPatrolParam, result);
-    }
-
-    private Boolean checkPatrol() {
-        Boolean undoFlag = false;
-        PatrolItemEntity errEntity = null;
-        int i = -1;
-        for (PatrolItemEntity entity : patrolItemAdapter.getDataList()) {
-            i++;
-            errEntity = entity;
-            if (entity.getInputType() == PatrolLayoutAdapter.RADIO) {
-                if (entity.getResult().getHasquestion() == null) {
-                    undoFlag = true;
-                    break;
-                }
-            } else if (entity.getInputType() == PatrolLayoutAdapter.GAGUE_BODY) {
-                if (entity.getResult().getValue1() == null || StringUtil.isEmpty(entity.getResult().getValue1().trim())
-                        || entity.getResult().getValue2() == null || StringUtil.isEmpty(entity.getResult().getValue2().trim())
-                        || entity.getResult().getValue3() == null || StringUtil.isEmpty(entity.getResult().getValue3().trim())) {
-                    undoFlag = true;
-                    break;
-                }
-            } else {
-                if (entity.getHasTemperature() != null) {
-                    if (entity.getResult().getValue1() == null || StringUtil.isEmpty(entity.getResult().getValue1().trim())) {
-                        undoFlag = true;
-                        break;
-                    }
-                }
-                if (entity.getHasLineTemperature() != null) {
-                    if (entity.getResult().getValue1() == null || StringUtil.isEmpty(entity.getResult().getValue1().trim())
-                            || entity.getResult().getValue2() == null || StringUtil.isEmpty(entity.getResult().getValue2().trim())
-                            || entity.getResult().getValue3() == null || StringUtil.isEmpty(entity.getResult().getValue3().trim())) {
-                        undoFlag = true;
-                        break;
-                    }
-                }
-                if (entity.getHasVoltage() != null && entity.getHasCurrent() != null) {
-                    if (entity.getResult().getValue1() == null || StringUtil.isEmpty(entity.getResult().getValue1().trim())
-                            || entity.getResult().getValue2() == null || StringUtil.isEmpty(entity.getResult().getValue2().trim())
-                            || entity.getResult().getValue3() == null || StringUtil.isEmpty(entity.getResult().getValue3().trim())
-                            || entity.getResult().getValue4() == null || StringUtil.isEmpty(entity.getResult().getValue4().trim())
-                            || entity.getResult().getValue5() == null || StringUtil.isEmpty(entity.getResult().getValue5().trim())
-                            || entity.getResult().getValue6() == null || StringUtil.isEmpty(entity.getResult().getValue6().trim())) {
-                        undoFlag = true;
-                        break;
-                    }
-                } else if (entity.getHasVoltage() != null) {
-                    if (entity.getResult().getValue1() == null || StringUtil.isEmpty(entity.getResult().getValue1().trim())
-                            || entity.getResult().getValue2() == null || StringUtil.isEmpty(entity.getResult().getValue2().trim())
-                            || entity.getResult().getValue3() == null || StringUtil.isEmpty(entity.getResult().getValue3().trim())) {
-                        undoFlag = true;
-                        break;
-                    }
-                } else if (entity.getHasCurrent() != null) {
-                    if (entity.getResult().getValue1() == null || StringUtil.isEmpty(entity.getResult().getValue1().trim())
-                            || entity.getResult().getValue2() == null || StringUtil.isEmpty(entity.getResult().getValue2().trim())
-                            || entity.getResult().getValue3() == null || StringUtil.isEmpty(entity.getResult().getValue3().trim())) {
-                        undoFlag = true;
-                        break;
-                    }
-                }
-                if (entity.getActivePower() != null) {
-                    if (entity.getResult().getValue1() == null || StringUtil.isEmpty(entity.getResult().getValue1().trim())
-                            || entity.getResult().getValue2() == null || StringUtil.isEmpty(entity.getResult().getValue2().trim())) {
-                        undoFlag = true;
-                        break;
-                    }
+        } else if (resultCode == ImagePicker.RESULT_CODE_BACK) {
+            //预览图片返回
+            if (data != null && requestCode == EventKind.REQUEST_CODE_PREVIEW) {
+                List<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_ITEMS);
+                if (images == null || images.size() == 0) {
+                    dialognew.deleteImage();
                 }
             }
         }
-        if (undoFlag) {
-            final int position = i;
-            patrolItemListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    patrolItemListView.smoothScrollToPosition(position);
-                }
-            });
-            System.out.println(errEntity.getTitle());
-        }
-        return undoFlag;
     }
+    private void showHoulder(int type) {
+        switch (type){
+            case 1:
+                curhodler.layout_lv1_all.setVisibility(View.GONE);
+                curhodler.layout_lv1_hite.setVisibility(View.VISIBLE);
+                curhodler.layout_lv2_all.setVisibility(View.GONE);
+                curhodler.layout_lv2_hite.setVisibility(View.VISIBLE);
+                curhodler.layout_lv3_all.setVisibility(View.GONE);
+                curhodler.layout_lv3_hite.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                curhodler.layout_lv1_all.setVisibility(View.VISIBLE);
+                curhodler.layout_lv1_hite.setVisibility(View.GONE);
+                curhodler.layout_lv2_all.setVisibility(View.GONE);
+                curhodler.layout_lv2_hite.setVisibility(View.VISIBLE);
+                curhodler.layout_lv3_all.setVisibility(View.GONE);
+                curhodler.layout_lv3_hite.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                curhodler.layout_lv1_all.setVisibility(View.VISIBLE);
+                curhodler.layout_lv1_hite.setVisibility(View.GONE);
+                curhodler.layout_lv2_all.setVisibility(View.GONE);
+                curhodler.layout_lv2_hite.setVisibility(View.VISIBLE);
+                curhodler.layout_lv3_all.setVisibility(View.GONE);
+                curhodler.layout_lv3_hite.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                curhodler.layout_lv1_all.setVisibility(View.VISIBLE);
+                curhodler.layout_lv1_hite.setVisibility(View.GONE);
+                curhodler.layout_lv2_all.setVisibility(View.VISIBLE);
+                curhodler.layout_lv2_hite.setVisibility(View.GONE);
+                curhodler.layout_lv3_all.setVisibility(View.GONE);
+                curhodler.layout_lv3_hite.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                curhodler.layout_lv1_all.setVisibility(View.VISIBLE);
+                curhodler.layout_lv1_hite.setVisibility(View.GONE);
+                curhodler.layout_lv2_all.setVisibility(View.VISIBLE);
+                curhodler.layout_lv2_hite.setVisibility(View.GONE);
+                curhodler.layout_lv3_all.setVisibility(View.VISIBLE);
+                curhodler.layout_lv3_hite.setVisibility(View.GONE);
+                break;
 
-    private void sendSaveInfo(AddPatrolParam addPatrolParam, final CompanyEquipmentResult result) {
-        HttpClientSend.getInstance().send(addPatrolParam, new BaseAlertCallback("保存成功","保存失败") {
-            @Override
-            public void onSuccessed(String rest) {
-                showPatrolItem(result);
-                // 更新问题列表
-                QuestionFragment.mQuestionFragmentInstance.getQuestionList();
-            }
-        });
-    }
-
-    class MTagAdapter extends TagAdapter<CompanyEquipmentResult> {
-
-        private List<CompanyEquipmentResult> dataList;
-
-        CompanyEquipmentResult checkResult;
-
-        public MTagAdapter() {
-            super(new ArrayList<CompanyEquipmentResult>());
-        }
-
-        public void setDataList(List<CompanyEquipmentResult> dataList) {
-            this.dataList = dataList;
-        }
-
-        @Override
-        public int getCount() {
-            return dataList == null ? 0 : dataList.size();
-        }
-
-        @Override
-        public CompanyEquipmentResult getItem(int position) {
-            return dataList.get(position);
-        }
-
-        @Override
-        public View getView(FlowLayout parent, int position, CompanyEquipmentResult s) {
-            CompanyEquipmentResult result = getItem(position);
-            final LayoutInflater mInflater = LayoutInflater.from(getActivity());
-            TextView tv = (TextView) mInflater.inflate(R.layout.item_flow_text, patrolCEquipmentListView, false);
-            tv.setText(result.getName());
-            return tv;
-        }
-
-
-        @Override
-        public void onSelected(int position, View view) {
-            checkResult = dataList.get(position);
-        }
-
-        public CompanyEquipmentResult getChecked() {
-            return checkResult;
-        }
-    }
-
-    public class MenuItemClickListener implements SwipeMenuItemClickListener {
-
-        public void onItemClick(SwipeMenuBridge menuBridge) {
-            menuBridge.closeMenu();
-            int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-            int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
-            int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-            if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                CompanyEquipmentResult selEntity = (CompanyEquipmentResult)lv2Adapter1.getItem(adapterPosition);
-                //大于2级设备显示 详细页面
-                if (selEntity.getEquipmentEntity().getIsLeafNode() || selEntity.getEquipmentEntity().getEquipmentLevel() > 2) {
-                    if (selEntity.getName().equals(OtherPatrolItemType.ROOM.getInfo())) {
-                        lv3Layout.setVisibility(View.GONE);
-                        PatrolFragment.this.showPatrolItem(selEntity);
-                    } else {
-                        PatrolFragment.this.getTagListView(getSameEquip(selEntity.getEquipmentId(), lv2Adapter1));
-                    }
-                } else {
-                    List<PatrolItemEntity> list = PatrolItemDao.getInstance().queryByEquipmentId(selEntity.getEquipmentId());
-                    if (list.size() > 0) {
-                        lv3Layout.setVisibility(View.GONE);
-                        tagAdapter.setDataList(new ArrayList<CompanyEquipmentResult>());
-                        tagAdapter.notifyDataChanged();
-                        PatrolFragment.this.showPatrolItem(selEntity);
-                    } else {
-                        Toast.makeText(x.app(), "没有可巡视项目", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
         }
     }
 }

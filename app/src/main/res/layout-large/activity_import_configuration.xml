@@ -5,119 +5,129 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/import_con_layout_info"
+    android:background="#EFF1F4"
     tools:context="cn.tties.maint.activity.EquipmentCheckDetailsActivity">
     <LinearLayout
-        android:paddingLeft="20dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="@dimen/x20"
+        android:paddingRight="@dimen/x15"
         android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1.5"
+        android:layout_width="@dimen/x354"
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/import_con_tv"
-            android:layout_marginTop="30dp"
-            android:textSize="22sp"
+            android:layout_marginTop="@dimen/y40"
+            android:textSize="26sp"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="导入先前配置"/>
         <TextView
-            android:layout_marginTop="20dp"
-            android:textSize="18sp"
-            android:textColor="@color/btn_color"
+            android:layout_marginLeft="@dimen/x4"
+            android:layout_marginTop="@dimen/y52"
+            android:textSize="20sp"
+            android:textColor="@color/common_text_max_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="即将导入下列配置的柜体"/>
         <LinearLayout
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="@dimen/x4"
+            android:layout_marginTop="@dimen/y24"
             android:background="@drawable/edittext_radius"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/x310"
+            android:layout_height="@dimen/y40"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             >
             <TextView
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/x9"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="left"
                 android:text="选择公司"
-                android:textColor="@color/gray" />
+                android:textSize="14sp"
+                android:textColor="@color/common_text_max_gray"
+               />
             <Spinner
                 android:id="@+id/import_con_company"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:layout_weight="8"
                 android:theme="@style/SpinnerStyle"/>
             <View
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1" />
+                android:layout_width="@dimen/x18"
+                android:layout_height="match_parent"
+                />
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/x4"
+            android:layout_marginTop="@dimen/y15"
             android:background="@drawable/edittext_radius"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/x310"
+            android:layout_height="@dimen/y40"
             android:gravity="center_vertical"
             android:orientation="horizontal"
            >
             <TextView
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/x9"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="left"
                 android:text="选择户号"
-                android:textColor="@color/gray" />
+                android:textSize="14sp"
+                android:textColor="@color/common_text_max_gray" />
             <Spinner
                 android:id="@+id/import_con_ele"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:layout_weight="8"
                 android:theme="@style/SpinnerStyle"/>
             <View
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1" />
+                android:layout_width="@dimen/x18"
+                android:layout_height="match_parent"
+                />
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/x4"
+            android:layout_marginTop="@dimen/y15"
             android:background="@drawable/edittext_radius"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_width="@dimen/x310"
+            android:layout_height="@dimen/y40"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             >
             <TextView
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/x9"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:gravity="left"
                 android:text="选择设备"
-                android:textColor="@color/gray" />
+                android:textSize="14sp"
+                android:textColor="@color/common_text_max_gray" />
             <Spinner
                 android:id="@+id/import_con_equipment"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:layout_weight="8"
                 android:theme="@style/SpinnerStyle"/>
             <View
-                android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1" />
+                android:layout_width="@dimen/x18"
+                android:layout_height="match_parent"
+                />
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="@dimen/y304"
+            android:layout_marginTop="@dimen/y20"
+            android:layout_marginLeft="@dimen/x6"
             android:id="@+id/import_con_cancel"
-            android:background="@color/btn_color"
+            android:background="@drawable/btn_cancel"
             android:gravity="center"
-            android:layout_width="80dp"
-            android:layout_height="40dp">
+            android:layout_width="@dimen/x119"
+            android:layout_height="@dimen/y52">
             <TextView
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -126,54 +136,62 @@
 
     </LinearLayout>
     <View
-        android:layout_width="1dp"
+        android:layout_width="@dimen/x1"
         android:layout_height="match_parent"
-        android:background="@color/btn_color"/>
+        android:background="#D8D8D8"/>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="0dp"
-        android:layout_weight="4"
-        android:paddingLeft="20dp"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/x20"
         android:layout_height="match_parent">
         <LinearLayout
-            android:layout_marginTop="30dp"
+            android:paddingLeft="@dimen/x1"
+            android:layout_marginTop="@dimen/y40"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/eq_de_name"
-                android:textSize="20sp"
+                android:textSize="26sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="预览装置"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/y20"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/y52"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent">
                 <TextView
+                    android:layout_centerVertical="true"
                     android:id="@+id/import_con_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/selView"
                     android:text="企业设备名称"
-                    android:textColor="@color/royalblue" />
+                    android:textSize="20sp"
+                    android:textColor="#333333" />
             </RelativeLayout>
             <Button
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="@dimen/x45"
                 android:id="@+id/import_con_btn_import"
-                style="@style/form_btn_confirm"
+                android:layout_width="@dimen/x158"
+                android:layout_height="@dimen/y52"
+                android:background="@drawable/btn_confirm_normal"
+                android:textSize="16sp"
+                android:textColor="@color/white"
                 android:text="导入" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
                 android:orientation="horizontal"
@@ -182,12 +200,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/common_text_min_gray"
                     android:text="是否有柜体"/>
                 <TextView
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="@dimen/x20"
                     android:id="@+id/import_con_iscabinet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/common_text_min_gray"
                     android:text="是"/>
             </LinearLayout>
             <LinearLayout
@@ -195,12 +217,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-
+                    android:textSize="12sp"
+                    android:textColor="@color/common_text_min_gray"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="类型"/>
                 <TextView
-                    android:layout_marginLeft="30dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/common_text_min_gray"
+                    android:layout_marginLeft="@dimen/x62"
                     android:id="@+id/import_con_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -208,27 +233,29 @@
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/y30"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:textColor="@color/common_text_max_gray"
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="包含子设备"/>
             <TextView
+                android:textColor="@color/common_text_max_gray"
                 android:id="@+id/import_con_num"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/x10"
                 android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="@dimen/y20"
+            android:layout_marginRight="@dimen/x29"
+            android:layout_marginBottom="@dimen/y35"
             android:background="@color/white"
             android:id="@+id/import_con_hite"
             android:orientation="vertical"
@@ -236,15 +263,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="暂无设备信息"/>
            </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="@dimen/y20"
+            android:layout_marginRight="@dimen/x29"
+            android:layout_marginBottom="@dimen/y35"
             android:id="@+id/import_con_all"
             android:orientation="vertical"
             android:layout_width="match_parent"

@@ -3,15 +3,13 @@
     android:layout_width="100dp"
     android:background="#BDC8D8"
     android:layout_height="60dp">
-
-
     <LinearLayout
        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:id="@+id/eq_root_ll"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:background="@drawable/radiobutton_order_stutus_normal"
+        android:layout_width="84dp"
+        android:layout_height="42dp"
+        android:background="@drawable/btn_root"
         android:gravity="center"
         >
         <TextView
@@ -19,9 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
-
-
-
 </RelativeLayout>

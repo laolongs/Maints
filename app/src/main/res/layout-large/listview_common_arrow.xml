@@ -10,16 +10,18 @@
         />
     <RelativeLayout
         android:id="@+id/arrow_Rl"
-        android:background="@color/white"
+        android:background="@drawable/btn_root"
         android:layout_width="match_parent"
         android:layout_height="60dp">
         <TextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/listview_text"
-            android:textSize="14sp" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="19dp"
+            android:textColor="@color/common_text_max_gray"
+            android:text=""
+            android:textSize="16sp" />
     </RelativeLayout>
 
 

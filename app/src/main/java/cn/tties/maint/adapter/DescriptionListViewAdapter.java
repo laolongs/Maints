@@ -22,22 +22,22 @@ import java.util.List;
 import cn.tties.maint.R;
 import cn.tties.maint.activity.BaseFragment;
 import cn.tties.maint.common.EventKind;
+import cn.tties.maint.enums.QuestionStatusType;
 import cn.tties.maint.httpclient.result.DescriptionResult;
+import cn.tties.maint.httpclient.result.QuestionScheduleResult;
 
 /**
  * Created by Justin on 2018/1/8.
  */
 
 public class DescriptionListViewAdapter extends BaseAdapter {
-
+    private List<DescriptionResult> mDataList;
+    private BaseFragment mFragment;
     public DescriptionListViewAdapter(BaseFragment fragment, List<DescriptionResult> mList) {
         mDataList = mList;
         this.mFragment = fragment;
+
     }
-
-    private List<DescriptionResult> mDataList;
-
-    private BaseFragment mFragment;
 
     public DescriptionListViewAdapter(BaseFragment fragment) {
         this.mFragment = fragment;
@@ -69,7 +69,6 @@ public class DescriptionListViewAdapter extends BaseAdapter {
             convertView.setTag(new ViewHolder(convertView));
         }
         ViewHolder holder = (ViewHolder) convertView.getTag();
-
         holder.textTitle.setText(result.getContent());
         if (result.getImageBeanList() != null) {
             ImageAdapter adapter = new ImageAdapter(mFragment.getContext(), result.getImageBeanList());

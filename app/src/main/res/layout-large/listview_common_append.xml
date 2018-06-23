@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:background="@color/lv2_check"
-    android:layout_marginTop="5dp">
+    android:layout_marginTop="10dp">
     <TextView
         android:gravity="center"
         android:background="@drawable/bg_lv2"
         android:id="@+id/text_name"
-        android:layout_width="150dp"
-        android:layout_height="41dp"
+        android:layout_width="80dp"
+        android:layout_height="49dp"
         android:text=""
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 </LinearLayout>

@@ -1,97 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:zhy="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_main"
+    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
-    android:orientation="horizontal">
-
-    <include layout="@layout/layout_common_muilt_listview" />
+    android:background="@color/common_bg"
+    android:orientation="vertical">
+    <View
+        style="@style/common_linehight"/>
 
     <LinearLayout
-        android:id="@+id/layout_info"
+        android:id="@+id/patrol_info"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
-
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+       >
+        <View
+            style="@style/common_linewidth"/>
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/main_background"
-            android:gravity="right"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_save"
-                style="@style/form_btn_confirm"
-                android:layout_gravity="right"
-                android:text="保存" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_below="@+id/btn_save">
-
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/layout_lv1_all"
+                android:layout_width="150dp"
+                android:layout_height="match_parent">
+                <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+                    android:id="@+id/listview_root"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/layout_lv1_hite"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="当前无电房"
+                    />
+            </LinearLayout>
             <View
-                android:id="@+id/selView"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@color/listview_check"
-                android:minHeight="30dp" />
-
-            <TextView
-                android:id="@+id/text_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/selView"
-                android:text=""
-                android:textColor="@color/black" />
-
-        </RelativeLayout>
-
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/list_patrol_equipment_detail"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            zhy:max_select="1"></com.zhy.view.flowlayout.TagFlowLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_listview_gray"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <ListView
-                android:id="@+id/list_patrol_item"
+                style="@style/common_linewidth"/>
+            <LinearLayout
+                android:id="@+id/layout_lv2_all"
+                android:layout_width="150dp"
+                android:layout_height="match_parent">
+                <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+                    android:id="@+id/listview_lv2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/layout_lv2_hite"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="当前电房无数据"
+                    />
+            </LinearLayout>
+            <View
+                style="@style/common_linewidth"/>
+            <LinearLayout
+                android:id="@+id/layout_lv3_all"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@color/colorTransparent" />
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp">
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/text_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="电房巡视"
+                        android:textSize="20sp"
+                        android:textColor="@color/black" />
+                    <LinearLayout
+                        android:id="@+id/patrol_addquestion"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="新建问题"
+                            android:textColor="@color/listview_check"
+                            android:textSize="18sp"/>
+                        <ImageView
+                            android:layout_marginLeft="20dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@mipmap/new_equipment"/>
+                    </LinearLayout>
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_listview_gray"
+                    android:orientation="vertical"
+                    >
+                    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+                        android:background="@color/common_bg"
+                        android:id="@+id/ptrlayout_order"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        cube_ptr:ptr_duration_to_close="200"
+                        cube_ptr:ptr_duration_to_close_header="1000"
+                        cube_ptr:ptr_keep_header_when_refresh="true"
+                        cube_ptr:ptr_pull_to_fresh="false"
+                        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+                        cube_ptr:ptr_resistance="1.7">
+                        <ListView
+                            android:id="@+id/list_patrol_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/layout_lv3_hite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="35sp"
+                    android:text="当前没有进行中的巡视任务"
+                    />
+            </LinearLayout>
         </LinearLayout>
-
+        <View
+            style="@style/common_linewidth"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_nodata"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="48sp"
-            android:text="当前没有进行中的巡视任务"
-            />
-    </LinearLayout>
+    <View
+        style="@style/common_linehight"/>
 </LinearLayout>

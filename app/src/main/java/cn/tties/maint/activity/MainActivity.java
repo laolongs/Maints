@@ -57,7 +57,9 @@ import cn.tties.maint.httpclient.result.EleAccountResult;
 import cn.tties.maint.httpclient.send.CompanyListSend;
 import cn.tties.maint.httpclient.send.VersionSend;
 import cn.tties.maint.util.ACache;
+import cn.tties.maint.util.ToastUtil;
 import cn.tties.maint.view.AllCancelDialog;
+import cn.tties.maint.view.AllEditorDialog;
 import cn.tties.maint.view.BaseCustomDialog;
 import cn.tties.maint.view.ConfirmDialog;
 import cn.tties.maint.widget.DrawableUtil;
@@ -69,16 +71,7 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
     private static final String TAG = "MainActivity";
     public static MainActivity mMainActivityInstance;
     public MainFragmentManager manager;
-    private int mInitIndex;
-    private boolean mFristChecked;
-    private HashMap<String, Integer> mTabHashMap;
-    private StateListDrawable stateListDrawable;
-    //一级  公司
-    protected List<EleAccountResult> eleAccountList;
-    protected EleAccountAdapter eleAccountAdapter;
-    protected List<CompanyResult> companyList;
     ComapnyDialog comapnyDialog;
-    protected int mChangeCompanyId = -1;
     protected Integer curEleId;
     protected String curEleNo;
     protected CompanyResult curCompany=new CompanyResult();
@@ -105,11 +98,12 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
     private List<CompanyResult> list;
     private Integer eleid;
     private String eleNo;
+    boolean isSelect;//是否允许点击  电表配置  电房巡视  消缺  美化安规  除尘清理
+    boolean isClick;//是否允许选择公司 和 户号
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainActivityInstance = this;
-        mFristChecked = false;
         new VersionSend().send(new VersionParams(), false);
         //获取公司信息
         CompanyParams params = new CompanyParams();
@@ -126,11 +120,54 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         curholder = new MainHolder(mainl);
         curholder.equipment.setOnClickListener(this);
         curholder.wordorder.setOnClickListener(this);
-        curholder.ele_configuration.setOnClickListener(this);
-        curholder.ele_tour.setOnClickListener(this);
-        curholder.eliminate.setOnClickListener(this);
-        curholder.beautify.setOnClickListener(this);
-        curholder.dedusting.setOnClickListener(this);
+
+        curholder.ele_configuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isSelect){
+                    ToastUtil.showShort(MainActivity.this,"请从工单管理去处理");
+                    return;
+                }
+            }
+        });
+        curholder.ele_tour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isSelect){
+                    ToastUtil.showShort(MainActivity.this,"请从工单管理去处理");
+                    return;
+                }
+            }
+        });
+        curholder.eliminate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isSelect){
+                    ToastUtil.showShort(MainActivity.this,"请从工单管理去处理");
+                    return;
+                }
+            }
+        });
+        curholder.beautify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isSelect){
+                    ToastUtil.showShort(MainActivity.this,"请从工单管理去处理");
+                    return;
+                }
+            }
+        });
+        curholder.dedusting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isSelect){
+                    ToastUtil.showShort(MainActivity.this,"请从工单管理去处理");
+                    return;
+                }
+            }
+        });
+
+
         curholder.question.setOnClickListener(this);
         curholder.setting.setOnClickListener(this);
         curholder.equipment_img.setSelected(true);
@@ -143,7 +180,10 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         companyRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "onClick: "+"电力  ");
+                if(isClick){
+                    ToastUtil.showShort(MainActivity.this,"当前状态不允许选择企业");
+                    return;
+                }
                 comapnyDialog = new ComapnyDialog(MainActivity.this, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -171,7 +211,10 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
 
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "onClick: "+"     电力  ");
+                if(isClick){
+                    ToastUtil.showShort(MainActivity.this,"当前状态不允许更改户号");
+                    return;
+                }
                 eleDialog = new EleDialog(MainActivity.this, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -198,10 +241,11 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
             ivCurrent.setSelected(false);
             tvCurrent.setSelected(false);
             llCurrent.setBackgroundColor(blue);
-
             switch (view.getId()) {
                 //档案管理
                 case R.id.equipment:
+                    isSelect=false;
+                    isClick=false;
                     //发送电表ID到baseFragment,便于请求公用
                     getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new EquipmentCheckFragment(eleid,curEleNo, curCompany)).commit();
                     curholder.equipment_img.setSelected(true);
@@ -213,6 +257,8 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     break;
                 //工单列表
                 case R.id.wordorder:
+                    isSelect=false;
+                    isClick=false;
                     getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
                     curholder.wordorder_img.setSelected(true);
                     curholder.wordorder_tv.setSelected(true);
@@ -221,58 +267,10 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     tvCurrent = curholder.wordorder_tv;
                     llCurrent = curholder.wordorder;
                     break;
-                //电表配置
-                case R.id.ele_configuration:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new AmmeterFragment(eleid,curEleNo, curCompany)).commit();
-                    curholder.ele_configuration_img.setSelected(true);
-                    curholder.ele_configuration_tv.setSelected(true);
-                    curholder.ele_configuration.setBackgroundColor(whilte);
-                    ivCurrent = curholder.ele_configuration_img;
-                    tvCurrent = curholder.ele_configuration_tv;
-                    llCurrent = curholder.ele_configuration;
-                    break;
-                //电房巡视
-                case R.id.ele_tour:
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new PatrolFragment(eleid,curEleNo, curCompany)).commit();
-                    curholder.ele_tour_img.setSelected(true);
-                    curholder.ele_tour_tv.setSelected(true);
-                    curholder.ele_tour.setBackgroundColor(whilte);
-                    ivCurrent = curholder.ele_tour_img;
-                    tvCurrent = curholder.ele_tour_tv;
-                    llCurrent = curholder.ele_tour;
-                    break;
-                //消缺
-                case R.id.eliminate:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
-                    curholder.eliminate_img.setSelected(true);
-                    curholder.eliminate_tv.setSelected(true);
-                    curholder.eliminate.setBackgroundColor(whilte);
-                    ivCurrent = curholder.eliminate_img;
-                    tvCurrent = curholder.eliminate_tv;
-                    llCurrent = curholder.eliminate;
-                    break;
-                //美化安规
-                case R.id.beautify:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
-                    curholder.beautify_img.setSelected(true);
-                    curholder.beautify_tv.setSelected(true);
-                    curholder.beautify.setBackgroundColor(whilte);
-                    ivCurrent = curholder.beautify_img;
-                    tvCurrent = curholder.beautify_tv;
-                    llCurrent = curholder.beautify;
-                    break;
-                //除尘清理
-                case R.id.dedusting:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
-                    curholder.dedusting_img.setSelected(true);
-                    curholder.dedusting_tv.setSelected(true);
-                    curholder.dedusting.setBackgroundColor(whilte);
-                    ivCurrent = curholder.dedusting_img;
-                    tvCurrent = curholder.dedusting_tv;
-                    llCurrent = curholder.dedusting;
-                    break;
                 //问题列表
                 case R.id.question:
+                    isSelect=false;
+                    isClick=false;
                     getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new QuestionFragment()).commit();
                     curholder.question_img.setSelected(true);
                     curholder.question_tv.setSelected(true);
@@ -283,6 +281,8 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     break;
                 //设置
                 case R.id.setting:
+                    isSelect=false;
+                    isClick=false;
                     getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new SettingFragment()).commit();
                     curholder.setting_img.setSelected(true);
                     curholder.setting_tv.setSelected(true);
@@ -293,7 +293,7 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     break;
             }
         }else{
-            return;
+            dialog();
         }
     }
     public void setCompanyList(){
@@ -360,7 +360,7 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         @Override
         protected void setContentView() {
             // 指定布局
-            this.setContentView(R.layout.dialog_equipment_company);
+            this.setContentView(R.layout.dialog_company);
             radioCompany = (RadioGroup) findViewById(R.id.radio_company);
             int i = 0;
             for (CompanyResult entity : list) {
@@ -415,117 +415,89 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         if (bean.getKind().equals(EventKind.EVENT_COMPANY_ELEISEDITOR)) {
             iseditor = bean.getSuccess();
         }
+        //是否来自工单管理
+        if (bean.getKind().equals(EventKind.EVENT_COMPANY_ISFORORDER)) {
+            isSelect = bean.getSuccess();
+        }
     }
+
     public void dialog(){
-        AllCancelDialog dialog1=new AllCancelDialog();
-        dialog1.loadDialog("尚未保存当前页面，确认放弃？", new AllCancelDialog.OnClickIsConfirm() {
+        AllEditorDialog dialog1=new AllEditorDialog();
+        dialog1.loadDialog("尚未保存当前页面，确认放弃？", new AllEditorDialog.OnClickIsConfirm() {
             @Override
             public void OnClickIsConfirmListener() {
-                iseditor=false;
+                return;
             }
-        }, new AllCancelDialog.OnClickIsCancel() {
+        }, new AllEditorDialog.OnClickIsCancel() {
             @Override
             public void OnClickIsCancelListener() {
-                return;
+                iseditor=false;
+
             }
         });
     }
-    public void shwoFragment(int fragmentId){
-        ivCurrent.setSelected(false);
-        tvCurrent.setSelected(false);
-        llCurrent.setBackgroundColor(blue);
-        switch (fragmentId) {
-            //档案管理
-            case R.id.equipment:
-                //发送电表ID到baseFragment,便于请求公用
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new EquipmentCheckFragment(eleid,curEleNo, curCompany)).commit();
-                curholder.equipment_img.setSelected(true);
-                curholder.equipment_tv.setSelected(true);
-                curholder.equipment.setBackgroundColor(whilte);
-                ivCurrent = curholder.equipment_img;
-                tvCurrent = curholder.equipment_tv;
-                llCurrent = curholder.equipment;
-                break;
-            //工单列表
-            case R.id.wordorder:
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
-                curholder.wordorder_img.setSelected(true);
-                curholder.wordorder_tv.setSelected(true);
-                curholder.wordorder.setBackgroundColor(whilte);
-                ivCurrent = curholder.wordorder_img;
-                tvCurrent = curholder.wordorder_tv;
-                llCurrent = curholder.wordorder;
-                break;
-            //电表配置
-            case R.id.ele_configuration:
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new AmmeterFragment(eleid,curEleNo, curCompany)).commit();
-                curholder.ele_configuration_img.setSelected(true);
-                curholder.ele_configuration_tv.setSelected(true);
-                curholder.ele_configuration.setBackgroundColor(whilte);
-                ivCurrent = curholder.ele_configuration_img;
-                tvCurrent = curholder.ele_configuration_tv;
-                llCurrent = curholder.ele_configuration;
-                break;
-            //电房巡视
-            case R.id.ele_tour:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new PatrolFragment(eleid,curEleNo, curCompany)).commit();
-                curholder.ele_tour_img.setSelected(true);
-                curholder.ele_tour_tv.setSelected(true);
-                curholder.ele_tour.setBackgroundColor(whilte);
-                ivCurrent = curholder.ele_tour_img;
-                tvCurrent = curholder.ele_tour_tv;
-                llCurrent = curholder.ele_tour;
-                break;
-            //消缺
-            case R.id.eliminate:
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
-                curholder.eliminate_img.setSelected(true);
-                curholder.eliminate_tv.setSelected(true);
-                curholder.eliminate.setBackgroundColor(whilte);
-                ivCurrent = curholder.eliminate_img;
-                tvCurrent = curholder.eliminate_tv;
-                llCurrent = curholder.eliminate;
-                break;
-            //美化安规
-            case R.id.beautify:
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
-                curholder.beautify_img.setSelected(true);
-                curholder.beautify_tv.setSelected(true);
-                curholder.beautify.setBackgroundColor(whilte);
-                ivCurrent = curholder.beautify_img;
-                tvCurrent = curholder.beautify_tv;
-                llCurrent = curholder.beautify;
-                break;
-            //除尘清理
-            case R.id.dedusting:
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new OrderListFragment(eleid,curEleNo, curCompany)).commit();
-                curholder.dedusting_img.setSelected(true);
-                curholder.dedusting_tv.setSelected(true);
-                curholder.dedusting.setBackgroundColor(whilte);
-                ivCurrent = curholder.dedusting_img;
-                tvCurrent = curholder.dedusting_tv;
-                llCurrent = curholder.dedusting;
-                break;
-            //问题列表
-            case R.id.question:
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new QuestionFragment()).commit();
-                curholder.question_img.setSelected(true);
-                curholder.question_tv.setSelected(true);
-                curholder.question.setBackgroundColor(whilte);
-                ivCurrent = curholder.question_img;
-                tvCurrent = curholder.question_tv;
-                llCurrent = curholder.question;
-                break;
-            //设置
-            case R.id.setting:
-                getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new SettingFragment()).commit();
-                curholder.setting_img.setSelected(true);
-                curholder.setting_tv.setSelected(true);
-                curholder.setting.setBackgroundColor(whilte);
-                ivCurrent = curholder.setting_img;
-                tvCurrent = curholder.setting_tv;
-                llCurrent = curholder.setting;
-                break;
-        }
+
+    public void shwoFragment(int fragmentId,int workOrderId,int workType){
+            ivCurrent.setSelected(false);
+            tvCurrent.setSelected(false);
+            llCurrent.setBackgroundColor(blue);
+            switch (fragmentId) {
+                //电表配置
+                case R.id.ele_configuration:
+                        isClick=true;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new AmmeterFragment(eleid,curEleNo, curCompany,workOrderId)).commit();
+                        curholder.ele_configuration_img.setSelected(true);
+                        curholder.ele_configuration_tv.setSelected(true);
+                        curholder.ele_configuration.setBackgroundColor(whilte);
+                        ivCurrent = curholder.ele_configuration_img;
+                        tvCurrent = curholder.ele_configuration_tv;
+                        llCurrent = curholder.ele_configuration;
+                    break;
+                //电房巡视
+                case R.id.ele_tour:
+
+                        isClick=true;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new PatrolFragment(eleid,curEleNo, curCompany,workOrderId)).commit();
+                        curholder.ele_tour_img.setSelected(true);
+                        curholder.ele_tour_tv.setSelected(true);
+                        curholder.ele_tour.setBackgroundColor(whilte);
+                        ivCurrent = curholder.ele_tour_img;
+                        tvCurrent = curholder.ele_tour_tv;
+                        llCurrent = curholder.ele_tour;
+                    break;
+                //消缺
+                case R.id.eliminate:
+                        isClick=true;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new FaultFragment(eleid,curEleNo, curCompany,workOrderId,workType)).commit();
+                        curholder.eliminate_img.setSelected(true);
+                        curholder.eliminate_tv.setSelected(true);
+                        curholder.eliminate.setBackgroundColor(whilte);
+                        ivCurrent = curholder.eliminate_img;
+                        tvCurrent = curholder.eliminate_tv;
+                        llCurrent = curholder.eliminate;
+                    break;
+                //美化安规
+                case R.id.beautify:
+                        isClick=true;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new PrettiftFragment(eleid,curEleNo, curCompany,workOrderId)).commit();
+                        curholder.beautify_img.setSelected(true);
+                        curholder.beautify_tv.setSelected(true);
+                        curholder.beautify.setBackgroundColor(whilte);
+                        ivCurrent = curholder.beautify_img;
+                        tvCurrent = curholder.beautify_tv;
+                        llCurrent = curholder.beautify;
+                    break;
+                //除尘清理
+                case R.id.dedusting:
+                        isClick=true;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.realtabcontent, new DustFragment(eleid,curEleNo, curCompany,workOrderId)).commit();
+                        curholder.dedusting_img.setSelected(true);
+                        curholder.dedusting_tv.setSelected(true);
+                        curholder.dedusting.setBackgroundColor(whilte);
+                        ivCurrent = curholder.dedusting_img;
+                        tvCurrent = curholder.dedusting_tv;
+                        llCurrent = curholder.dedusting;
+                    break;
+            }
     }
 }

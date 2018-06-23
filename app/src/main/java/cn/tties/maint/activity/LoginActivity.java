@@ -2,6 +2,7 @@ package cn.tties.maint.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -54,7 +55,7 @@ public class LoginActivity extends BaseActivity {
         dialog = new CriProgressDialog(LoginActivity.this);
         UserInfoBean bean = MyApplication.getUserInfo();
         if (bean != null) {
-            mUserName.setText(bean.getStaffNo());
+            mUserName.setText(bean.getStaffTel());
         }
     }
 

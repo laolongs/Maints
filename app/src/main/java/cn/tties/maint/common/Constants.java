@@ -25,7 +25,7 @@ import cn.tties.maint.widget.TabClass;
  */
 public class Constants {
 //    public static final String BASE_URL = "http://192.168.2.220:8683/";//测试环境运维
-    public static final String BASE_URL = "http://192.168.2.112:8080/";//本地
+    public static final String BASE_URL = "http://192.168.2.127:8080/";//本地
 //    public static final String BASE_URL = "http://192.168.2.116:8081/";//康维杰
 //    public static final String BASE_URL = "http://192.168.2.49:8080/";//李震
 //    public static final String BASE_URL = "http://maint.tties.cn/";

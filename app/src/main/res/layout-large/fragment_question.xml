@@ -1,62 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cube_ptr="http://schemas.android.com/tools"
+    android:padding="2dp"
+    android:background="@color/common_root"
     style="@style/common_linearLayout">
-
-    <RelativeLayout
+    <LinearLayout
+        android:background="@color/common_root"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp">
-
-        <Spinner
-            android:id="@+id/spinner_company"
-            android:layout_width="150dp"
-            android:layout_height="30dp"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            style="@style/common_title"
-            android:layout_centerInParent="true"
-            android:text="问题处理" />
-
-        <Spinner
-            android:id="@+id/spinner_status"
-            android:layout_width="150dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true" />
-
-    </RelativeLayout>
-
-
-    <ImageView style="@style/common_title_line" />
-
-    <FrameLayout
-        android:id="@+id/ptrlayout_question"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        cube_ptr:ptr_duration_to_close="200"
-        cube_ptr:ptr_duration_to_close_header="1000"
-        cube_ptr:ptr_keep_header_when_refresh="true"
-        cube_ptr:ptr_pull_to_fresh="false"
-        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
-        cube_ptr:ptr_resistance="1.7">
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/refreshlayout"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="#f4f4f4">
+            android:layout_weight="1">
+            <View
+                android:background="@color/common_root"
+                android:layout_width="200dp"
+                android:layout_height="20dp"/>
+            <RadioGroup
+                android:id="@+id/questoin_radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@color/common_root"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/text_undo"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/selector_radiobtn_order_bg"
+                    android:textColor="@color/selector_radiobutton_text"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="未进行" />
+                <RadioButton
+                    android:id="@+id/text_executing"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/selector_radiobtn_order_bg"
+                    android:textColor="@color/selector_radiobutton_text"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="进行中" />
+                <RadioButton
+                    android:id="@+id/text_complete"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/selector_radiobtn_order_bg"
+                    android:textColor="@color/selector_radiobutton_text"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="已完成" />
+            </RadioGroup>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/equipment_allcompay"
+            android:gravity="center"
+            android:layout_marginRight="25dp"
+            android:layout_width="120dp"
+            android:background="@drawable/btn_compay"
+            android:layout_height="47dp">
+            <TextView
+                android:textColor="#1A92EE"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="全部公司"/>
+            <ImageView
+                android:layout_marginLeft="15dp"
+                android:layout_width="10dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/details_down"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/equipment_alltime"
+                android:gravity="center"
+                android:layout_marginRight="25dp"
+                android:layout_width="120dp"
+                android:background="@drawable/btn_compay"
+                android:layout_height="47dp">
+                <TextView
+                    android:textColor="#1A92EE"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全部时间"/>
+                <ImageView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/details_down"/>
+            </LinearLayout>
+    </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_question_list"
+
+
+    <View
+        style="@style/common_linehight"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <View
+            style="@style/common_linewidth"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:background="@color/common_bg"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
-    </FrameLayout>
-
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/text_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="问题列表"
+                    android:textSize="20sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+            <in.srain.cube.views.ptr.PtrClassicFrameLayout
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:background="@color/common_bg"
+                android:id="@+id/ptrlayout_question"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                cube_ptr:ptr_duration_to_close="200"
+                cube_ptr:ptr_duration_to_close_header="1000"
+                cube_ptr:ptr_keep_header_when_refresh="true"
+                cube_ptr:ptr_pull_to_fresh="false"
+                cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+                cube_ptr:ptr_resistance="1.7">
+                <ListView
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/list_question"
+                    style="@style/table_listview" />
+            </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+        </LinearLayout>
+        <View
+            style="@style/common_linewidth"/>
+    </LinearLayout>
+    <View
+        style="@style/common_linehightdown"/>
 </LinearLayout>

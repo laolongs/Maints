@@ -28,4 +28,42 @@ public class SelectEquipmentByEleRoomParams extends ClinetRequestParams {
     }
 
     public static final String INTERFACE = "selectEquipmentByEleRoom.do";
+    /**
+     * {
+     "errorCode": 0,
+     "errorMessage": "成功",
+     "result": [
+     {
+     "companyEquipmentId": 942,
+     "createTime": "2018-05-28 10:15:29",
+     "eleAccountId": 54,
+     "equipmentId": 2,
+     "flag": 0,
+     "name": "天天智电",
+     "pid": -1,
+     "roomId": 40
+     },
+     {
+     "companyEquipmentId": 940,
+     "createTime": "2018-05-25 15:54:51",
+     "eleAccountId": 54,
+     "equipmentId": 2,
+     "flag": 0,
+     "name": "架空线",
+     "pid": -1,
+     "roomId": 40
+     },
+     {
+     "companyEquipmentId": 489,
+     "createTime": "2018-01-24 19:07:37",
+     "eleAccountId": 54,
+     "equipmentId": 2,
+     "flag": 0,
+     "name": "架空线123",
+     "pid": -1,
+     "roomId": 40
+     }
+     ]
+     }
+     */
 }

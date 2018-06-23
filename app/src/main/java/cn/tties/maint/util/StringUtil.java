@@ -66,4 +66,21 @@ public class StringUtil {
         System.out.println(getChineseStr("%E5%AD%A4%E5%B4%96%E4%B8%80%E6%9E%9D%E8%8A%B1"));
         System.out.println(getChineseStr("æµç§°"));
     }
+    public static String[] split(String value,String value2){
+        String[] values={"null",value};
+        if(value!=null&&!value.equals("")){
+            String sub=new String(value);
+            String[] split = sub.split(value2);
+            return split;
+        }
+        return values;
+    }
+    public static String substring(String value,int start,int end){
+        if(value!=null&&!value.equals("")){
+            String sub=new String(value);
+            String split = sub.substring(start,end);
+            return split;
+        }
+        return "";
+    }
 }

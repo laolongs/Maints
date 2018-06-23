@@ -1,23 +1,28 @@
 <resources>
 
     <style name="common_linewidth">
-        <item name="android:layout_width">8dp</item>
+        <item name="android:layout_width">10dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/white</item>
     </style>
     <style name="common_linehight">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">8dp</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@drawable/btn_line_up</item>
+    </style>
+    <style name="common_linehightdown">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@drawable/btn_line_down</item>
     </style>
     <style name="common_linewidths">
-        <item name="android:layout_width">8dp</item>
+        <item name="android:layout_width">10dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/common_bg</item>
     </style>
     <style name="common_linehights">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">8dp</item>
+        <item name="android:layout_height">10dp</item>
         <item name="android:background">@color/common_bg</item>
     </style>
 

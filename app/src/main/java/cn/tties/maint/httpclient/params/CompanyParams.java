@@ -4,6 +4,7 @@ import cn.tties.maint.httpclient.ClinetRequestParams;
 
 /**
  * Created by fultrust on 2018/1/5.
+ *
  */
 
 public class CompanyParams extends ClinetRequestParams {

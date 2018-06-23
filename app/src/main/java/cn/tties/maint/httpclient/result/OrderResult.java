@@ -27,13 +27,13 @@ public class OrderResult implements Serializable {
 
     private Integer endDate;
 
-    private Integer inTime;
+    private Integer inTime;//当前的次数
 
     private String createTime;
 
     private String updateTime;
 
-    private Integer xunShiCount;
+    private Integer xunShiCount;//历史次数
 
     private CompanyResult company;
 

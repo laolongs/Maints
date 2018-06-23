@@ -8,11 +8,11 @@ import java.util.List;
  */
 public enum WorkType {
 
-    ADORN_AMMETER(0, "电表装置", "去配置"),
-    REMOVE_FAULT(1, "消缺", "去消缺"),
-    PRETTIFT(2, "美化安规", "去美化"),
-    PATROL(3, "电房巡视", "去巡视"),
-    REMOVE_DUST(4, "除尘清理", "去清理");
+    ADORN_AMMETER(0, "电表装置", "去配置", "继续配置"),
+    REMOVE_FAULT(1, "消缺", "去消缺", "继续消缺"),
+    PRETTIFT(2, "美化安规", "去美化", "继续美化"),
+    PATROL(3, "电房巡视", "去巡视", "继续巡视"),
+    REMOVE_DUST(4, "除尘清理", "去清理", "继续清理");
     //---------------老的
 //    UPLOAD_ELE_BILL(0, "上传电费单", "去上传"),
 //    UPLOAD_CONTRACT(1, "上传合同", "去上传"),
@@ -22,11 +22,12 @@ public enum WorkType {
     private final int value;
     private final String info;
     private final String opr;
-
-    private WorkType(int value, String info, String opr) {
+    private final String goon;
+    private WorkType(int value, String info, String opr,String goon) {
         this.value = value;
         this.info = info;
         this.opr = opr;
+        this.goon=goon;
     }
 
     public int getValue() {
@@ -39,6 +40,10 @@ public enum WorkType {
 
     public String getOpr() {
         return opr;
+    }
+
+    public String getGoon() {
+        return goon;
     }
 
     public static String getInfo(int type) {

@@ -5,18 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/left_arrow"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:text="描述"
+        android:textSize="20sp"
+        android:textColor="@color/common_text_max_gray"
         android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/text_title"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

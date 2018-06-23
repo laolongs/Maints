@@ -55,7 +55,7 @@ import cn.tties.maint.widget.TabClass;
  */
 @ContentView(R.layout.activity_splash)
 public class SplashActivity extends BaseActivity {
-
+    private static final String TAG = "SplashActivity";
     private static final int SHOW_TIME_MIN = 1500; //最短显示时间
     public static DbManager db = x.getDb(MyApplication.getDaoConfig());
     private ConfirmDialog dialog;
@@ -168,14 +168,14 @@ public class SplashActivity extends BaseActivity {
         Boolean loginStatus = ACache.getInstance().getAsObject(Constants.CACHE_LOGIN_STATUS);
         final UserInfoBean userInfoBean = MyApplication.getUserInfo();
         if (loginStatus == null || !loginStatus || userInfoBean == null) {
-            Log.d("logStatus", "用户非登录状态");
+            Log.i(TAG, "用户非登录状态");
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
             SplashActivity.this.finish();
         } else {
-            Log.d("logStatus", "自动登录 username:" + userInfoBean.getStaffNo() + " password:" + userInfoBean.getLoginPwd());
+            Log.i(TAG, "自动登录 username:" + userInfoBean.getStaffTel() + " password:" + userInfoBean.getLoginPwd());
             LoginParams params = new LoginParams();
-            params.setUserName(userInfoBean.getStaffNo());
+            params.setUserName(userInfoBean.getStaffTel());
             params.setPassWord(userInfoBean.getLoginPwd());
             HttpClientSend.getInstance().send(params, new BaseStringCallback() {
                 @Override

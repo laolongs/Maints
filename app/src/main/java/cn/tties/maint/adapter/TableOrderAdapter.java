@@ -76,6 +76,7 @@ public class TableOrderAdapter extends BaseAdapter {
             viewHolder.textTechName = (TextView) convertView.findViewById(R.id.text_tech_name);
             viewHolder.textTechTel = (TextView) convertView.findViewById(R.id.text_tech_tel);
             viewHolder.btnSave = (Button) convertView.findViewById(R.id.btn_save);
+            viewHolder.btnSuccess = (Button) convertView.findViewById(R.id.btn_success);
             convertView.setTag(viewHolder);
         }
         return convertView;
@@ -94,6 +95,7 @@ public class TableOrderAdapter extends BaseAdapter {
         public TextView textTechTel;
         public LinearLayout layout;
         public Button btnSave;
+        public Button btnSuccess;
     }
 
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/append_lv2_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp">
+    <TextView
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="@drawable/bg_lv2"
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        android:text="ddd"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+</LinearLayout>

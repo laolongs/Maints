@@ -49,4 +49,5 @@ public class SelectPatrolItemParams extends ClinetRequestParams {
     public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
+
 }

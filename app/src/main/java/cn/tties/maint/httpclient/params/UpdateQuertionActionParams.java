@@ -12,6 +12,16 @@ public class UpdateQuertionActionParams extends ClinetRequestParams {
 
     private Integer questionId;
     private Integer status;
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public Integer getQuestionId() {
         return questionId;
     }

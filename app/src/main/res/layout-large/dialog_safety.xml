@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/table_dialog_layout"
+    android:layout_width="400dp"
+    android:paddingLeft="20dp"
+    android:background="@color/common_bg"
+    android:layout_height="wrap_content">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="50dp">
+       <TextView
+           android:paddingTop="20dp"
+           style="@style/table_dialog_title_text"
+           android:text="安全交底" />
+   </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_save"
+            android:background="@color/common_bg"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp"
+            android:padding="5dp">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:choiceMode="singleChoice"
+                android:divider="@null"
+                android:fadingEdge="none"
+                android:listSelector="@android:color/transparent"
+                android:scrollbarStyle="outsideOverlay"
+                app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                app:spanCount="4"
+                tools:listitem="@layout/listview_image"/>
+            <LinearLayout
+                android:gravity="right"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/btn_skip"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@color/btn_color"
+                    android:textColor="@color/white"
+                    android:text="跳过" />
+                <Button
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/btn_submit"
+                    android:layout_width="130dp"
+                    android:layout_height="50dp"
+                    android:background="@color/listview_check"
+                    android:textColor="@color/white"
+                    android:text="提交" />
+            </LinearLayout>
+
+        </LinearLayout>
+</LinearLayout>

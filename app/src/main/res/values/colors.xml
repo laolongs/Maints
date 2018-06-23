@@ -12,7 +12,8 @@
     <color name="main_title">#1f64ba</color>
     <color name="main_title_gray">#FF6D737F</color>
 
-    <color name="btn_confirm_normal">#1f64ba</color>
+    <color name="btn_confirm_normal">#1A92EE</color>
+    <color name="btn_cancel_normal">#7F7F7F</color>
     <color name="btn_confirm_press">#FF8C00</color>
 
     <color name="dialog_title">#d8d8d8</color>
@@ -31,11 +32,12 @@
     <color name="table_border">#cbcbcb</color>
 
     <color name="border">#e2e2e2</color>
-    <color name="btn_color">#9DAABA</color>
+    <color name="btn_color">#9CAAB9</color>
 
     <color name="listview_check">#FF4780C8</color>
     <color name="lv2_check">#FE9F00</color>
     <color name="root_check">#1B92EE</color>
+    <color name="prettift_befor">#4DDBCF</color>
     <color name="delete_check">#FF3737</color>
     <color name="listview_text">#FF6B6B6B</color>
     <color name="listview_btn_del">#FFF97171</color>
@@ -55,7 +57,9 @@
 
     <color name="listview_status">#4D57C5E8</color>
     <color name="common_root">#BDC8D8</color>
-    <color name="common_bg">#E9ECF3</color>
+    <color name="common_bg">#EFF1F4</color>
+    <color name="common_text_min_gray">#999999</color>
+    <color name="common_text_max_gray">#666666</color>
 
     <!--系统颜色 -->
     <color name="toobar_bg">#157cd3</color>

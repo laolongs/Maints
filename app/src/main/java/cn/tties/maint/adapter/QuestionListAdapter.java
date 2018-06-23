@@ -95,8 +95,8 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
         if (result.getDescriptionList() != null) {
             descriptionList.addAll(result.getDescriptionList());
         }
-        DescriptionListViewAdapter descriptionAdapter = new DescriptionListViewAdapter(mFragment, descriptionList);
-        holder.listViewDescription.setAdapter(descriptionAdapter);
+//        DescriptionListViewAdapter descriptionAdapter = new DescriptionListViewAdapter(mFragment, descriptionList);
+//        holder.listViewDescription.setAdapter(descriptionAdapter);
         AppUtils.setListViewHeight(holder.listViewDescription, 30);
         //缺陷类型
         holder.textType.setText(result.getFaultTypeType());
@@ -146,7 +146,7 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
         holder.btnDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragment.openDescriptionDialog(bean.getStaffId(), result.getQuestionId());
+//                mFragment.openDescriptionDialog(bean.getStaffId(), result.getQuestionId());
             }
         });
         //进度操作

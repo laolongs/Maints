@@ -19,6 +19,7 @@ import cn.tties.maint.R;
 public class EquipmentDetailsActivityHolder extends BaseLayoutHolder {
 
 
+    public TextView eq_de_tv;
     public LinearLayout eq_de_start;
     public LinearLayout eq_de_old;
     public LinearLayout eq_de_cancel;
@@ -39,6 +40,7 @@ public class EquipmentDetailsActivityHolder extends BaseLayoutHolder {
     public SwipeMenuRecyclerView eq_de_list_lv4_details;
     public Boolean isCabinet=false;
     public EquipmentDetailsActivityHolder(View view) {
+        this.eq_de_tv = (TextView) view.findViewById(R.id.eq_de_tv);
         this.eq_de_start = (LinearLayout) view.findViewById(R.id.eq_de_start);
         this.eq_de_old = (LinearLayout) view.findViewById(R.id.eq_de_old);
         this.eq_de_cancel = (LinearLayout) view.findViewById(R.id.eq_de_cancel);

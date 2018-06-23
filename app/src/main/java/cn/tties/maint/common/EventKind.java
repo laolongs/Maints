@@ -18,7 +18,8 @@ public class EventKind {
     public static final String EVENT_COMPANY_IMPORTLIST = "EVENT_COMPANY_IMPORTLIST";
     //判断电房修改后是否保存
     public static final String EVENT_COMPANY_ELEISEDITOR = "EVENT_COMPANY_ELEISEDITOR";
-
+    //判断是否从工单列表进入
+    public static final String EVENT_COMPANY_ISFORORDER = "EVENT_COMPANY_ISFORORDER";
     //检查版本
     public static final String EVENT_VERSION_SYCN = "EVENT_VERSION_SYCN";
 

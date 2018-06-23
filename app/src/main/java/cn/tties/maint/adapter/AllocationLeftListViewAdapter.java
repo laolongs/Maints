@@ -110,7 +110,7 @@ public class AllocationLeftListViewAdapter<T extends CommonListViewInterface> ex
 
         final T item = getItem(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_common_arrow, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_allocation_left_item, parent, false);
         }
         TextView nameText = (TextView) convertView.findViewById(R.id.text_name);
         RelativeLayout arrow_Rl = (RelativeLayout) convertView.findViewById(R.id.arrow_Rl);

@@ -8,34 +8,34 @@ import cn.tties.maint.httpclient.ClinetRequestParams;
 
 public class UploadImgDescriptionParam  extends ClinetRequestParams {
 
-    public static final String INTERFACE = "UploadImgDescriptionParam.do";
+    public static final String INTERFACE = "createQuestionDescriptionParam.do";
 
     private Integer questionId;
-    private Integer staffId;
+    private Integer maintStaffId;
     private  String content;
-
-    public void setQuestionId(Integer questionId) {
-        this.questionId = questionId;
-    }
-
-    public void setStaffId(Integer staffId) {
-        this.staffId = staffId;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public Integer getQuestionId() {
         return questionId;
     }
 
-    public Integer getStaffId() {
-        return staffId;
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
+
+    public Integer getMaintStaffId() {
+        return maintStaffId;
+    }
+
+    public void setMaintStaffId(Integer maintStaffId) {
+        this.maintStaffId = maintStaffId;
     }
 
     public String getContent() {
         return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
 

@@ -74,6 +74,8 @@ public class PatrolItemEntity extends AbstractEntity {
     private int InputType;
 
     private PatrolResult result;
+    //用于记录温度  是否弹出温度提示框
+    private int temperature;
 
     public Integer getPatrolItemId() {
         return patrolItemId;
@@ -256,5 +258,13 @@ public class PatrolItemEntity extends AbstractEntity {
 
     public void setBody(Boolean body) {
         isBody = body;
+    }
+
+    public int getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
     }
 }

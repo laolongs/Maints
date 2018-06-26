@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -154,30 +156,67 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
     //采集点配置layout.
     @ViewInject(R.id.ammeter_collection_configuration)
     private LinearLayout layoutCollectionPoint;
-    /**
-     * 采集点信息layout.
-     */
+    //采集点信息layout.
     @ViewInject(R.id.ammeter_collection_message)
     private LinearLayout layoutCollectionmessage;
-    /**
-     * 总电量配置layout.
-     */
+    //总电量配置layout.
     @ViewInject(R.id.ammeter_allele_configuration)
     private LinearLayout layoutTotalElectric;
-    /**
-     * 总电量信息layout.
-     */
+    //总电量信息layout.
     @ViewInject(R.id.ammeter_allele_message)
     private LinearLayout layoutallelemessage;
-    /**
-     * 采集点holder.
-     */
+    //电表红外配置layout.
+    @ViewInject(R.id.infrared_info)
+    private LinearLayout infraredInfo;
+    //电表红外召测
+    @ViewInject(R.id.btn_infrared_getMetsureStatus)
+    private Button btnInfraredMetsure;
+    //电表红外  重置表地址
+    @ViewInject(R.id.btn_infrared_reset)
+    private Button btnInfraredReset;
+    //电表红外  保存
+    @ViewInject(R.id.btn_infrared_save)
+    private Button btnInfraredSave;
+    //电表红外配置layout111.
+    @ViewInject(R.id.infrared_metsure_ll)
+    private LinearLayout infraredMetsureLl;
+    //电表红外配置    表地址
+    @ViewInject(R.id.infrared_text_address)
+    private TextView infraredTextAddress;
+    //电表红外配置    历史记录
+    @ViewInject(R.id.infrared_text_history)
+    private TextView infraredTextHistory;
+    //电表红外配置layout222.
+    @ViewInject(R.id.infrared_metsure_details_ll)
+    private LinearLayout infraredMetsureDetauksLl;
+    //电表红外配置  可输入表地址 11
+    @ViewInject(R.id.infrared_ele_edit)
+    private EditText infraredEleEdit1;
+    //电表红外  读取
+    @ViewInject(R.id.btn_infrared_read)
+    private Button btnInfraredRead;
+    //电表红外  倒计时按钮1
+    @ViewInject(R.id.btn_infrared_timeone)
+    private Button btnInfraredTimeone;
+    //电表红外配置  可输入表地址 22
+    @ViewInject(R.id.infrared_ele_edit2)
+    private EditText infraredEleEdit2;
+    //电表红外  重新读取
+    @ViewInject(R.id.btn_infrared_reset_read)
+    private Button btnInfraredResetRead;
+    //电表红外配置  可输入表地址 33
+    @ViewInject(R.id.infrared_ele_editor3)
+    private EditText infraredEleEdit3;
+    //电表红外  倒计时2
+    @ViewInject(R.id.btn_infrared_timetwo)
+    private Button btnInfraredTimetwo;
+    //电表红外  list  根据查出来的电表展示 并选中表号给输入框3赋值  完成后清空展示条目
+    @ViewInject(R.id.infrared_ele_list)
+    private ListView infraredEleList;
+    //采集点holder.
     private CollectionHolder collectionHolder;
-
     private CollectionMessageHolder collectionMessageHolder;
-    /**
-     * 总电量holder.
-     */
+    //总电量holder
     private DistributionHolder totalElectricHolder;
     private DistributionMessageHolder distributionMessageHolder;
     //1级
@@ -185,27 +224,18 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
     protected CommonSwipListViewAdapter rootAdapter;
     protected SwipeItemClickListener rootListener;
     protected SwipeItemClickListener lv2Listener;
-
-    /**
-     * 请求类型 1-采集点配置
-     */
+    //请求类型 1-采集点配置
     private int requestType;
-    /**
-     * 采集点id
-     */
+    //采集点id
     private CriProgressDialog dialog;
     private InfoDialog infoDialog;
     List<TaskResult> taskList;
-    //功率因素
-    List<String> powerFactorList;
     //变压器列表
     List<CompanyEquipmentResult> totalTransformerList;
     //可选择变压器列表
     List<CompanyEquipmentResult> transformerList;
     private TaskDialog taskDialog;
-    /*
-    *  召测
-    */
+    // 召测
     private MeterInfoDialog meterInfoDialog;
     private List<Long> taskIdList;
     private int taskIndex;
@@ -353,6 +383,13 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
         btn_eleeditor.setOnClickListener(this);
         btn_save.setOnClickListener(this);
         ammeter_img.setOnClickListener(this);
+        btnInfraredMetsure.setOnClickListener(this);
+        btnInfraredRead.setOnClickListener(this);
+        btnInfraredReset.setOnClickListener(this);
+        btnInfraredResetRead.setOnClickListener(this);
+        btnInfraredSave.setOnClickListener(this);
+        btnInfraredTimeone.setOnClickListener(this);
+        btnInfraredTimetwo.setOnClickListener(this);
         collectionHolder.ammeter_collection_message_delete.setOnClickListener(this);
         showHoulder(5);
     }
@@ -411,6 +448,34 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
                         return;
                     }
                 });
+                break;
+            //红外召测
+            case R.id.btn_infrared_getMetsureStatus:
+
+                break;
+            //红外  重置表地址
+            case R.id.btn_infrared_reset:
+
+                break;
+            //红外  保存
+            case R.id.btn_infrared_save:
+
+                break;
+            //红外  读取
+            case R.id.btn_infrared_read:
+
+                break;
+            //红外  倒计时1
+            case R.id.btn_infrared_timeone:
+
+                break;
+            //红外  重新读取
+            case R.id.btn_infrared_reset_read:
+
+                break;
+            //红外  倒计时2
+            case R.id.btn_infrared_timetwo:
+
                 break;
         }
     }
@@ -472,8 +537,8 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
             showUpdateDetail(bean);
             showHoulder(4);
         }
-        if (bean.getItemId() == AmmeterType.INFRARED_POINT.getValue()) {//总电量
-
+        if (bean.getItemId() == AmmeterType.INFRARED_POINT.getValue()) {//电表红外配置
+            showHoulder(6);
         }
     }
     /**
@@ -1153,6 +1218,22 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
                 ammeter_info2.setVisibility(View.VISIBLE);
                 //二级提示视图
                 ammeter_LL2_hite.setVisibility(View.GONE);
+                break;
+            case 6://显示红外召测页面
+                //二级视图
+                ammeter_info2.setVisibility(View.GONE);
+                layout_info.setVisibility(View.GONE);
+                infraredInfo.setVisibility(View.VISIBLE);
+                infraredMetsureLl.setVisibility(View.VISIBLE);
+                infraredMetsureDetauksLl.setVisibility(View.GONE);
+                break;
+            case 7://显示红外保存页面
+                //二级视图
+                ammeter_info2.setVisibility(View.GONE);
+                layout_info.setVisibility(View.GONE);
+                infraredInfo.setVisibility(View.VISIBLE);
+                infraredMetsureLl.setVisibility(View.GONE);
+                infraredMetsureDetauksLl.setVisibility(View.VISIBLE);
                 break;
 
         }

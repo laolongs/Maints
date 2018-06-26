@@ -119,9 +119,6 @@
             <View
                 style="@style/common_linewidth"/>
             <LinearLayout
-
-
-                android:visibility="gone"
                 android:id="@+id/ammeter_info2"
                 android:layout_width="@dimen/x200"
                 android:layout_height="match_parent"
@@ -297,7 +294,7 @@
                                 <EditText
                                     android:id="@+id/edit_collecton_point_name"
                                     style="@style/ammeter_editor"
-                                   />
+                                    />
                             </LinearLayout>
                             <View
                                 style="@style/common_linehights"/>
@@ -479,7 +476,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                  android:text="测量点电源接线方式"
+                                    android:text="测量点电源接线方式"
                                     style="@style/ammeter_text" />
                                 <View
                                     android:layout_width="@dimen/x1"
@@ -500,7 +497,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                   android:text="GPRS卡编号"
+                                    android:text="GPRS卡编号"
                                     style="@style/ammeter_text" />
                                 <View
                                     android:layout_width="@dimen/x1"
@@ -547,7 +544,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                   android:text="额定电压"
+                                    android:text="额定电压"
                                     style="@style/ammeter_text"/>
                                 <View
                                     android:layout_width="@dimen/x1"
@@ -567,7 +564,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                   android:text="额定功率"
+                                    android:text="额定功率"
                                     style="@style/ammeter_text" />
                                 <View
                                     android:layout_width="@dimen/x1"
@@ -608,7 +605,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                   android:text="关联变压器"
+                                    android:text="关联变压器"
                                     style="@style/ammeter_text" />
                                 <View
                                     android:layout_width="@dimen/x1"
@@ -643,13 +640,10 @@
                             android:layout_height="wrap_content"
                             android:text="删除"/>
                     </LinearLayout>
-            </LinearLayout>
+                </LinearLayout>
 
 
                 <LinearLayout
-
-
-                    android:visibility="gone"
                     android:id="@+id/ammeter_collection_message"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -845,7 +839,7 @@
                                 <TextView
                                     android:id="@+id/edit_rated_voltages"
                                     style="@style/ammeter_text_set" />
-                        </LinearLayout>
+                            </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/x48"
@@ -890,15 +884,9 @@
                     </ScrollView>
                 </LinearLayout>
                 <include
-
-
-                    android:visibility="gone"
                     android:id="@+id/ammeter_allele_configuration"
                     layout="@layout/layout_common_distribution" />
                 <LinearLayout
-
-
-                    android:visibility="gone"
                     android:paddingRight="@dimen/x25"
                     android:id="@+id/ammeter_allele_message"
                     android:orientation="vertical"
@@ -918,6 +906,291 @@
                     </ListView>
                 </LinearLayout>
             </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/infrared_info"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/x20">
+                <LinearLayout
+                    android:paddingTop="@dimen/y27"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/infrared_title"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="26sp"
+                        android:text="电表红外配置"/>
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/y1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x52"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/btn_infrared_getMetsureStatus"
+                            android:layout_gravity="right"
+                            android:layout_width="@dimen/x119"
+                            android:layout_height="@dimen/y52"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:background="@drawable/btn_confirm_normal"
+                            android:layout_marginRight="@dimen/x34"
+                            android:text="召测" />
+
+                        <Button
+                            android:id="@+id/btn_infrared_reset"
+                            android:layout_width="@dimen/x158"
+                            android:layout_height="@dimen/y52"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:background="@drawable/btn_cancel"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="@dimen/x24"
+                            android:text="重置表地址" />
+
+                        <Button
+                            android:id="@+id/btn_infrared_save"
+                            android:layout_width="@dimen/x158"
+                            android:layout_height="@dimen/y52"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:background="@drawable/btn_confirm_normal"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="@dimen/x24"
+                            android:text="保存" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/infrared_metsure_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_bg"
+                    android:orientation="vertical"
+                    android:paddingRight="@dimen/x24"
+                    android:paddingTop="@dimen/x46">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="表地址"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_min_gray"/>
+                        <TextView
+                            android:id="@+id/infrared_text_address"
+                            android:layout_marginLeft="@dimen/x37"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="154155"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_max_gray"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/x13"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="历史召测"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_min_gray"/>
+                        <TextView
+                            android:id="@+id/infrared_text_history"
+                            android:layout_marginLeft="@dimen/x37"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2018/12/06"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_max_gray"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/infrared_metsure_details_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/common_bg"
+                    android:orientation="vertical"
+                    android:paddingRight="@dimen/x24"
+                    android:paddingTop="@dimen/x42">
+                    <RelativeLayout
+                        android:background="@drawable/edittext_radius"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x48">
+                        <TextView
+                            android:layout_centerVertical="true"
+                            android:id="@+id/infrared_ele_address1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:text="表地址"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_min_gray"/>
+                        <View
+                            android:id="@+id/view1"
+                            android:layout_marginLeft="@dimen/x90"
+                            android:layout_toRightOf="@+id/infrared_ele_address1"
+                            android:layout_marginTop="@dimen/x8"
+                            android:layout_marginBottom="@dimen/x8"
+                            android:background="@color/common_text_max_gray"
+                            android:layout_width="@dimen/x1"
+                            android:layout_height="match_parent"/>
+                        <EditText
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/view1"
+                            android:id="@+id/infrared_ele_edit"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:layout_width="@dimen/x500"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_max_gray"/>
+                        <Button
+                            android:id="@+id/btn_infrared_read"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/x15"
+                            android:background="@drawable/btn_empty_bgblue"
+                            android:layout_width="@dimen/x100"
+                            android:layout_height="@dimen/y30"
+                            android:text="读取"
+                            android:textSize="14sp"
+                            android:textColor="@color/root_check"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_marginTop="@dimen/x32"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x48">
+
+                        <Button
+                            android:id="@+id/btn_infrared_timeone"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/x15"
+                            android:background="@drawable/btn_empty_bgblue"
+                            android:layout_width="@dimen/x100"
+                            android:layout_height="@dimen/y30"
+                            android:text="倒计时"
+                            android:textSize="14sp"
+                            android:textColor="@color/root_check"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_marginTop="@dimen/x63"
+                        android:background="@drawable/edittext_radius"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x48">
+                        <TextView
+                            android:layout_centerVertical="true"
+                            android:id="@+id/infrared_ele_address2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:text="表地址"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_min_gray"/>
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_marginLeft="@dimen/x90"
+                            android:layout_toRightOf="@+id/infrared_ele_address2"
+                            android:layout_marginTop="@dimen/x8"
+                            android:layout_marginBottom="@dimen/x8"
+                            android:background="@color/common_text_max_gray"
+                            android:layout_width="@dimen/x1"
+                            android:layout_height="match_parent"/>
+                        <EditText
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/view2"
+                            android:id="@+id/infrared_ele_edit2"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:layout_width="@dimen/x500"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:textColor="#ffa000"/>
+                        <Button
+                            android:id="@+id/btn_infrared_reset_read"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/x15"
+                            android:background="@drawable/btn_empty_bgblue"
+                            android:layout_width="@dimen/x100"
+                            android:layout_height="@dimen/y30"
+                            android:text="重新读取"
+                            android:textSize="14sp"
+                            android:textColor="@color/root_check"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_marginTop="@dimen/x57"
+                        android:background="@drawable/edittext_radius"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x48">
+                        <TextView
+                            android:layout_centerVertical="true"
+                            android:id="@+id/infrared_ele_address3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:text="表地址"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_min_gray"/>
+                        <View
+                            android:id="@+id/view3"
+                            android:layout_marginLeft="@dimen/x90"
+                            android:layout_toRightOf="@+id/infrared_ele_address3"
+                            android:layout_marginTop="@dimen/x8"
+                            android:layout_marginBottom="@dimen/x8"
+                            android:background="@color/common_text_max_gray"
+                            android:layout_width="@dimen/x1"
+                            android:layout_height="match_parent"/>
+                        <EditText
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/view3"
+                            android:id="@+id/infrared_ele_editor3"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:layout_width="@dimen/x500"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_max_gray"/>
+                        <Button
+                            android:id="@+id/btn_infrared_timetwo"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/x15"
+                            android:background="@drawable/btn_empty_bgblue"
+                            android:layout_width="@dimen/x100"
+                            android:layout_height="@dimen/y30"
+                            android:text="倒计时"
+                            android:textSize="14sp"
+                            android:textColor="@color/root_check"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:background="@drawable/edittext_radius"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ListView
+                            android:layout_marginLeft="@dimen/x173"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/infrared_ele_list"
+                            android:layout_width="@dimen/x500"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:textColor="@color/common_text_max_gray"/>
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
             <View
                 style="@style/common_linewidth"/>
         </LinearLayout>

@@ -98,7 +98,7 @@ public class LoginActivity extends BaseActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                             dialog.removeDialog();
-                            Toast.makeText(x.app(), "连接失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(x.app(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         } finally {
                         }
                     }

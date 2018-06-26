@@ -99,7 +99,7 @@ public class Question_DescriptionDialog {
                 }
                 UploadImgDescriptionParam params = new UploadImgDescriptionParam();
                 params.setQuestionId(questionId);
-                params.setMaintStaffId(MyApplication.getUserInfo().getStaffId());
+                params.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
                 params.setContent(title);
                 List<File> fileList = new ArrayList<>();
                 for (ImageItem imageItem : imageItemsList) {

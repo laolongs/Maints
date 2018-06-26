@@ -2,26 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="50dp">
+    android:layout_height="@dimen/y50">
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/y2"
         android:background="#E9ECF3"
         />
     <LinearLayout
+        android:orientation="horizontal"
         android:id="@+id/arrow_Rl"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="@dimen/y48">
         <TextView
             android:gravity="center_vertical"
             android:background="@drawable/btn_lv2_item"
             android:id="@+id/text_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="19dp"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/x19"
             android:textColor="@color/common_text_max_gray"
             android:text="ddd"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
+            <ImageView
+                android:layout_gravity="center"
+                android:id="@+id/arrow_img"
+                android:layout_width="@dimen/x5"
+                android:layout_height="@dimen/y30"
+                android:src="@mipmap/img_indicate"/>
     </LinearLayout>
 
 

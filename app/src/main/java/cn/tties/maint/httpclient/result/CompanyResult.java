@@ -31,6 +31,8 @@ public class CompanyResult implements Serializable{
 
     private Double monthMoney;
 
+    private Integer monthlyTourNumber;
+
     private String businessName;
 
     private String businessTel;
@@ -62,6 +64,14 @@ public class CompanyResult implements Serializable{
     private Double powerFactor;
 
     private List<EleAccountResult> eleAccountList;
+
+    public Integer getMonthlyTourNumber() {
+        return monthlyTourNumber;
+    }
+
+    public void setMonthlyTourNumber(Integer monthlyTourNumber) {
+        this.monthlyTourNumber = monthlyTourNumber;
+    }
 
     public Integer getCompanyId() {
         return companyId;

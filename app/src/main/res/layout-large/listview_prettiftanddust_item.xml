@@ -4,29 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="10dp">
+    android:background="@drawable/edittext_radius"
+    >
     <LinearLayout
         android:background="@color/white"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="@dimen/x66">
         <ImageView
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/x10"
             android:id="@+id/img_type"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/y26"
             android:src="@mipmap/img_patrol_general"/>
         <TextView
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/x20"
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="title"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textColor="#424242"
+            android:textSize="20sp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"/>
+        android:layout_height="@dimen/x17"
+        android:background="@color/common_bg"/>
 </LinearLayout>

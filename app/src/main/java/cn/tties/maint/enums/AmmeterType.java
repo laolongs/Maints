@@ -13,7 +13,8 @@ public enum AmmeterType {
 //    BASE_INFO(1, "基础信息"),
 //    ACCOUNT(2, "开通账户"),
     COLLECTION_POINT(3, "采集点配置"),
-    TOTAL_ELECTRIC(4, "总电量配置");
+    TOTAL_ELECTRIC(4, "总电量配置"),
+    INFRARED_POINT(5, "电表红外配置");
     private final Integer value;
     private final String info;
 

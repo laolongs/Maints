@@ -2,6 +2,7 @@ package cn.tties.maint.view;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.print.PrintJob;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,6 +30,7 @@ import java.util.List;
 import cn.tties.maint.R;
 import cn.tties.maint.activity.BaseFragment;
 import cn.tties.maint.activity.OrderListFragment;
+import cn.tties.maint.activity.PatrolFragment;
 import cn.tties.maint.activity.QuestionFragment;
 import cn.tties.maint.adapter.SafetyImageListViewAdapter;
 import cn.tties.maint.common.EventKind;
@@ -39,6 +41,7 @@ import cn.tties.maint.enums.WorkType;
 import cn.tties.maint.httpclient.BaseStringCallback;
 import cn.tties.maint.httpclient.HttpClientSend;
 import cn.tties.maint.httpclient.params.Patrol_QuestionParams;
+import cn.tties.maint.httpclient.params.Patrol_WXParams;
 import cn.tties.maint.httpclient.params.SafetyParams;
 import cn.tties.maint.httpclient.result.CompanyEquipmentResult;
 import cn.tties.maint.httpclient.result.SafetyResult;
@@ -63,6 +66,7 @@ public class Patrol_NewQuestionDialog{
     private EditText edit_describe;
     private EditText edit_temperature;
     private LinearLayout LL_address;
+    private LinearLayout level_ll;
     private TextView  text_address;
     private Spinner level;
     boolean isTemperature;
@@ -71,8 +75,13 @@ public class Patrol_NewQuestionDialog{
     int cureleid;
     AlertDialog dialog;
     Integer faultType;
+    Integer faultTypes;//有问题和上报问题
+    Integer companyId;
     int numFlag=0;//0 代表新建问题， 1 代表添加问题，2 代表有温度的问题
-    public Patrol_NewQuestionDialog(BaseFragment fragment, CompanyEquipmentResult result, int orderworkid, int cureleid,int numFlag) {
+    String address;
+    int patrolItemId;
+    String companyName;
+    public Patrol_NewQuestionDialog(BaseFragment fragment, CompanyEquipmentResult result, int orderworkid, int cureleid,int companyId,String address,String companyName) {
         adapter = new SafetyImageListViewAdapter(fragment.getContext(), new ArrayList<ImageItem>(), maxCount);
         adapter.setOnItemClickListener(clickListener);
         this.mFragment = fragment;
@@ -80,7 +89,16 @@ public class Patrol_NewQuestionDialog{
         imageItemsList = new ArrayList<>();
         this.orderworkid=orderworkid;
         this.cureleid=cureleid;
+        this.companyId=companyId;
+        this.address=address;
+        this.companyName=companyName;
+    }
+    public void setNumFlag(int numFlag){
         this.numFlag=numFlag;
+    }
+    public void setpatrolItemIdAndfaultType(int patrolItemId,int faultType){
+        this.patrolItemId=patrolItemId;
+        this.faultTypes=faultType;
     }
     public void setData(boolean isTemperature){
         this.isTemperature=isTemperature;
@@ -88,27 +106,35 @@ public class Patrol_NewQuestionDialog{
     public void setContentView() {
         // 指定布局
         AlertDialog.Builder builder = new AlertDialog.Builder(mFragment.getContext());
-        View view = View
-                .inflate(mFragment.getContext(), R.layout.dialog_patrol_newquestion, null);
+        View view = View.inflate(mFragment.getContext(), R.layout.dialog_patrol_newquestion, null);
         builder.setView(view);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         edit_describe = (EditText)  view.findViewById(R.id.edit_describe);
+        level_ll = (LinearLayout)  view.findViewById(R.id.level_ll);
         level = (Spinner)  view.findViewById(R.id.level);
         edit_temperature = (EditText) view.findViewById(R.id.edit_temperature);
         LL_address = (LinearLayout) view.findViewById(R.id.LL_address);
         text_address = (TextView) view.findViewById(R.id.text_address);
         btn_cancel = (Button)  view.findViewById(R.id.btn_cancel);
         btn_add = (Button)  view.findViewById(R.id.btn_add);
-//        text_address.setText(result.get);
+        text_address.setText(address);//地址
         dialog = builder.create();
         recyclerView.setLayoutManager(new GridLayoutManager(mFragment.getContext(), 4));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         getSpinnerData(level);
-        if(isTemperature){
-            edit_temperature.setVisibility(View.VISIBLE);
-        }else{
+        //新建问题
+        if(numFlag==0){
+            level_ll.setVisibility(View.VISIBLE);
             edit_temperature.setVisibility(View.GONE);
+        }
+        if(numFlag==1){
+            if(isTemperature){
+                edit_temperature.setVisibility(View.VISIBLE);
+            }else{
+                edit_temperature.setVisibility(View.GONE);
+            }
+            level_ll.setVisibility(View.GONE);
         }
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,11 +148,7 @@ public class Patrol_NewQuestionDialog{
                 }
                 //有问题
                 if(numFlag==1){
-
-                }
-                //有温度问题
-                if(numFlag==2){
-
+                    sendQuestion();
                 }
 
             }
@@ -191,10 +213,6 @@ public class Patrol_NewQuestionDialog{
         adapter.setImages(imageItemsList);
         adapter.notifyDataSetChanged();
     }
-    public void clearImage() {
-        imageItemsList.clear();
-        adapter.notifyDataSetChanged();
-    }
     public void loading() {
         dialog.show();
     }
@@ -223,14 +241,22 @@ public class Patrol_NewQuestionDialog{
         });
 
     }
+    //企业微信群发
     public void sendNewQuestion(){
         String title = edit_describe.getText().toString();
         int count = imageItemsList == null ? 0 : imageItemsList.size();
+        if(faultType==null){
+            Toast.makeText(x.app(), "请选择缺陷类型", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (StringUtil.isEmpty(title) && count == 0) {
             Toast.makeText(x.app(), "请输入描述或至少上传一张图片", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        Patrol_WXParams wxParams=new Patrol_WXParams();
+        wxParams.setContent(title);
+        wxParams.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
+        wxParams.setCompanyNameAndElectricRoomPatrol(companyName+"电房巡视");
         Patrol_QuestionParams params=new Patrol_QuestionParams();
         params.setEleAccountId(cureleid);
         params.setHasquestion(true);
@@ -240,9 +266,15 @@ public class Patrol_NewQuestionDialog{
         params.setValue1("");
         params.setWorkOrderId(orderworkid);
         params.setRoomId(result.getRoomId());
-        params.setStaffId(MyApplication.getUserInfo().getStaffId());
+        params.setStaffId(MyApplication.getUserInfo().getMaintStaffId());
         params.setContent(title);
         params.setQuestionFaultType(faultType);
+        params.setCompanyId(companyId);
+//        Log.i(TAG, "sendNewQuestion: cureleid"+cureleid);
+//        Log.i(TAG, "sendNewQuestion:result.getCompanyEquipmentId() "+result.getCompanyEquipmentId());
+//        Log.i(TAG, "sendNewQuestion:orderworkid "+orderworkid);
+//        Log.i(TAG, "sendNewQuestion: result.getRoomId()"+result.getRoomId());
+//        Log.i(TAG, "sendNewQuestion: faultType"+faultType);
         List<File> fileList = new ArrayList<>();
         for (ImageItem imageItem : imageItemsList) {
             if (imageItem != null) {
@@ -250,6 +282,24 @@ public class Patrol_NewQuestionDialog{
                 fileList.add(file);
             }
         }
+        //企业微信
+        HttpClientSend.getInstance().sendFile(wxParams, fileList,new BaseStringCallback() {
+            @Override
+            public void onSuccess(String result) {
+                SafetyResult ret = JsonUtils.deserialize(result, SafetyResult.class);
+                if (ret.getErrorCode() != 0) {
+                    Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(x.app(), "企业微信发送成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                Toast.makeText(x.app(), "企业微信发送失败", Toast.LENGTH_SHORT).show();
+            }
+        });
         Log.i(TAG, "sendNewQuestion: "+params.toString());
         HttpClientSend.getInstance().sendFile(params, fileList,new BaseStringCallback() {
             @Override
@@ -259,13 +309,88 @@ public class Patrol_NewQuestionDialog{
                     Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(ret.getResult().isFlag()){
-                    Toast.makeText(x.app(), "新建问题成功", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }else{
-                    Toast.makeText(x.app(), "新建问题失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(x.app(), "新建问题成功", Toast.LENGTH_SHORT).show();
+                PatrolFragment.patrolFragmentInstance.queryPatrolList();
+                dialog.dismiss();
+            }
+        });
+    }
+    //企业微信群发
+    public void sendQuestion(){
+        if(isTemperature){
+            String temperature = edit_temperature.getText().toString();
+            if(StringUtil.isEmpty(temperature)){
+                Toast.makeText(x.app(), "请输入温度", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        String title = edit_describe.getText().toString();
+        int count = imageItemsList == null ? 0 : imageItemsList.size();
+        if (StringUtil.isEmpty(title) && count == 0) {
+            Toast.makeText(x.app(), "请输入描述或至少上传一张图片", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Patrol_WXParams wxParams=new Patrol_WXParams();
+        wxParams.setContent(title);
+        wxParams.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
+        wxParams.setCompanyNameAndElectricRoomPatrol(companyName+"电房巡视");
+
+
+        Patrol_QuestionParams params=new Patrol_QuestionParams();
+        params.setEleAccountId(cureleid);
+        params.setHasquestion(true);
+        //新建问题无巡视项ID
+        params.setPatrolItemId(patrolItemId);
+        params.setCompanyEquipmentId(result.getCompanyEquipmentId());
+        params.setValue1("");
+        params.setWorkOrderId(orderworkid);
+        params.setRoomId(result.getRoomId());
+        params.setStaffId(MyApplication.getUserInfo().getMaintStaffId());
+        params.setContent(title);
+        params.setQuestionFaultType(faultTypes);
+        params.setCompanyId(companyId);
+//        Log.i(TAG, "sendNewQuestion: cureleid"+cureleid);
+//        Log.i(TAG, "sendNewQuestion:result.getCompanyEquipmentId() "+result.getCompanyEquipmentId());
+//        Log.i(TAG, "sendNewQuestion:orderworkid "+orderworkid);
+//        Log.i(TAG, "sendNewQuestion: result.getRoomId()"+result.getRoomId());
+//        Log.i(TAG, "sendNewQuestion: faultType"+faultType);
+        List<File> fileList = new ArrayList<>();
+        for (ImageItem imageItem : imageItemsList) {
+            if (imageItem != null) {
+                File file = new File(imageItem.path);
+                fileList.add(file);
+            }
+        }
+        //企业微信
+        HttpClientSend.getInstance().sendFile(wxParams, fileList,new BaseStringCallback() {
+            @Override
+            public void onSuccess(String result) {
+                SafetyResult ret = JsonUtils.deserialize(result, SafetyResult.class);
+                if (ret.getErrorCode() != 0) {
+                    Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Toast.makeText(x.app(), "企业微信发送成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                super.onError(ex, isOnCallback);
+                Toast.makeText(x.app(), "企业微信发送失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+        Log.i(TAG, "sendNewQuestion: "+params.toString());
+        HttpClientSend.getInstance().sendFile(params, fileList,new BaseStringCallback() {
+            @Override
+            public void onSuccess(String result) {
+                SafetyResult ret = JsonUtils.deserialize(result, SafetyResult.class);
+                if (ret.getErrorCode() != 0) {
+                    Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(x.app(), "提交问题成功", Toast.LENGTH_SHORT).show();
+                PatrolFragment.patrolFragmentInstance.queryPatrolList();;
+                dialog.dismiss();
             }
         });
     }

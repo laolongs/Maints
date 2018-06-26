@@ -153,7 +153,7 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
         holder.btnHandle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ScheduleDialog dialog = new ScheduleDialog(bean.getStaffId(), result.getQuestionId());
+                final ScheduleDialog dialog = new ScheduleDialog(bean.getMaintStaffId(), result.getQuestionId());
                 dialog.loading();
             }
         });
@@ -161,7 +161,7 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
         holder.btnAdvice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AdviceDialog dialog = new AdviceDialog(bean.getStaffId(), result.getQuestionId());
+                final AdviceDialog dialog = new AdviceDialog(bean.getMaintStaffId(), result.getQuestionId());
                 dialog.loading();
             }
         });

@@ -173,9 +173,9 @@ public class SplashActivity extends BaseActivity {
             startActivity(intent);
             SplashActivity.this.finish();
         } else {
-            Log.i(TAG, "自动登录 username:" + userInfoBean.getStaffTel() + " password:" + userInfoBean.getLoginPwd());
+            Log.i(TAG, "自动登录 username:" + userInfoBean.getMaintStaffTel() + " password:" + userInfoBean.getLoginPwd());
             LoginParams params = new LoginParams();
-            params.setUserName(userInfoBean.getStaffTel());
+            params.setMaintStaffTel(userInfoBean.getMaintStaffTel());
             params.setPassWord(userInfoBean.getLoginPwd());
             HttpClientSend.getInstance().send(params, new BaseStringCallback() {
                 @Override
@@ -193,7 +193,10 @@ public class SplashActivity extends BaseActivity {
                         loginResult.getUserInfo().setLoginPwd(userInfoBean.getLoginPwd());
                         ACache.getInstance().put(Constants.CACHE_USERINFO, loginResult.getUserInfo());
                         //查询用户菜单
-                        getAllMbFunction(loginResult.getUserInfo().getStaffId());
+//                        getAllMbFunction(loginResult.getUserInfo().getMaintStaffId());
+                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     } catch (Exception e) {
                         e.printStackTrace();
                         Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
@@ -206,44 +209,44 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    private void getAllMbFunction(int staffId) {
-        QueryAllMbFunctionParams paramsAuth = new QueryAllMbFunctionParams();
-        paramsAuth.setStaffId(staffId);
-        HttpClientSend.getInstance().send(paramsAuth, new BaseStringCallback() {
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
-                    if (ret.getErrorCode() != 0) {
-                        Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    List<String> userAuth = new ArrayList<>();
-                    List<MbFunctionResult> list = JsonUtils.deserialize(ret.getResult(), new TypeToken<List<MbFunctionResult>>() {
-                    }.getType());
-                    for (MbFunctionResult queryAllMbFunctionResult : list) {
-                        for (TabClass tabClass : Constants.menuList) {
-                            if (tabClass.getAlias().equals(queryAllMbFunctionResult.getAlias())) {
-                                userAuth.add(queryAllMbFunctionResult.getAlias());
-                            }
-                        }
-                    }
-                    UserInfoBean userInfoBean = MyApplication.getUserInfo();
-                    userInfoBean.setMenuList(userAuth);
-                    ACache.getInstance().put(Constants.CACHE_USERINFO, userInfoBean);
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(x.app(), "连接失败", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    SplashActivity.this.finish();
-                } finally {
-                }
-            }
-        });
-    }
+//    private void getAllMbFunction(int staffId) {
+//        QueryAllMbFunctionParams paramsAuth = new QueryAllMbFunctionParams();
+//        paramsAuth.setStaffId(staffId);
+//        HttpClientSend.getInstance().send(paramsAuth, new BaseStringCallback() {
+//            @Override
+//            public void onSuccess(String result) {
+//                try {
+//                    BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
+//                    if (ret.getErrorCode() != 0) {
+//                        Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    List<String> userAuth = new ArrayList<>();
+//                    List<MbFunctionResult> list = JsonUtils.deserialize(ret.getResult(), new TypeToken<List<MbFunctionResult>>() {
+//                    }.getType());
+//                    for (MbFunctionResult queryAllMbFunctionResult : list) {
+//                        for (TabClass tabClass : Constants.menuList) {
+//                            if (tabClass.getAlias().equals(queryAllMbFunctionResult.getAlias())) {
+//                                userAuth.add(queryAllMbFunctionResult.getAlias());
+//                            }
+//                        }
+//                    }
+//                    UserInfoBean userInfoBean = MyApplication.getUserInfo();
+////                    userInfoBean.setMenuList(userAuth);
+//                    ACache.getInstance().put(Constants.CACHE_USERINFO, userInfoBean);
+//                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(x.app(), "连接失败", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+//                    startActivity(intent);
+//                    SplashActivity.this.finish();
+//                } finally {
+//                }
+//            }
+//        });
+//    }
 
 }

@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="50dp">
+    android:background="@color/common_bg"
+    android:layout_height="wrap_content">
     <LinearLayout
-        android:paddingLeft="19dp"
+        android:paddingLeft="@dimen/x30"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <CheckBox
@@ -15,8 +16,10 @@
             android:layout_height="match_parent"
             android:textColor="@color/common_text_max_gray"
             android:text="ddd"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x20"/>
 
 </LinearLayout>

@@ -13,11 +13,21 @@ public class QueryNewQuertionParams extends ClinetRequestParams {
 
     private int status;
 
+    private Integer maintStaffId;
+
     private Integer[] companyIds;
 
     private String  createTimeEnd;
 
     private String  createTimeStart;
+
+    public Integer getMaintStaffId() {
+        return maintStaffId;
+    }
+
+    public void setMaintStaffId(Integer maintStaffId) {
+        this.maintStaffId = maintStaffId;
+    }
 
     public int getStatus() {
         return status;

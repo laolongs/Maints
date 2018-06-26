@@ -3,6 +3,7 @@ package cn.tties.maint.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -42,7 +43,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 
 /**
  * Created by li on 2018/6/15
- * description：消缺
+ * description：除尘清理
  * author：guojlli
  */
 @SuppressLint("ValidFragment")
@@ -54,11 +55,11 @@ public class DustFragment extends BaseFragment implements View.OnClickListener{
     private LinearLayout all;
     @ViewInject(R.id.text_title)
     private TextView text_title;
-    @ViewInject(R.id.dust_before)
+    @ViewInject(R.id.prettift_before)
     private LinearLayout before;
     @ViewInject(R.id.text_before)
     private TextView text_before;
-    @ViewInject(R.id.dust_later)
+    @ViewInject(R.id.prettift_later)
     private LinearLayout later;
     @ViewInject(R.id.text_later)
     private TextView text_later;
@@ -75,9 +76,8 @@ public class DustFragment extends BaseFragment implements View.OnClickListener{
     private PrettiftAndDustAdapter andDustAdapter;
     int workOrderId;
     private Dust_DescriptionDialog dialog;
-    private int bgcolor;
-    private int bgbefore;
-    private int bglater;
+    private int textcolor;
+    private int textcolors;
     boolean isbefore;
     boolean islater;
     int beforeNum=1;
@@ -119,9 +119,8 @@ public class DustFragment extends BaseFragment implements View.OnClickListener{
         });
     }
     private void initView() {
-        bgcolor = Color.parseColor("#000000");
-        bgbefore = Color.parseColor("#4DDBCF");
-        bglater = Color.parseColor("#1B92EE");
+        textcolor = Color.parseColor("#888888");
+        textcolors = Color.parseColor("#1B92EE");
         andDustAdapter = new PrettiftAndDustAdapter();
         list.setAdapter(andDustAdapter);
         before.setOnClickListener(this);
@@ -132,7 +131,7 @@ public class DustFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.dust_before://处理前
+            case R.id.prettift_before://处理前
                 if(!isbefore){
                     getDialog(beforeNum);
                 }else{//处理前效果
@@ -141,7 +140,7 @@ public class DustFragment extends BaseFragment implements View.OnClickListener{
                     moreDialog.loading();
                 }
                 break;
-            case R.id.dust_later://处理后
+            case R.id.prettift_later://处理后
                 if(!islater){
                     getDialog(laterNum);
                 }else{//处理后效果
@@ -191,6 +190,8 @@ public class DustFragment extends BaseFragment implements View.OnClickListener{
         });
     }
     public void getPrettiftStatusList(){
+        final GradientDrawable backgroundbefore = (GradientDrawable)before.getBackground();
+        final GradientDrawable backgroundlater = (GradientDrawable)later.getBackground();
         Prettift_StatusAndDetilsParams params=new Prettift_StatusAndDetilsParams();
         params.setPrettifyDustType(dustNum);
         params.setWorkOrderId(workOrderId);
@@ -207,20 +208,24 @@ public class DustFragment extends BaseFragment implements View.OnClickListener{
                 if(ret.getResult().size()<=0||ret.getResult()==null){
                     isbefore=false;
                     islater=false;
-                    before.setBackgroundColor(bgbefore);
+//                    before.setBackgroundColor(bgbefore);
                     text_before.setText("处理前");
-                    later.setBackgroundColor(bglater);
+//                    later.setBackgroundColor(bglater);
                     text_later.setText("处理后");
                 }else{//查看详情
                     for (PrettiftStatusAndDetailsResult.ResultBean resultBean:ret.getResult()) {
                         if(resultBean.getDescriptionType()==1){//处理前效果
-                            before.setBackgroundColor(bgcolor);
+                            backgroundbefore.setStroke(2,x.app().getResources().getColor(R.color.common_text_min_gray));
+                            backgroundbefore.setColor(x.app().getResources().getColor(R.color.common_bg));
                             text_before.setText("处理前效果");
+                            text_before.setTextColor(textcolor);
                             isbefore=true;
                             resultBeanbefor=resultBean;
                         }
                         if(resultBean.getDescriptionType()==2){//处理后效果
-                            later.setBackgroundColor(bgcolor);
+                            backgroundlater.setStroke(2,x.app().getResources().getColor(R.color.root_check));
+                            backgroundlater.setColor(x.app().getResources().getColor(R.color.common_bg));
+                            later.setBackgroundColor(textcolors);
                             text_later.setText("处理后效果");
                             islater=true;
                             resultBeanlater=resultBean;

@@ -1,27 +1,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/x179"
     android:descendantFocusability="blocksDescendants"
     android:background="@color/white"
+    android:paddingLeft="@dimen/x16"
+    android:paddingRight="@dimen/x21"
     android:orientation="vertical">
     <LinearLayout
+        android:layout_marginTop="@dimen/x17"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_width="60dp"
-            android:layout_height="20dp">
+            android:gravity="center_vertical"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/y26">
             <ImageView
+                android:layout_marginTop="@dimen/x2"
                 android:id="@+id/img_type"
-                android:layout_width="60dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/x60"
+                android:layout_height="@dimen/y26"
                 android:src="@mipmap/img_patrol_general"/>
         </LinearLayout>
         <LinearLayout
             android:gravity="center"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/x15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -30,64 +34,64 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="title"
-                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textColor="#424242"
                 />
         </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="@dimen/x18"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="0dp"
-            android:gravity="center"
             android:layout_height="match_parent"
             android:layout_weight="1">
             <TextView
-                android:layout_marginLeft="20dp"
+                android:layout_marginRight="@dimen/x20"
+                android:layout_marginTop="@dimen/x15"
                 android:id="@+id/text_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:textColor="@color/common_text_min_gray"
                 android:text="这没有此问题描述"
                  />
         </LinearLayout>
         <LinearLayout
             android:gravity="right"
             android:orientation="vertical"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
             >
             <LinearLayout
                 android:id="@+id/ll_question"
-                android:layout_width="120dp"
-                android:layout_height="30dp"
-                android:background="@color/listview_check">
+                android:layout_width="@dimen/x160"
+                android:layout_height="@dimen/y40"
+                android:background="@drawable/btn_confirm_normal">
                 <TextView
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="有问题"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"/>
             <LinearLayout
+                android:layout_marginTop="@dimen/x10"
                 android:id="@+id/ll_noquestion"
-                android:background="#4DDBCF"
-                android:layout_width="120dp"
-                android:layout_height="30dp">
+                android:background="@drawable/btn_confirm_green"
+                android:layout_width="@dimen/x160"
+                android:layout_height="@dimen/y40">
                 <TextView
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="无问题"
                     android:textColor="@color/white"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -167,7 +167,7 @@ public class QuestionNewListAdapter extends BaseAdapter {
                     }
                 });
             }else{
-                questionViewHolder.text_more.setVisibility(View.GONE);
+                questionViewHolder.text_more.setVisibility(View.INVISIBLE);
             }
             //问题描述
             questionViewHolder.btn_description.setOnClickListener(new View.OnClickListener() {
@@ -184,7 +184,7 @@ public class QuestionNewListAdapter extends BaseAdapter {
     public class QuestionViewHolder{
         ImageView img_type;
         TextView text_title;
-        TextView text_schedule;
+//        TextView text_schedule;
         ListView question_imglist;
         TextView text_time;
         TextView text_more;
@@ -197,7 +197,7 @@ public class QuestionNewListAdapter extends BaseAdapter {
         public QuestionViewHolder(View view) {
             img_type= view.findViewById(R.id.img_type);
             text_title= view.findViewById(R.id.text_title);
-            text_schedule= view.findViewById(R.id.text_schedule);
+//            text_schedule= view.findViewById(R.id.text_schedule);
             question_imglist= view.findViewById(R.id.question_imglist);
             text_time= view.findViewById(R.id.text_time);
             text_more= view.findViewById(R.id.text_more);

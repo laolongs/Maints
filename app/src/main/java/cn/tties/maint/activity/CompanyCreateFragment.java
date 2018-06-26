@@ -264,7 +264,7 @@ public class CompanyCreateFragment extends BaseFragment {
         createCompanyParams.setTechName(editTechName.getText().toString());
         createCompanyParams.setTechTel(editTechTel.getText().toString());
         createCompanyParams.setStatus(0);
-        createCompanyParams.setCreatorId(MyApplication.getUserInfo().getStaffId());
+        createCompanyParams.setCreatorId(MyApplication.getUserInfo().getMaintStaffId());
         int selectMaintIndex = spinnerMaint.getSelectedItemPosition();
         MbStaffResult selectMaint = queryMaintResultList.get(selectMaintIndex);
         createCompanyParams.setMaintStaffId(selectMaint.getStaffId());

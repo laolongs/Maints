@@ -88,7 +88,7 @@ public class EquiRecyclerAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     }
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View  view = mInflater.inflate(R.layout.recycleview_item_parent, parent, false);
+        View  view = mInflater.inflate(R.layout.recycleview_item_equi_parent, parent, false);
         return new ParentViewHolder(view);
 
     }

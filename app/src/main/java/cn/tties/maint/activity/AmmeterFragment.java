@@ -468,9 +468,12 @@ public class AmmeterFragment extends BaseFragment implements View.OnClickListene
             getTransformer();
             showHoulder(2);
         }
-        if (bean.getItemId() == AmmeterType.TOTAL_ELECTRIC.getValue()) {
+        if (bean.getItemId() == AmmeterType.TOTAL_ELECTRIC.getValue()) {//总电量
             showUpdateDetail(bean);
             showHoulder(4);
+        }
+        if (bean.getItemId() == AmmeterType.INFRARED_POINT.getValue()) {//总电量
+
         }
     }
     /**

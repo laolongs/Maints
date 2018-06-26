@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -111,19 +113,21 @@ public class DetailsLv2ListViewAdapter<T extends CommonListViewInterface> extend
     @Override
     public void onBindViewHolder(DetailsLv2ListViewAdapter.ViewHolder holder, int position) {
         holder.setData(mDataList.get(position));
-        int unselect = Color.parseColor("#ffffff");
-        int select = Color.parseColor("#1B92EE");
         int unselecttv = Color.parseColor("#000000");
         int selecttv = Color.parseColor("#ffffff");
         holder.setData(mDataList.get(position));
+        GradientDrawable drawable = (GradientDrawable)holder.nameText.getBackground();
+        holder.setData(mDataList.get(position));
         if (mDataList.get(position).isChecked()) {
-            holder.nameText.setBackground(x.app().getResources().getDrawable(R.drawable.btn_lv2_blue));
-            holder.nameText.setBackgroundColor(select);
+            drawable.setStroke(3, x.app().getResources().getColor(R.color.root_check));
+            drawable.setColor(x.app().getResources().getColor(R.color.root_check));
             holder.nameText.setTextColor(selecttv);
+            holder.arrow_img.setVisibility(View.VISIBLE);
         } else {
-            holder.nameText.setBackground(x.app().getResources().getDrawable(R.drawable.btn_lv2_item));
-            holder.nameText.setBackgroundColor(unselect);
+            drawable.setStroke(3, x.app().getResources().getColor(R.color.background));
+            drawable.setColor(x.app().getResources().getColor(R.color.background));
             holder.nameText.setTextColor(unselecttv);
+            holder.arrow_img.setVisibility(View.GONE);
         }
     }
 
@@ -137,10 +141,12 @@ public class DetailsLv2ListViewAdapter<T extends CommonListViewInterface> extend
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
         LinearLayout arrow_Rl;
+        ImageView arrow_img;
         public ViewHolder(View itemView) {
             super(itemView);
             nameText = (TextView) itemView.findViewById(R.id.text_name);
             arrow_Rl = (LinearLayout) itemView.findViewById(R.id.arrow_Rl);
+            arrow_img = (ImageView) itemView.findViewById(R.id.arrow_img);
         }
 
         public void setData(T title) {

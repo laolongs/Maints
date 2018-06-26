@@ -6,26 +6,18 @@
    >
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="@dimen/y5"
         />
     <RelativeLayout
         android:background="#fff"
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/expend"
-            android:layout_width="5dp"
-            android:layout_height="5dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:src="@mipmap/details_up"/>
-
         <LinearLayout
             android:id="@+id/parent_layout"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/y70"
+            android:background="@drawable/btn_compay"
             android:orientation="horizontal" >
             <TextView
                 android:id="@+id/parent_left_text"
@@ -33,9 +25,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:gravity="center_vertical"
-                android:paddingLeft="20dp"
+                android:paddingLeft="@dimen/x20"
                 android:textColor="@color/common_text_max_gray"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -48,8 +40,16 @@
                 android:layout_weight="2"
                 android:gravity="center"
                 android:textColor="@color/root_check"
-                android:textSize="18sp"/>
+                android:textSize="16sp"/>
         </LinearLayout>
+        <ImageView
+            android:id="@+id/expend"
+            android:layout_width="@dimen/x5"
+            android:layout_height="@dimen/y5"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/y16"
+            android:src="@mipmap/details_up"/>
     </RelativeLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -65,64 +65,66 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
         <LinearLayout
-            android:layout_marginBottom="25dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginBottom="@dimen/y25"
+            android:layout_marginTop="@dimen/y32"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="@dimen/y40">
             <LinearLayout
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/x20"
                 android:id="@+id/re_item_child_compile"
-                android:layout_width="119dp"
+                android:layout_width="@dimen/x119"
                 android:gravity="center"
                 android:background="@drawable/btn_confirm_normal"
-                android:layout_height="32dp">
+                android:layout_height="@dimen/y32">
                 <ImageView
-                    android:layout_width="17dp"
-                    android:layout_height="20dp" />
+                    android:layout_width="@dimen/x17"
+                    android:layout_height="@dimen/y20"
+                    android:src="@mipmap/img_editor"/>
                 <TextView
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginLeft="@dimen/x6"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:text="编辑"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/re_item_child_delete"
-                android:layout_marginLeft="16dp"
-                android:layout_width="119dp"
+                android:layout_marginLeft="@dimen/x16"
+                android:layout_width="@dimen/x119"
                 android:gravity="center"
                 android:background="@drawable/btn_delete_normal"
-                android:layout_height="32dp">
+                android:layout_height="@dimen/y32">
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/img_delete"/>
+                    android:layout_width="@dimen/x15"
+                    android:layout_height="@dimen/y20"
+                    android:src="@mipmap/img_deletes"/>
                 <TextView
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginLeft="@dimen/x6"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:text="删除"/>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/re_item_child_new"
-                android:layout_marginLeft="17dp"
-                android:layout_width="158dp"
+                android:layout_marginLeft="@dimen/x17"
+                android:layout_width="@dimen/x158"
                 android:gravity="center"
                 android:background="@drawable/btn_confirm_normal"
-                android:layout_height="32dp">
+                android:layout_height="@dimen/y32">
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="20dp" />
+                    android:layout_width="@dimen/x16"
+                    android:layout_height="@dimen/y20"
+                    android:src="@mipmap/img_new"/>
                 <TextView
-                    android:layout_marginLeft="6dp"
+                    android:layout_marginLeft="@dimen/x6"
                     android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:text="新建相同设备"/>
             </LinearLayout>
          </LinearLayout>

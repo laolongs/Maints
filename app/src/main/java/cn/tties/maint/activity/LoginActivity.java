@@ -40,7 +40,6 @@ import cn.tties.maint.widget.TabClass;
 @ContentView(R.layout.activity_login)
 public class LoginActivity extends BaseActivity {
 
-
     @ViewInject(R.id.edittext_username)
     private EditText mUserName;
 
@@ -55,7 +54,7 @@ public class LoginActivity extends BaseActivity {
         dialog = new CriProgressDialog(LoginActivity.this);
         UserInfoBean bean = MyApplication.getUserInfo();
         if (bean != null) {
-            mUserName.setText(bean.getStaffTel());
+            mUserName.setText(bean.getMaintStaffTel());
         }
     }
 
@@ -73,7 +72,7 @@ public class LoginActivity extends BaseActivity {
                 }
                 dialog.loadDialog("登录中..");
                 LoginParams params = new LoginParams();
-                params.setUserName(mUserName.getText().toString());
+                params.setMaintStaffTel(mUserName.getText().toString());
                 params.setPassWord(mPassword.getText().toString());
                 HttpClientSend.getInstance().send(params, new BaseStringCallback() {
                     @Override
@@ -88,11 +87,14 @@ public class LoginActivity extends BaseActivity {
                             LoginResult loginResult = JsonUtils.deserialize(ret.getResult(), LoginResult.class);
                             ACache.getInstance().put(Constants.CACHE_LOGIN_STATUS, true);
                             UserInfoBean bean = loginResult.getUserInfo();
-                            bean.setStaffName(mUserName.getText().toString());
+                            bean.setMaintStaffName(mUserName.getText().toString());
                             bean.setLoginPwd(mPassword.getText().toString());
                             ACache.getInstance().put(Constants.CACHE_USERINFO, loginResult.getUserInfo());
                             //查询用户菜单
-                            LoginActivity.this.getAllMbFunction(loginResult.getUserInfo().getStaffId());
+//                            LoginActivity.this.getAllMbFunction(loginResult.getUserInfo().getMaintStaffId());
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
                         } catch (Exception e) {
                             e.printStackTrace();
                             dialog.removeDialog();
@@ -115,43 +117,43 @@ public class LoginActivity extends BaseActivity {
      * 根据员工ID查询员工所有的权限.
      * @param staffId
      */
-    private void getAllMbFunction(int staffId) {
-        QueryAllMbFunctionParams paramsAuth = new QueryAllMbFunctionParams();
-        paramsAuth.setStaffId(staffId);
-        HttpClientSend.getInstance().send(paramsAuth, new BaseStringCallback() {
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
-                    if(ret.getErrorCode()!=0){
-                        dialog.removeDialog();
-                        Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    List<String> userAuth = new ArrayList<>();
-                    List<MbFunctionResult> list = JsonUtils.deserialize(ret.getResult(), new TypeToken<List<MbFunctionResult>>() {}.getType());
-                    for (MbFunctionResult queryAllMbFunctionResult:list ) {
-                        for (TabClass tabClass : Constants.menuList) {
-                            if (tabClass.getAlias().equals(queryAllMbFunctionResult.getAlias())) {
-                                userAuth.add(queryAllMbFunctionResult.getAlias());
-                            }
-                        }
-                    }
-                    UserInfoBean userInfoBean = MyApplication.getUserInfo();
-                    userInfoBean.setMenuList(userAuth);
-                    ACache.getInstance().put(Constants.CACHE_USERINFO, userInfoBean);
-
-                    dialog.removeDialog();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    dialog.removeDialog();
-                    Toast.makeText(x.app(), "连接失败", Toast.LENGTH_SHORT).show();
-                } finally {
-                }
-            }
-        });
-    }
+//    private void getAllMbFunction(int staffId) {
+//        QueryAllMbFunctionParams paramsAuth = new QueryAllMbFunctionParams();
+//        paramsAuth.setStaffId(staffId);
+//        HttpClientSend.getInstance().send(paramsAuth, new BaseStringCallback() {
+//            @Override
+//            public void onSuccess(String result) {
+//                try {
+//                    BaseResult ret = JsonUtils.deserialize(result, BaseResult.class);
+//                    if(ret.getErrorCode()!=0){
+//                        dialog.removeDialog();
+//                        Toast.makeText(x.app(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    List<String> userAuth = new ArrayList<>();
+//                    List<MbFunctionResult> list = JsonUtils.deserialize(ret.getResult(), new TypeToken<List<MbFunctionResult>>() {}.getType());
+//                    for (MbFunctionResult queryAllMbFunctionResult:list ) {
+//                        for (TabClass tabClass : Constants.menuList) {
+//                            if (tabClass.getAlias().equals(queryAllMbFunctionResult.getAlias())) {
+//                                userAuth.add(queryAllMbFunctionResult.getAlias());
+//                            }
+//                        }
+//                    }
+//                    UserInfoBean userInfoBean = MyApplication.getUserInfo();
+////                    userInfoBean.setMenuList(userAuth);
+//                    ACache.getInstance().put(Constants.CACHE_USERINFO, userInfoBean);
+//
+//                    dialog.removeDialog();
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    dialog.removeDialog();
+//                    Toast.makeText(x.app(), "连接失败", Toast.LENGTH_SHORT).show();
+//                } finally {
+//                }
+//            }
+//        });
+//    }
 }

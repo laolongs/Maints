@@ -2,17 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_table"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/x115"
     android:orientation="vertical">
     <LinearLayout
         android:background="@color/white"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/common_bg"/>
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="80dp"
@@ -20,117 +16,125 @@
             android:orientation="horizontal">
             <LinearLayout
                 android:orientation="horizontal"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="1.5">
+                android:layout_weight="0.5"
+                android:layout_height="80dp">
                 <ImageView
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
+                    android:layout_marginLeft="@dimen/x17"
+                    android:layout_width="@dimen/x8"
+                    android:layout_height="@dimen/y8"
                     android:src="@mipmap/workorder_dot"/>
                 <TextView
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="@dimen/x10"
                     android:id="@+id/text_work_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="工单类型"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textColor="@color/listview_check" />
             </LinearLayout>
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="2">
-                <TextView
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/text_company_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="公司名称"
-                    android:textColor="@color/gray"/>
-                <TextView
-                    android:layout_marginTop="2dp"
-                    android:id="@+id/text_company_addr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="公司地址"
-                    android:textSize="10sp"
-                     />
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/text_start_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="开始日期"
-                    android:textSize="10sp" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp">
-                <TextView
-                    android:id="@+id/text_question"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="处理问题"
-                    android:textColor="@color/listview_check"
-                    android:textSize="10sp" />
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/text_question_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="123"
-                    android:textColor="@color/gray" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginLeft="20dp"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp">
-                <TextView
-                    android:id="@+id/text_tour"
-                    android:layout_marginTop="5dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="累计巡视"
-                    android:textColor="@color/listview_check"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/text_tour_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="123"
-                    android:textColor="@color/gray" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/x41"
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_weight="1">
                 <TextView
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="@dimen/y12"
+                    android:id="@+id/text_company_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="公司名称"
+                    android:textSize="20sp"
+                    android:textColor="#424242"/>
+                <TextView
+                    android:layout_marginTop="@dimen/y6"
+                    android:id="@+id/text_company_addr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="公司地址"
+                    android:textSize="12sp"
+                    android:textColor="@color/common_text_max_gray"
+                     />
+                <TextView
+                    android:id="@+id/text_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开始日期"
+                    android:textColor="@color/common_text_max_gray"
+                    android:textSize="12sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/text_question"
+                    android:layout_marginTop="@dimen/y18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="处理问题"
+                    android:textColor="@color/root_check"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_marginTop="@dimen/y6"
+                    android:id="@+id/text_question_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="26sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/text_tour"
+                    android:layout_marginTop="@dimen/y18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="累计巡视"
+                    android:textColor="@color/root_check"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_marginTop="@dimen/x6"
+                    android:layout_gravity="center"
+                    android:id="@+id/text_tour_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="26sp"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="@dimen/x37"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_marginTop="@dimen/y26"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="技术联系人"
-                    android:textColor="@color/listview_check"
-                    android:textSize="10sp" />
+                    android:textColor="@color/root_check"
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/y7"
                     android:id="@+id/text_tech_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:text="技术联系人"
+                    android:textSize="13sp"
                     android:textColor="@color/black"
                     />
                 <TextView
@@ -140,35 +144,38 @@
                     android:gravity="left"
                     android:text="联系电话"
                     android:textColor="@color/black"
-                    android:textSize="10sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5"
                 android:gravity="center_horizontal"
+                android:layout_marginRight="@dimen/x20"
                 android:orientation="vertical">
                 <Button
                     android:id="@+id/btn_success"
-                    android:layout_height="30dp"
-                    android:layout_width="wrap_content"
-                    android:background="@drawable/selector_btn_confirm_click"
+                    android:layout_height="@dimen/y40"
+                    android:layout_width="@dimen/y108"
+                    android:background="@drawable/btn_confirm_normal"
                     android:textSize="14sp"
-                    android:text="继 续"
+                    android:text="继续"
                     android:textColor="@color/white"/>
                 <Button
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="@dimen/y5"
                     android:id="@+id/btn_save"
-                    android:layout_height="30dp"
-                    android:layout_width="wrap_content"
-                    android:background="@drawable/selector_btn_confirm_click"
+                    android:layout_height="@dimen/y40"
+                    android:layout_width="@dimen/y108"
+                    android:background="@drawable/btn_confirm_normal"
                     android:textSize="14sp"
-                    android:text="创 建"
+                    android:text="创建"
                     android:textColor="@color/white"/>
 
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y5"
+        android:background="#E9ECF2"/>
 
 </LinearLayout>

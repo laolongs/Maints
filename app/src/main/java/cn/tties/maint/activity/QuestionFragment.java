@@ -251,7 +251,7 @@ public class QuestionFragment extends BaseFragment implements RadioGroup.OnCheck
         companyList = new ArrayList<>();
         companyNameList = new ArrayList<>();
         CompanyParams params = new CompanyParams();
-        params.setMaintStaffId(MyApplication.getUserInfo().getStaffId());
+        params.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
             @Override
             public void onSuccess(String result) {
@@ -271,6 +271,7 @@ public class QuestionFragment extends BaseFragment implements RadioGroup.OnCheck
     public void getQuestionList() {
         QueryNewQuertionParams queryQuertionParams = new QueryNewQuertionParams();
         queryQuertionParams.setStatus(searchEntity.getStatus());
+        queryQuertionParams.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
         queryQuertionParams.setCompanyIds(searchEntity.getCompanyIds());
         queryQuertionParams.setCreateTimeStart(searchEntity.getCreateTimeStart());
         queryQuertionParams.setCreateTimeEnd(searchEntity.getCreateTimeEnd());

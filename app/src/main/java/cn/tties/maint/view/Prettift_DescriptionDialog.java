@@ -101,7 +101,7 @@ public class Prettift_DescriptionDialog {
                 params.setCompanyId(companyId);
                 params.setWorkOrderId(workOrderId);
                 params.setDescriptionType(description_type);
-                params.setMaintStaffId(MyApplication.getUserInfo().getStaffId());
+                params.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
                 params.setContent(title);
                 Log.i(TAG, "onClick: "+companyId+workOrderId+description_type);
                 List<File> fileList = new ArrayList<>();

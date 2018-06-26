@@ -1,28 +1,38 @@
 <resources>
 
     <style name="common_linewidth">
-        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_width">@dimen/x10</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/white</item>
     </style>
     <style name="common_linehight">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_height">@dimen/y10</item>
         <item name="android:background">@drawable/btn_line_up</item>
+    </style>
+    <style name="common_white_linewidth">
+        <item name="android:layout_width">@dimen/x3</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="common_white_linehight">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/y3</item>
+        <item name="android:background">@color/white</item>
     </style>
     <style name="common_linehightdown">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_height">@dimen/y10</item>
         <item name="android:background">@drawable/btn_line_down</item>
     </style>
     <style name="common_linewidths">
-        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_width">@dimen/x10</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/common_bg</item>
     </style>
     <style name="common_linehights">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_height">@dimen/y10</item>
         <item name="android:background">@color/common_bg</item>
     </style>
 
@@ -276,7 +286,40 @@
         <item name="android:minHeight">40dp</item>
         <item name="android:theme">@style/toolbar_blue_theme</item>
     </style>
+    <style name="ammeter_editor">
+        <item name="android:paddingLeft">@dimen/x10</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/edittext_radius</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="ammeter_text">
+        <item name="android:paddingLeft">@dimen/x10</item>
+        <item name="android:layout_width">@dimen/x160</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/common_text_min_gray</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:maxEms">7</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    android:maxEms="7"
+    android:singleLine="true"
+    android:ellipsize="end"
+    <style name="ammeter_text_set">
+        <item name="android:paddingLeft">@dimen/x10</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="ammeter_spinner">
+        <item name="android:paddingLeft">@dimen/x10</item>
+        <item name="android:layout_width">@dimen/x150</item>
+        <item name="android:layout_height">match_parent</item>
 
+    </style>
     <style name="cut_off_line_1dp">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">1dp</item>

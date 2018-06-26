@@ -94,8 +94,8 @@ public class ImportConfigurationActivity extends BaseFragmentActivity implements
     private void getCompanyList() {
         companyList = new ArrayList<>();
         CompanyParams params = new CompanyParams();
-        params.setMaintStaffId(MyApplication.getUserInfo().getStaffId());
-        Log.i(TAG, "getCompanyList: "+MyApplication.getUserInfo().getStaffId());
+        params.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
+        Log.i(TAG, "getCompanyList: "+MyApplication.getUserInfo().getMaintStaffId());
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
             @Override
             public void onSuccess(String result) {

@@ -42,6 +42,7 @@ import cn.tties.maint.adapter.EquiRecyclerAdapter;
 import cn.tties.maint.adapter.EquipmentAddressListViewAdapter;
 import cn.tties.maint.adapter.EquipmentLayoutAdapter;
 import cn.tties.maint.adapter.EquipmentRootListViewAdapter;
+import cn.tties.maint.adapter.EquipmentTextLayoutAdapter;
 import cn.tties.maint.adapter.MyEquipmentCheckEleAdapter;
 import cn.tties.maint.bean.CommonListViewInterface;
 import cn.tties.maint.bean.EquipmentLayoutBean;
@@ -118,7 +119,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     protected SwipeItemClickListener lv2Listener;
 
     //加载节点布局
-    private EquipmentLayoutAdapter detailAdapter;
+    private EquipmentTextLayoutAdapter detailAdapter;
     private MyPopupWindow popupWindow;
     private CompanyEquipmentResult curPidResult;
     private boolean cabinet=false;
@@ -130,6 +131,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     int unselect = Color.parseColor("#BDC8D8");
     int select = Color.parseColor("#ffffff");
     int textselect = Color.parseColor("#1B92EE");
+    int textunselect = Color.parseColor("#9CAAB9");
     protected CommonSwipListViewAdapter lv2eleAdapter1;
     protected SwipeItemClickListener lv2eleListener;
     private CreateEleRoomDialog createEleRoomDialog;
@@ -259,7 +261,6 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 break;
             //电房保存
             case R.id.btn_ele_save:
-                holder.isEditor=false;
                 saveEle();
                 break;
             //电房编辑
@@ -369,7 +370,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                         rootAdapter.setChecked(selBean);
                         rootAdapter.notifyDataSetChanged();
                         curHolder.equipment_eleLL.setBackgroundColor(unselect);
-                        curHolder.equipment_eleRoom.setTextColor(select);
+                        curHolder.equipment_eleRoom.setTextColor(textunselect);
                         rootListViewClick(selBean);
 
                     }else{
@@ -386,7 +387,7 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
     }
     //二级节点 或三级节点展示
     protected void initLV3LeafListView() {
-        detailAdapter=new EquipmentLayoutAdapter(getActivity(),new ArrayList<EquipmentLayoutBean>());
+        detailAdapter=new EquipmentTextLayoutAdapter(getActivity(),new ArrayList<EquipmentLayoutBean>());
         curHolder.lv3_leaf_list.setAdapter(detailAdapter);
     }
     //二级点击请求三级数据
@@ -976,6 +977,11 @@ public class EquipmentCheckFragment extends BaseFragment implements View.OnClick
                 getEleAccountComEqu();
                 getEleRoomComEqu();
                 showHoulder(2);
+                holder.isEditor=false;
+                EventBusBean eventBusBean=new EventBusBean();
+                eventBusBean.setKind(EventKind.EVENT_COMPANY_ELEISEDITOR);
+                eventBusBean.setSuccess(holder.isEditor);
+                EventBus.getDefault().post(eventBusBean);
             }
         });
     }

@@ -107,10 +107,10 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
         new VersionSend().send(new VersionParams(), false);
         //获取公司信息
         CompanyParams params = new CompanyParams();
-        params.setMaintStaffId(MyApplication.getUserInfo().getStaffId());
+        params.setMaintStaffId(MyApplication.getUserInfo().getMaintStaffId());
         new CompanyListSend().send(params);
         ACache.getInstance().put(Constants.CACHE_COMPANYLIST, new ArrayList<>());
-
+        initfindId();
         //添加对应得fragment
     }
 
@@ -191,13 +191,18 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                         //如果切换公司
                         if (curCompany != list.get(companyId)) {
                             curCompany = list.get(companyId);
-                            eleid = curCompany.getEleAccountList().get(0).getEleAccountId();
-                            eleNo = curCompany.getEleAccountList().get(0).getEleNo();
-                            company_tv.setText(curCompany.getCompanyShortName());
-                            ele_tv.setText(eleNo);
-                            //公司ID
+                            if(list.get(0).getEleAccountList()!=null){
+                                eleid = curCompany.getEleAccountList().get(0).getEleAccountId();
+                                eleNo = curCompany.getEleAccountList().get(0).getEleNo();
+                                company_tv.setText(curCompany.getCompanyShortName());
+                                ele_tv.setText(eleNo);
+                                //公司ID
 //                            setCompanyId(curCompany);
-                            setEleId(eleid, eleNo,curCompany);
+                                setEleId(eleid, eleNo,curCompany);
+                            }else{
+                                ToastUtil.showShort(MainActivity.this,"当前无户号");
+                            }
+
                         }
                         comapnyDialog.dismiss();
                     }
@@ -219,14 +224,19 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
                     @Override
                     public void onClick(View view) {
                         int companyId = eleDialog.radioCompany.getCheckedRadioButtonId();
-                        eleid=curCompany.getEleAccountList().get(companyId).getEleAccountId();
-                        eleNo=curCompany.getEleAccountList().get(companyId).getEleNo();
-                        ele_tv.setText(eleNo);
+                        if(curCompany.getEleAccountList()!=null){
+                            eleid=curCompany.getEleAccountList().get(companyId).getEleAccountId();
+                            eleNo=curCompany.getEleAccountList().get(companyId).getEleNo();
+                            ele_tv.setText(eleNo);
 //                        if(curCompany.getEleAccountList()!=curCompany.getEleAccountList().get(companyId)){
 //                            curCompany.getEleAccountList();
 //                        }
-                        setEleId(eleid, eleNo,curCompany);
-                        eleDialog.dismiss();
+                            setEleId(eleid, eleNo,curCompany);
+                            eleDialog.dismiss();
+                        }else {
+                            ToastUtil.showShort(MainActivity.this,"当前无户号");
+                        }
+
                     }
                 });
                 eleDialog.show();
@@ -299,19 +309,24 @@ public class MainActivity extends BaseFragmentActivity implements View.OnClickLi
     public void setCompanyList(){
         list = ACache.getInstance().getAsObject(Constants.CACHE_COMPANYLIST);
         company_tv.setText(list.get(0).getCompanyShortName());
-        ele_tv.setText(list.get(0).getEleAccountList().get(0).getEleNo());
-        Integer companyId = list.get(0).getCompanyId();
-        curCompany=list.get(0);
-        for (int i = 0; i < list.size(); i++) {
-            if(companyId==list.get(i).getCompanyId()){
-                eleid = list.get(i).getEleAccountList().get(0).getEleAccountId();
-                eleNo = list.get(i).getEleAccountList().get(0).getEleNo();
+        if(list.get(0).getEleAccountList()!=null){
+            ele_tv.setText(list.get(0).getEleAccountList().get(0).getEleNo());
+            Integer companyId = list.get(0).getCompanyId();
+            curCompany=list.get(0);
+            for (int i = 0; i < list.size(); i++) {
+                if(companyId==list.get(i).getCompanyId()){
+                    eleid = list.get(i).getEleAccountList().get(0).getEleAccountId();
+                    eleNo = list.get(i).getEleAccountList().get(0).getEleNo();
+                }
             }
-        }
 
 //        setCompanyId(curCompany);
-        setEleId(eleid, eleNo,curCompany);
-        initfindId();
+            setEleId(eleid, eleNo,curCompany);
+        }else{
+            ToastUtil.showShort(MainActivity.this,"当前无户号");
+        }
+
+
     }
 //    public void setCompanyId(CompanyResult curCompany){
 //        EventBusBean busBean = new EventBusBean();

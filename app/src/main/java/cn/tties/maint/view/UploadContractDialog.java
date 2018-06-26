@@ -63,7 +63,7 @@ public class UploadContractDialog extends BaseCustomDialog {
         spinnerCompany = findViewById(R.id.spinner_company);
         comapnyList = new ArrayList<>();
         CompanyParams params = new CompanyParams();
-        params.setCreatorId(MyApplication.getUserInfo().getStaffId());
+        params.setCreatorId(MyApplication.getUserInfo().getMaintStaffId());
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
             @Override
             public void onSuccess(String result) {

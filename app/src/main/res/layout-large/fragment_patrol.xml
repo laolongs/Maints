@@ -5,6 +5,7 @@
     xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/x3"
     android:background="@color/common_bg"
     android:orientation="vertical">
     <View
@@ -26,9 +27,10 @@
             android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/layout_lv1_all"
-                android:layout_width="150dp"
+                android:layout_width="@dimen/x200"
                 android:layout_height="match_parent">
                 <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+                    android:layout_marginTop="@dimen/x22"
                     android:id="@+id/listview_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -36,7 +38,7 @@
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/layout_lv1_hite"
-                android:layout_width="150dp"
+                android:layout_width="@dimen/x200"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -52,9 +54,10 @@
                 style="@style/common_linewidth"/>
             <LinearLayout
                 android:id="@+id/layout_lv2_all"
-                android:layout_width="150dp"
+                android:layout_width="@dimen/x200"
                 android:layout_height="match_parent">
                 <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+                    android:layout_marginTop="@dimen/x22"
                     android:id="@+id/listview_lv2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -62,7 +65,7 @@
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/layout_lv2_hite"
-                android:layout_width="150dp"
+                android:layout_width="@dimen/x200"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -77,17 +80,19 @@
             <View
                 style="@style/common_linewidth"/>
             <LinearLayout
+                android:paddingLeft="@dimen/x20"
+                android:paddingRight="@dimen/x25"
                 android:id="@+id/layout_lv3_all"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/x25"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="90dp">
+                    android:layout_height="wrap_content">
                     <TextView
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
                         android:id="@+id/text_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -96,26 +101,28 @@
                         android:textColor="@color/black" />
                     <LinearLayout
                         android:id="@+id/patrol_addquestion"
-                        android:gravity="center_vertical"
+                        android:gravity="right"
                         android:orientation="horizontal"
                         android:layout_alignParentRight="true"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
                         <TextView
+                            android:layout_gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="新建问题"
                             android:textColor="@color/listview_check"
-                            android:textSize="18sp"/>
+                            android:textSize="14sp"/>
                         <ImageView
-                            android:layout_marginLeft="20dp"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:layout_marginRight="@dimen/x10"
+                            android:layout_width="@dimen/x49"
+                            android:layout_height="@dimen/x49"
                             android:src="@mipmap/new_equipment"/>
                     </LinearLayout>
                 </RelativeLayout>
                 <LinearLayout
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="@dimen/x22"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_listview_gray"
@@ -135,7 +142,9 @@
                         <ListView
                             android:id="@+id/list_patrol_item"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:dividerHeight="2dp"
+                            android:divider="@color/common_bg"/>
                     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
                 </LinearLayout>
@@ -151,7 +160,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="35sp"
+                    android:textSize="20sp"
                     android:text="当前没有进行中的巡视任务"
                     />
             </LinearLayout>
@@ -161,5 +170,5 @@
     </LinearLayout>
 
     <View
-        style="@style/common_linehight"/>
+        style="@style/common_linehightdown"/>
 </LinearLayout>

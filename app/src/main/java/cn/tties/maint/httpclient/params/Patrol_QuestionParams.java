@@ -12,7 +12,8 @@ public class Patrol_QuestionParams extends ClinetRequestParams {
     public static final String INTERFACE = "insertPatrolRecoreAndQuestion.do";
 
     private Integer eleAccountId;
-    private boolean hasquestion;
+    private Integer companyId;
+    private Boolean hasquestion;
     private Integer patrolItemId;
     private Integer companyEquipmentId;
     private String value1;
@@ -32,20 +33,20 @@ public class Patrol_QuestionParams extends ClinetRequestParams {
         this.questionFaultType = questionFaultType;
     }
 
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
+    }
+
     public Integer getEleAccountId() {
         return eleAccountId;
     }
 
     public void setEleAccountId(Integer eleAccountId) {
         this.eleAccountId = eleAccountId;
-    }
-
-    public boolean isHasquestion() {
-        return hasquestion;
-    }
-
-    public void setHasquestion(boolean hasquestion) {
-        this.hasquestion = hasquestion;
     }
 
     public Integer getPatrolItemId() {
@@ -119,4 +120,14 @@ public class Patrol_QuestionParams extends ClinetRequestParams {
     public void setContent(String content) {
         this.content = content;
     }
+
+
+    public Boolean getHasquestion() {
+        return hasquestion;
+    }
+
+    public void setHasquestion(Boolean hasquestion) {
+        this.hasquestion = hasquestion;
+    }
+
 }

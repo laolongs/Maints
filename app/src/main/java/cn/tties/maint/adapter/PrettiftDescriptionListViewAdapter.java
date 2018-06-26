@@ -65,12 +65,12 @@ public class PrettiftDescriptionListViewAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_description, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_patrol_description, parent, false);
             convertView.setTag(new ViewHolder(convertView));
         }
         ViewHolder holder = (ViewHolder) convertView.getTag();
-
         holder.textTitle.setText(resultBeanAll.getContent());
+        holder.textTime.setText(resultBeanAll.getCreateTime());
         if (resultBeanAll.getListImg() != null) {
             ImageAdapter adapter = new ImageAdapter(mFragment.getContext(), resultBeanAll.getListImg());
             PrettiftDescriptionListViewAdapter.OnRecyclerViewItemClickListener clickListener = new PrettiftDescriptionListViewAdapter.OnRecyclerViewItemClickListener() {
@@ -106,11 +106,13 @@ public class PrettiftDescriptionListViewAdapter extends BaseAdapter {
     class ViewHolder {
         ViewHolder(View view) {
             textTitle = (TextView) view.findViewById(R.id.text_title);
+            textTime = (TextView) view.findViewById(R.id.text_time);
             recyclerViewDescription = (RecyclerView) view.findViewById(R.id.recyclerView);
         }
 
         public RecyclerView recyclerViewDescription;
         public TextView textTitle;
+        public TextView textTime;
     }
 
     public interface OnRecyclerViewItemClickListener {

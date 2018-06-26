@@ -12,21 +12,35 @@ import java.lang.reflect.Method;
 import cn.tties.maint.common.Constants;
 import cn.tties.maint.util.StringUtil;
 
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
+
 public class ClinetRequestParams implements Serializable {
 
-    private String userName;
+//    private String userName;
+    private String maintStaffTel;
 
     private String passWord;
 
-    public String getUserName() {
-        if (StringUtil.isEmpty(userName)) {
+//    public String getUserName() {
+//        if (StringUtil.isEmpty(userName)) {
+////            userName = ACache.getInstance().getAsString(Constants.CACHE_LOGIN_USERNAME);
+//        }
+//        return userName;
+//    }
+//
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
+
+    public String getMaintStaffTel() {
+        if (StringUtil.isEmpty(maintStaffTel)) {
 //            userName = ACache.getInstance().getAsString(Constants.CACHE_LOGIN_USERNAME);
         }
-        return userName;
+        return maintStaffTel;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setMaintStaffTel(String maintStaffTel) {
+        this.maintStaffTel = maintStaffTel;
     }
 
     public String getPassWord() {
@@ -59,15 +73,16 @@ public class ClinetRequestParams implements Serializable {
                     }
                 }
             }
-            Method u = this.getClass().getMethod("getUserName");
+            Method u = this.getClass().getMethod("getMaintStaffTel");
             Object obju = u.invoke(this);
-            param.addParameter("userName", obju);
+            param.addParameter("maintStaffTel", obju);
             Method p = this.getClass().getMethod("getPassWord");
             Object objp = p.invoke(this);
             param.addParameter("passWord", objp);
             Log.d("发送请求", param.toString());
         } catch (Exception e) {
             e.printStackTrace();
+            Log.i(this.getClass().getName(), e.getMessage());
         }
         param.setConnectTimeout(60000*2);
         param.setCacheMaxAge(60000*2);

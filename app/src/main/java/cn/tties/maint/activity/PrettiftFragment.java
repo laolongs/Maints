@@ -3,6 +3,8 @@ package cn.tties.maint.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -78,9 +80,8 @@ public class PrettiftFragment extends BaseFragment implements View.OnClickListen
     private PrettiftAndDustAdapter andDustAdapter;
     int workOrderId;
     private Prettift_DescriptionDialog dialog;
-    private int bgcolor;
-    private int bgbefore;
-    private int bglater;
+    private int textcolor;
+    private int textcolors;
     boolean isbefore;
     boolean islater;
     int beforeNum=1;
@@ -122,9 +123,8 @@ public class PrettiftFragment extends BaseFragment implements View.OnClickListen
         });
     }
     private void initView() {
-        bgcolor = Color.parseColor("#000000");
-        bgbefore = Color.parseColor("#4DDBCF");
-        bglater = Color.parseColor("#1B92EE");
+        textcolor = Color.parseColor("#888888");
+        textcolors = Color.parseColor("#1B92EE");
         andDustAdapter = new PrettiftAndDustAdapter();
         list.setAdapter(andDustAdapter);
         before.setOnClickListener(this);
@@ -194,6 +194,8 @@ public class PrettiftFragment extends BaseFragment implements View.OnClickListen
         });
     }
     public void getPrettiftStatusList(){
+       final GradientDrawable backgroundbefore = (GradientDrawable)before.getBackground();
+       final GradientDrawable backgroundlater = (GradientDrawable)later.getBackground();
         Prettift_StatusAndDetilsParams params=new Prettift_StatusAndDetilsParams();
         params.setPrettifyDustType(PrettiftNum);
         params.setWorkOrderId(workOrderId);
@@ -210,20 +212,24 @@ public class PrettiftFragment extends BaseFragment implements View.OnClickListen
                 if(ret.getResult().size()<=0||ret.getResult()==null){
                     isbefore=false;
                     islater=false;
-                    before.setBackgroundColor(bgbefore);
+//                    before.setBackgroundColor(bgbefore);
                     text_before.setText("处理前");
-                    later.setBackgroundColor(bglater);
+//                    later.setBackgroundColor(bglater);
                     text_later.setText("处理后");
                 }else{//查看详情
                     for (PrettiftStatusAndDetailsResult.ResultBean resultBean:ret.getResult()) {
                         if(resultBean.getDescriptionType()==1){//处理前效果
-                            before.setBackgroundColor(bgcolor);
+                            backgroundbefore.setStroke(2,x.app().getResources().getColor(R.color.common_text_min_gray));
+                            backgroundbefore.setColor(x.app().getResources().getColor(R.color.common_bg));
                             text_before.setText("处理前效果");
+                            text_before.setTextColor(textcolor);
                             isbefore=true;
                             resultBeanbefor=resultBean;
                         }
                         if(resultBean.getDescriptionType()==2){//处理后效果
-                            later.setBackgroundColor(bgcolor);
+                            backgroundlater.setStroke(2,x.app().getResources().getColor(R.color.root_check));
+                            backgroundlater.setColor(x.app().getResources().getColor(R.color.common_bg));
+                            later.setBackgroundColor(textcolors);
                             text_later.setText("处理后效果");
                             islater=true;
                             resultBeanlater=resultBean;

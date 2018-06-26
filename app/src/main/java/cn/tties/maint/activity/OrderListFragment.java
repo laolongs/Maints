@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -157,14 +159,11 @@ public class OrderListFragment extends BaseFragment implements RadioGroup.OnChec
     private void initOrderTypeSearchView() {
         List<String> orderKinds = new ArrayList<>();
         orderKinds.add("全部");
-        Integer roleType = MyApplication.getUserInfo().getRoleType().getValue();
-        if(roleType == RoleType.MAINT.getValue()){
-            orderKinds.add(WorkType.ADORN_AMMETER.getInfo());
-            orderKinds.add(WorkType.PATROL.getInfo());
-            orderKinds.add(WorkType.REMOVE_FAULT.getInfo());
-            orderKinds.add(WorkType.PRETTIFT.getInfo());
-            orderKinds.add(WorkType.REMOVE_DUST.getInfo());
-        }
+        orderKinds.add(WorkType.ADORN_AMMETER.getInfo());
+        orderKinds.add(WorkType.PATROL.getInfo());
+        orderKinds.add(WorkType.REMOVE_FAULT.getInfo());
+        orderKinds.add(WorkType.PRETTIFT.getInfo());
+        orderKinds.add(WorkType.REMOVE_DUST.getInfo());
         orderTypeAdapter = new ArrayAdapter<String>(x.app(), R.layout.spinner_text, orderKinds);
         spinnerKind.setAdapter(orderTypeAdapter);
         spinnerKind.setOnItemSelectedListener(
@@ -193,7 +192,7 @@ public class OrderListFragment extends BaseFragment implements RadioGroup.OnChec
 
     private void initSearchEntity() {
         searchEntity = new OrderResult();
-        searchEntity.setStaffId(MyApplication.getUserInfo().getStaffId());
+        searchEntity.setStaffId(MyApplication.getUserInfo().getMaintStaffId());
         searchEntity.setStatus(WorkStatusType.UNSTART.getValue());
     }
 
@@ -202,14 +201,14 @@ public class OrderListFragment extends BaseFragment implements RadioGroup.OnChec
      */
     private void queryWorkOrderList() {
         SelectOrderParams selectOrderParams = new SelectOrderParams();
-        selectOrderParams.setStaffId(MyApplication.getUserInfo().getStaffId().intValue());
+        selectOrderParams.setStaffId(MyApplication.getUserInfo().getMaintStaffId());
         if (null != searchEntity.getStatus()) {
             selectOrderParams.setStatus(searchEntity.getStatus());
         }
         if (null != searchEntity.getWorkType()) {
             selectOrderParams.setWorkType(searchEntity.getWorkType());
         }
-        Log.i(TAG, "queryWorkOrderList111: "+MyApplication.getUserInfo().getStaffId().intValue());
+        Log.i(TAG, "queryWorkOrderList111: "+MyApplication.getUserInfo().getMaintStaffId());
         Log.i(TAG, "queryWorkOrderList222: "+searchEntity.getStatus());
         Log.i(TAG, "queryWorkOrderList333: "+searchEntity.getWorkType());
         HttpClientSend.getInstance().send(selectOrderParams, new BaseStringCallback() {
@@ -253,6 +252,8 @@ public class OrderListFragment extends BaseFragment implements RadioGroup.OnChec
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final OrderResult orderEntity = (OrderResult) this.getItem(position);
+            int unselecttv = Color.parseColor("#888888");
+            int selecttv = Color.parseColor("#ffffff");
             convertView = getConvertView(convertView);
             ViewHolder viewHolder = (ViewHolder) convertView.getTag();
             viewHolder.textWorkType.setText(orderEntity.getWorkTypeType().getInfo());
@@ -262,21 +263,38 @@ public class OrderListFragment extends BaseFragment implements RadioGroup.OnChec
             //技术人员名字  运维人员
             viewHolder.textTechName.setText(orderEntity.getCompany().getTechName());
             viewHolder.textTechTel.setText(orderEntity.getCompany().getTechTel());
-            viewHolder.textQuestionCount.setText(orderEntity.getInTime().toString());
-            viewHolder.textTourCount.setText(orderEntity.getXunShiCount().toString());
+            if(orderEntity.getWorkTypeType()==WorkType.PATROL){
+                viewHolder.textQuestionCount.setText(orderEntity.getInTime().toString()+"/"+orderEntity.getCompany().getMonthlyTourNumber()+"次");
+            }else{
+                viewHolder.textQuestionCount.setText(orderEntity.getInTime().toString()+"次");
+            }
+            viewHolder.textTourCount.setText(orderEntity.getXunShiCount().toString()+"次");
+            //完成按钮附bg操作
+            GradientDrawable background =(GradientDrawable)viewHolder.btnSave.getBackground();
             if (orderEntity.getStatusType() == WorkStatusType.UNSTART) {
                 // XXX：特殊处理
                 viewHolder.btnSave.setText(WorkType.getTpye(orderEntity.getWorkType()).getOpr());
                 viewHolder.btnSave.setVisibility(View.VISIBLE);
                 viewHolder.btnSuccess.setVisibility(View.GONE);
+                background.setStroke(2, x.app().getResources().getColor(R.color.root_check));
+                background.setColor(x.app().getResources().getColor(R.color.root_check));
+                viewHolder.btnSave.setTextColor(selecttv);
             } else if (orderEntity.getStatusType() == WorkStatusType.STARTING) {
                 viewHolder.btnSuccess.setVisibility(View.VISIBLE);
                 viewHolder.btnSuccess.setText(WorkType.getTpye(orderEntity.getWorkType()).getGoon());
-                viewHolder.btnSave.setText("已完成");
+                viewHolder.btnSave.setText("完成");
                 viewHolder.btnSave.setVisibility(View.VISIBLE);
+                background.setStroke(2, x.app().getResources().getColor(R.color.root_check));
+                background.setColor(x.app().getResources().getColor(R.color.root_check));
+                viewHolder.btnSave.setTextColor(selecttv);
             } else {
                 viewHolder.btnSuccess.setVisibility(View.GONE);
-                viewHolder.btnSave.setVisibility(View.INVISIBLE);
+                viewHolder.btnSave.setVisibility(View.VISIBLE);
+                background.setStroke(2, x.app().getResources().getColor(R.color.common_text_min_gray));
+                background.setColor(x.app().getResources().getColor(R.color.background));
+                viewHolder.btnSave.setText("已完成");
+                viewHolder.btnSave.setTextColor(unselecttv);
+
             }
             if(orderEntity.getWorkTypeType()==WorkType.ADORN_AMMETER){//电表装置
                 orderWorkName="电表装置";

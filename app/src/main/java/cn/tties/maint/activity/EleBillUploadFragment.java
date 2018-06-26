@@ -107,7 +107,7 @@ public class EleBillUploadFragment extends BaseFragment {
     private void initCompanyList() {
         CompanyParams params = new CompanyParams();
         //登录用户ID
-        params.setCreatorId(MyApplication.getUserInfo().getStaffId());
+        params.setCreatorId(MyApplication.getUserInfo().getMaintStaffId());
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
             @Override
             public void onSuccess(String result) {

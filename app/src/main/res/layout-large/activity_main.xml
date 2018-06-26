@@ -6,78 +6,84 @@
     <LinearLayout
         android:background="@color/root_check"
         android:orientation="vertical"
-        android:layout_width="160dp"
+        android:layout_width="@dimen/x160"
         android:layout_height="match_parent">
         <ImageView
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:paddingLeft="@dimen/x10"
+            android:paddingRight="@dimen/x10"
             android:layout_width="match_parent"
-            android:layout_height="88dp"
+            android:layout_height="@dimen/y88"
             android:src="@mipmap/logo"/>
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
+            android:layout_height="@dimen/y2"
+            android:layout_marginLeft="@dimen/x2"
+            android:layout_marginRight="@dimen/x2"
             android:background="@drawable/bg_dotted_line"
             android:layerType="software"
             />
         <RelativeLayout
             android:id="@+id/main_company_RL"
             android:layout_width="match_parent"
-            android:layout_height="58dp">
+            android:layout_height="@dimen/y58">
             <ImageView
                 android:layout_centerInParent="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="15dp"
-                android:layout_width="18dp"
-                android:layout_height="23dp"
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_width="@dimen/x18"
+                android:layout_height="@dimen/y23"
                 android:src="@mipmap/company_name"/>
             <TextView
                 android:id="@+id/main_company_tv"
                 android:layout_centerInParent="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="@dimen/x40"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="12sp"
+                android:maxEms="7"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:text="全部"/>
             <ImageView
                 android:layout_centerInParent="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_width="8dp"
-                android:layout_height="13dp"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_width="@dimen/x8"
+                android:layout_height="@dimen/y13"
                 android:src="@mipmap/hite_right"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/main_ele_RL"
             android:layout_width="match_parent"
-            android:layout_height="58dp">
+            android:layout_height="@dimen/y58">
             <ImageView
                 android:layout_centerInParent="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="15dp"
-                android:layout_width="18dp"
-                android:layout_height="23dp"
+                android:layout_marginLeft="@dimen/x15"
+                android:layout_width="@dimen/x18"
+                android:layout_height="@dimen/y23"
                 android:src="@mipmap/company_message"/>
             <TextView
                 android:id="@+id/main_ele_tv"
                 android:layout_centerInParent="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="@dimen/x40"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="12sp"
+                android:maxEms="7"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:text="全部"/>
             <ImageView
                 android:layout_centerInParent="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_width="8dp"
-                android:layout_height="13dp"
+                android:layout_marginRight="@dimen/x10"
+                android:layout_width="@dimen/x8"
+                android:layout_height="@dimen/y13"
                 android:src="@mipmap/hite_right"/>
         </RelativeLayout>
         <ScrollView
@@ -93,205 +99,205 @@
                 <LinearLayout
                     android:id="@+id/equipment"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
                     <ImageView
-                        android:layout_marginLeft="29dp"
+                        android:layout_marginLeft="@dimen/x29"
                         android:id="@+id/equipment_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="@dimen/x25"
+                        android:layout_height="@dimen/y25"
                         android:src="@drawable/mian_imgone" />
                     <TextView
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginLeft="@dimen/x6"
                         android:id="@+id/equipment_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="档案管理"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/wordorder"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
                     <ImageView
-                        android:layout_marginLeft="29dp"
+                        android:layout_marginLeft="@dimen/x29"
                         android:id="@+id/wordorder_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="@dimen/x25"
+                        android:layout_height="@dimen/y25"
                         android:src="@drawable/mian_imgtwo" />
 
                     <TextView
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginLeft="@dimen/x6"
                         android:id="@+id/wordorder_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="工单管理"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/ele_configuration"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_marginLeft="45dp"
+                        android:layout_marginLeft="@dimen/x45"
                         android:id="@+id/ele_configuration_img"
-                        android:layout_width="5dp"
-                        android:layout_height="5dp"
+                        android:layout_width="@dimen/x5"
+                        android:layout_height="@dimen/y5"
                         android:src="@drawable/mian_imgthree" />
 
                     <TextView
                         android:id="@+id/ele_configuration_tv"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/x10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="电表配置"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/ele_tour"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_marginLeft="45dp"
+                        android:layout_marginLeft="@dimen/x45"
                         android:id="@+id/ele_tour_img"
-                        android:layout_width="5dp"
-                        android:layout_height="5dp"
+                        android:layout_width="@dimen/x5"
+                        android:layout_height="@dimen/y5"
                         android:src="@drawable/mian_imgthree" />
 
                     <TextView
                         android:id="@+id/ele_tour_tv"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/x10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="电房巡视"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/eliminate"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_marginLeft="45dp"
+                        android:layout_marginLeft="@dimen/x45"
                         android:id="@+id/eliminate_img"
-                        android:layout_width="5dp"
-                        android:layout_height="5dp"
+                        android:layout_width="@dimen/x5"
+                        android:layout_height="@dimen/y5"
                         android:src="@drawable/mian_imgthree" />
 
                     <TextView
                         android:id="@+id/eliminate_tv"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/x10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="消缺"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/beautify"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_marginLeft="45dp"
+                        android:layout_marginLeft="@dimen/x45"
                         android:id="@+id/beautify_img"
-                        android:layout_width="5dp"
-                        android:layout_height="5dp"
+                        android:layout_width="@dimen/x5"
+                        android:layout_height="@dimen/y5"
                         android:src="@drawable/mian_imgthree" />
 
                     <TextView
                         android:id="@+id/beautify_tv"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/x10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="美化安规"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/dedusting"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_marginLeft="45dp"
+                        android:layout_marginLeft="@dimen/x45"
                         android:id="@+id/dedusting_img"
-                        android:layout_width="5dp"
-                        android:layout_height="5dp"
+                        android:layout_width="@dimen/x5"
+                        android:layout_height="@dimen/y5"
                         android:src="@drawable/mian_imgthree" />
 
                     <TextView
                         android:id="@+id/dedusting_tv"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/x10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="除尘清理"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/question"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_marginLeft="29dp"
+                        android:layout_marginLeft="@dimen/x29"
                         android:id="@+id/question_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="@dimen/x25"
+                        android:layout_height="@dimen/y25"
                         android:src="@drawable/mian_imgfour" />
 
                     <TextView
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginLeft="@dimen/x6"
                         android:id="@+id/question_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="问题列表"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/setting"
                     android:layout_width="match_parent"
-                    android:layout_height="66dp"
+                    android:layout_height="@dimen/y66"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_marginLeft="29dp"
+                        android:layout_marginLeft="@dimen/x29"
                         android:id="@+id/setting_img"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="@dimen/x25"
+                        android:layout_height="@dimen/y25"
                         android:src="@drawable/mian_imgfive" />
 
                     <TextView
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginLeft="@dimen/x6"
                         android:id="@+id/setting_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="设置"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@drawable/main_text" />
                 </LinearLayout>
 

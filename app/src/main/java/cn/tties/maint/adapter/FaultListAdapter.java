@@ -1,6 +1,8 @@
 package cn.tties.maint.adapter;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,7 @@ public class FaultListAdapter extends BaseAdapter {
     BaseFragment mFragment;
     int workorderId;
     int workType;
+    private int textcolor;
     private Fault_DescriptionDialog dialog;
     @Override
     public int getCount() {
@@ -60,6 +63,7 @@ public class FaultListAdapter extends BaseAdapter {
         this.beanList = beanList;
         this.workorderId=workorderId;
         this.workType=workType;
+        textcolor = Color.parseColor("#888888");
     }
     public FaultListAdapter(BaseFragment mFragment) {
         this.mFragment = mFragment;
@@ -78,6 +82,7 @@ public class FaultListAdapter extends BaseAdapter {
             } else {
                 questionViewHolder = (QuestionViewHolder) convertView.getTag();
             }
+        GradientDrawable background = (GradientDrawable)questionViewHolder.btn_description.getBackground();
             if(!resultBean.getCompanyShortName().isEmpty()){
                 questionViewHolder.text_company.setText(resultBean.getCompanyShortName()+"");
             }
@@ -151,7 +156,10 @@ public class FaultListAdapter extends BaseAdapter {
                 });
             }
             if(resultBean.getStatus()== QuestionStatusType.END.getType()){//已完成
+                background.setStroke(2,x.app().getResources().getColor(R.color.common_text_min_gray));
+                background.setColor(x.app().getResources().getColor(R.color.common_bg));
                 questionViewHolder.btn_text.setText("已完成消缺");
+                questionViewHolder.btn_text.setTextColor(textcolor);
                 //图片列表  图片集合盘空
                 final List<QueryFaultResult.ResultBean.QuestionScheduleListBean> descriptionList = new ArrayList<>();
                 if (resultBean.getQuestionScheduleList() != null&&resultBean.getQuestionScheduleList().size()>0) {
@@ -166,7 +174,7 @@ public class FaultListAdapter extends BaseAdapter {
     }
     public class QuestionViewHolder{
         ImageView img_type;
-        TextView text_schedule;
+//        TextView text_schedule;
         TextView text_title;
         ListView question_imglist;
         TextView text_time;
@@ -181,7 +189,7 @@ public class FaultListAdapter extends BaseAdapter {
         public QuestionViewHolder(View view) {
             img_type= view.findViewById(R.id.img_type);
             text_title= view.findViewById(R.id.text_title);
-            text_schedule= view.findViewById(R.id.text_schedule);
+//            text_schedule= view.findViewById(R.id.text_schedule);
             question_imglist= view.findViewById(R.id.question_imglist);
             text_time= view.findViewById(R.id.text_time);
             text_more= view.findViewById(R.id.text_more);

@@ -60,7 +60,7 @@ public class SettingFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        textLogin.setText( MyApplication.getUserInfo().getStaffNo());
+        textLogin.setText( MyApplication.getUserInfo().getMaintStaffName());
         super.onViewCreated(view, savedInstanceState);
         VersionResult result = ACache.getInstance().getAsObject(Constants.CACHE_VERSION);
 
@@ -85,7 +85,7 @@ public class SettingFragment extends BaseFragment {
         }
         updatePasswordParams.setOldPwd(editOldPwd.getText().toString());
         updatePasswordParams.setNewPwd(editNewPwd.getText().toString());
-        updatePasswordParams.setStaffId(userInfoBean.getStaffId());
+        updatePasswordParams.setMaintStaffId(userInfoBean.getMaintStaffId());
         editOldPwd.setText("");
         editNewPwd.setText("");
         editNewPwd2.setText("");

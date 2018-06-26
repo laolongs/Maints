@@ -2,27 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="60dp">
+    android:layout_height="@dimen/y50">
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/y2"
         android:background="#E9ECF3"
         />
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:id="@+id/arrow_Rl"
-        android:background="@drawable/btn_root"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="@dimen/y48">
         <TextView
+            android:gravity="center_vertical"
+            android:background="@drawable/btn_lv2_item"
             android:id="@+id/text_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="19dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/x19"
             android:textColor="@color/common_text_max_gray"
-            android:text=""
-            android:textSize="16sp" />
-    </RelativeLayout>
+            android:text="ddd"
+            android:textSize="14sp" />
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/arrow_img"
+            android:layout_width="@dimen/x5"
+            android:layout_height="@dimen/y30"
+            android:src="@mipmap/img_indicate"/>
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -5,6 +5,7 @@
     xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/x5"
     android:background="@color/common_bg"
     android:orientation="vertical">
     <View
@@ -18,10 +19,12 @@
         android:orientation="horizontal"
        >
         <View
-            style="@style/common_linewidth"/>
+            android:layout_width="@dimen/x5"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/x20"
+            android:paddingLeft="@dimen/x20"
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -32,26 +35,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/x39"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="90dp">
+                    android:layout_height="@dimen/x40">
                     <TextView
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
                         android:id="@+id/text_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="消缺"
-                        android:textSize="20sp"
+                        android:textSize="26sp"
                         android:textColor="@color/black" />
 
                 </RelativeLayout>
                 <LinearLayout
+                    android:layout_marginTop="@dimen/x17"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_listview_gray"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                    android:orientation="vertical">
                     <in.srain.cube.views.ptr.PtrClassicFrameLayout
                         android:background="@color/common_bg"
                         android:id="@+id/ptrlayout_order"
@@ -81,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="35sp"
+                    android:textSize="20sp"
                     android:text="当前无消缺"
                     />
             </LinearLayout>
@@ -91,5 +94,5 @@
     </LinearLayout>
 
     <View
-        style="@style/common_linehight"/>
+        style="@style/common_linehightdown"/>
 </LinearLayout>

@@ -170,7 +170,7 @@ public class ContractCheckFragment extends BaseFragment {
 
     public void getContractData() {
         SelectContractListParams params = new SelectContractListParams();
-        params.setStaffId(MyApplication.getUserInfo().getStaffId());
+        params.setStaffId(MyApplication.getUserInfo().getMaintStaffId());
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
             @Override
             public void onSuccess(String result) {
@@ -195,7 +195,7 @@ public class ContractCheckFragment extends BaseFragment {
     }
 
     private void uploadPdf() {
-        uploadDialog = new UploadContractDialog(this, MyApplication.getUserInfo().getStaffId());
+        uploadDialog = new UploadContractDialog(this, MyApplication.getUserInfo().getMaintStaffId());
         uploadDialog.loading();
     }
 

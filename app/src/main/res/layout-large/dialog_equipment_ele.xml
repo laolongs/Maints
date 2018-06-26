@@ -1,53 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/table_dialog_layout">
-
-    <RelativeLayout style="@style/table_dialog_title">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            style="@style/table_dialog_btn_cancel" />
-
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/common_bg"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="@dimen/x720"
+        android:layout_height="@dimen/x543">
         <TextView
-            style="@style/table_dialog_title_text"
-            android:text="选择户号" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:layout_above="@+id/btn_save"
+            android:layout_marginTop="@dimen/x49"
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textColor="@color/black"
+            android:text="选择户号" />
+        <FrameLayout
+                android:layout_marginTop="@dimen/x47"
+                android:layout_above="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fadingEdge="vertical"
-                android:scrollbars="vertical">
-
-                <RadioGroup
-                    android:id="@+id/radio_company"
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="120dp">
+                    android:layout_height="fill_parent"
+                    android:fadingEdge="vertical"
+                    android:scrollbars="vertical">
 
-                </RadioGroup>
+                    <RadioGroup
+                        android:id="@+id/radio_company"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/x20"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="@dimen/x120">
 
-            </ScrollView>
-        </FrameLayout>
+                    </RadioGroup>
 
-        <Button
-            android:id="@+id/btn_save"
-            style="@style/table_dialog_btn_confirm"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="确定" />
-    </RelativeLayout>
+                </ScrollView>
+            </FrameLayout>
+        <LinearLayout
+            android:layout_marginRight="@dimen/x20"
+            android:layout_marginBottom="@dimen/x53"
+            android:layout_marginTop="@dimen/y53"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x52">
+            <Button
+                android:layout_marginRight="20dp"
+                android:id="@+id/btn_cancel"
+                android:layout_width="@dimen/x119"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_cancel"
+                android:textColor="@color/white"
+                android:text="取消" />
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="@dimen/x158"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_confirm_normal"
+                android:textColor="@color/white"
+                android:text="确定" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>

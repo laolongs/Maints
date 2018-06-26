@@ -2,25 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/allocation_left"
-    android:layout_height="60dp">
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="2dp"-->
-        <!--android:background="#ffffff"-->
-        <!--/>-->
+    android:layout_height="@dimen/y60">
     <RelativeLayout
-        android:padding="5dp"
         android:id="@+id/arrow_Rl"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="match_parent">
         <TextView
+            android:gravity="center"
+            android:background="@drawable/allocation_left"
             android:id="@+id/text_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:textColor="@color/listview_text"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
 

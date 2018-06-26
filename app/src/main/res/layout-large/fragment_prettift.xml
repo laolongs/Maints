@@ -5,6 +5,7 @@
     xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/x5"
     android:background="@color/common_bg"
     android:orientation="vertical">
     <View
@@ -17,10 +18,12 @@
         android:layout_weight="1"
         android:orientation="horizontal">
         <View
-            style="@style/common_linewidth"/>
+            android:layout_width="@dimen/x5"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/x20"
+            android:paddingLeft="@dimen/x20"
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -31,64 +34,63 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <RelativeLayout
+                    android:layout_marginTop="@dimen/x39"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="@dimen/x40">
                     <TextView
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
                         android:id="@+id/text_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="美化安规"
-                        android:textSize="20sp"
+                        android:textSize="26sp"
                         android:textColor="@color/black" />
                     <LinearLayout
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:layout_alignParentRight="true"
-                        android:layout_width="210dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent">
                         <LinearLayout
                             android:id="@+id/prettift_before"
-                            android:background="@color/prettift_befor"
+                            android:background="@drawable/btn_confirm_green"
                             android:gravity="center"
-                            android:layout_width="100dp"
-                            android:layout_height="50dp">
+                            android:layout_width="@dimen/x160"
+                            android:layout_height="match_parent">
                             <TextView
                                 android:id="@+id/text_before"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="处理前"
                                 android:textColor="@color/white"
-                                android:textSize="18sp"/>
+                                android:textSize="14sp"/>
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/prettift_later"
-                            android:layout_marginLeft="5dp"
-                            android:background="@color/root_check"
+                            android:layout_marginLeft="@dimen/x11"
+                            android:background="@drawable/btn_confirm_normal"
                             android:gravity="center"
-                            android:layout_width="100dp"
-                            android:layout_height="50dp">
+                            android:layout_width="@dimen/x160"
+                            android:layout_height="match_parent">
                             <TextView
                                 android:id="@+id/text_later"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="处理后"
                                 android:textColor="@color/white"
-                                android:textSize="18sp"/>
+                                android:textSize="14sp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
                 <LinearLayout
+                    android:layout_marginTop="@dimen/x15"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_listview_gray"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                    android:orientation="vertical">
                     <in.srain.cube.views.ptr.PtrClassicFrameLayout
-                        android:padding="10dp"
                         android:background="@color/common_bg"
                         android:id="@+id/ptrlayout_order"
                         android:layout_width="match_parent"
@@ -118,8 +120,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="35sp"
-                    android:text="当前无消缺"
+                    android:textSize="20sp"
+                    android:text="当前无美化项"
                     />
             </LinearLayout>
         </LinearLayout>
@@ -128,5 +130,5 @@
     </LinearLayout>
 
     <View
-        style="@style/common_linehight"/>
+        style="@style/common_linehightdown"/>
 </LinearLayout>

@@ -23,12 +23,21 @@ public class CompanyEquipmentResult implements CommonListViewInterface,Serializa
     private String name;
 
     private String createTime;
+    private String position;//地址
 
     private Integer flag;
 
     private EquipmentEntity equipmentEntity;
 
     private boolean isChecked;
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
 
     public Integer getCompanyEquipmentId() {
         return companyEquipmentId;

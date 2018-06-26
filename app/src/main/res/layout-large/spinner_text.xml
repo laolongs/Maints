@@ -2,10 +2,10 @@
     android:id="@android:id/text1"
     style="?android:attr/spinnerDropDownItemStyle"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="@dimen/y40"
     android:ellipsize="marquee"
     android:gravity="center"
     android:singleLine="true"
     android:textAlignment="inherit"
-    android:textColor="@color/listview_check"
+    android:textColor="@color/root_check"
     android:textSize="14sp" />

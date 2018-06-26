@@ -15,6 +15,7 @@
     <color name="btn_confirm_normal">#1A92EE</color>
     <color name="btn_cancel_normal">#7F7F7F</color>
     <color name="btn_confirm_press">#FF8C00</color>
+    <color name="btn_parent_press">#9CAAB9</color>
 
     <color name="dialog_title">#d8d8d8</color>
     <color name="dialog_bg">#f3f3f3</color>
@@ -42,6 +43,8 @@
     <color name="listview_text">#FF6B6B6B</color>
     <color name="listview_btn_del">#FFF97171</color>
     <color name="listview_btn_update">#FF80DC89</color>
+    <color name="left_bg">#7BA0BB</color>
+    <color name="right_bg">#E9ECF3</color>
 
 
     <color name="background">#FFFFFF</color>
@@ -57,7 +60,8 @@
 
     <color name="listview_status">#4D57C5E8</color>
     <color name="common_root">#BDC8D8</color>
-    <color name="common_bg">#EFF1F4</color>
+    <color name="common_bg">#E9ECF2</color>
+    <color name="common_order_bg">#E9ECF2</color>
     <color name="common_text_min_gray">#999999</color>
     <color name="common_text_max_gray">#666666</color>
 

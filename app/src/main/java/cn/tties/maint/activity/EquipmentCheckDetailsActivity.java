@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -616,8 +617,8 @@ public class EquipmentCheckDetailsActivity extends BaseFragmentActivity implemen
         curHolder.eq_de_list_feal_list.setAdapter(detailAdapter);
         lv3Adapter2 = new DetailsSwipListViewAdapter();
         //四级本地数据
-        GridLayoutManager layoutManage = new GridLayoutManager(this, 4);
-        curHolder.eq_de_list_lv4.setLayoutManager(layoutManage);
+//        GridLayoutManager layoutManage = new GridLayoutManager(this, 4);
+        curHolder.eq_de_list_lv4.setLayoutManager(new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL));
         curHolder.eq_de_list_lv4.setSwipeItemClickListener(new SwipeItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {

@@ -49,6 +49,8 @@ import cn.tties.maint.httpclient.result.EleRoomResult;
 import cn.tties.maint.httpclient.result.OrderResult;
 import cn.tties.maint.httpclient.result.PatrolResult;
 import cn.tties.maint.util.JsonUtils;
+import cn.tties.maint.util.NoFastClickUtils;
+import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.view.ConfirmDialog;
 import cn.tties.maint.view.InfoDialog;
 import cn.tties.maint.view.Patrol_NewQuestionDialog;
@@ -72,10 +74,9 @@ public class PatrolFragment extends BaseFragment {
     @ViewInject(R.id.patrol_info)
     private LinearLayout layoutInfo;
     @ViewInject(R.id.ptrlayout_order)
-    private PtrClassicFrameLayout orderPtrlayout;
+    public PtrClassicFrameLayout orderPtrlayout;
     private PtrListViewOnScrollListener mPtrListViewOnScrollListener;
     private PatrolLayoutAdapter patrolItemAdapter;
-    private Integer orderId;
     private ConfirmDialog dialog;
     private CompanyResult curCompany;
     private Integer curEleId;
@@ -89,9 +90,11 @@ public class PatrolFragment extends BaseFragment {
     private List<PatrolResult> recordResult;
     private Patrol_NewQuestionDialog dialognew;
     private CompanyEquipmentResult result;
-    int orderworkid=223;
+//    int orderworkid=223;
     int numFlag=0;//0 代表新建问题， 1 代表添加问题，2 代表有温度的问题
     int workOrderId;
+    private String address;
+    CommonListViewInterface selBeans;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -104,6 +107,7 @@ public class PatrolFragment extends BaseFragment {
         this.curEleNo=curEleNo;
         this.curCompany=curCompany;
         this.workOrderId=workOrderId;
+        Log.i(TAG, "showPatrolItem:工单Id "+workOrderId);
     }
     @Override
     public void changeEleAccountNextSteps(Integer curEleId, String curEleNo, CompanyResult curCompany) {
@@ -150,6 +154,7 @@ public class PatrolFragment extends BaseFragment {
                     //设置选中
                     lv2Adapter.setChecked(selBean);
                     lv2Adapter.notifyDataSetChanged();
+                    selBeans=selBean;
                     lv2UpListViewClick(selBean);
                 }
             }
@@ -170,14 +175,18 @@ public class PatrolFragment extends BaseFragment {
         // 初始化巡视项
         initDetailListView();
         getPatrolTypeList();
-        getWorkOrderId();
+//        getWorkOrderId();
         initPullRefresh();
         //添加额外新问题
         curhodler.patrol_addquestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (NoFastClickUtils.isFastClick()) {
+                    return;
+                }
                 numFlag=0;
-//                dialognew.clearImage();
+                dialognew.setNumFlag(numFlag);
+                dialognew.setContentView();
                 dialognew.loading();
             }
         });
@@ -216,17 +225,23 @@ public class PatrolFragment extends BaseFragment {
     protected void lv2UpListViewClick(CommonListViewInterface bean) {
         showItemEntities.clear();
         result = (CompanyEquipmentResult) bean;
+        String position = result.getPosition();
+        //地址
+        address = StringUtil.substring(position, 1, position.length()-1);
         Log.i(TAG, "lv2UpListViewClick: "+ result.getEquipmentId());
+        queryPatrolList();
+    }
+    public void queryPatrolList(){
+        showItemEntities.clear();
         SelectPatrolItemParams params = new SelectPatrolItemParams();
         params.setEleAccountId(curEleId);
-//        params.setWorkOrderId(orderId);
-        params.setWorkOrderId(223);
+        params.setWorkOrderId(workOrderId);
         params.setCompanyEquipmentId(result.getCompanyEquipmentId());
         params.setRoomId(result.getRoomId());
-        dialognew = new Patrol_NewQuestionDialog(PatrolFragment.this,result,orderworkid,curEleId,numFlag);
-        dialognew.setContentView();
+        dialognew = new Patrol_NewQuestionDialog(PatrolFragment.this,result,workOrderId,curEleId,curCompany.getCompanyId(),address,curCompany.getCompanyName());
+        patrolItemAdapter.setData(result.getCompanyEquipmentId(),curEleId,result.getRoomId(),workOrderId,curCompany.getCompanyName());
         Log.i(TAG, "lv2UpListViewClick: curEleId"+curEleId);
-        Log.i(TAG, "lv2UpListViewClick: orderId"+orderId);
+        Log.i(TAG, "lv2UpListViewClick: orderId"+workOrderId);
         Log.i(TAG, "lv2UpListViewClick: result.getCompanyEquipmentId()"+ result.getCompanyEquipmentId());
         Log.i(TAG, "lv2UpListViewClick: result.getRoomId()"+ result.getRoomId());
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
@@ -249,7 +264,6 @@ public class PatrolFragment extends BaseFragment {
             }
         });
     }
-
     /**
      * 初始化巡视项.
      */
@@ -258,11 +272,16 @@ public class PatrolFragment extends BaseFragment {
         this.mPtrListViewOnScrollListener = new PtrListViewOnScrollListener(this.orderPtrlayout, true, false);
         curhodler.listview_lv3.setAdapter(patrolItemAdapter);
         curhodler.listview_lv3.setOnScrollListener(this.mPtrListViewOnScrollListener);
+
+        //有问题回调
         patrolItemAdapter.setOnClick(new PatrolLayoutAdapter.OnClick() {
             @Override
-            public void OnClickListenter(boolean flag) {
-//                dialognew.clearImage();
+            public void OnClickListenter(boolean flag,int patrolItemId,int faultType) {
+                numFlag=1;
+                dialognew.setNumFlag(numFlag);
+                dialognew.setpatrolItemIdAndfaultType(patrolItemId,faultType);
                 dialognew.setData(flag);
+                dialognew.setContentView();
                 dialognew.loading();
             }
         });
@@ -274,7 +293,7 @@ public class PatrolFragment extends BaseFragment {
         orderPtrlayout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                PatrolFragment.this.showPatrolItem(recordResult, result);
+                PatrolFragment.this.queryPatrolList();
             }
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -312,59 +331,32 @@ public class PatrolFragment extends BaseFragment {
             }
         });
     }
-    //查询工单id
-    public void getWorkOrderId() {
-        SelectPatrolOrderParams params = new SelectPatrolOrderParams();
-        params.setStaffId(MyApplication.getUserInfo().getStaffId());
-        params.setCompanyId(curCompany.getCompanyId());
-        HttpClientSend.getInstance().send(params, new BaseStringCallback() {
-            @Override
-            public void onSuccess(String resultStr) {
-                BaseResult ret = JsonUtils.deserialize(resultStr, BaseResult.class);
-                if (ret.getErrorCode() != 0) {
-                    Toast.makeText(getActivity(), ret.getErrorMessage(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                OrderResult result = JsonUtils.deserialize(ret.getResult(), OrderResult.class);
-                orderId = result.getWorkOrderId();
-                getPatrolTypeList();
-            }
-        });
-    }
-//
     private void showPatrolItem(List<PatrolResult> recordResult, final CompanyEquipmentResult result) {
         showHoulder(5);
         Log.i(TAG, "showPatrolItem:二级设备id "+result.getEquipmentId());
         //已有record记录转成map
         Map<Integer, PatrolResult> recordMap = new HashMap<Integer, PatrolResult>();
+        List<PatrolItemEntity> newEntities = new ArrayList<>();
         for (PatrolResult result1 : recordResult) {
-            recordMap.put(result1.getPatrolItemId(), result1);
+            if (result1.getPatrolItemId()==null) {
+                PatrolItemEntity entity = new PatrolItemEntity();
+                entity.setInputType(PatrolLayoutAdapter.NEWQUESTION);
+                entity.setResult(result1);
+                newEntities.add(entity);
+            } else {
+                recordMap.put(result1.getPatrolItemId(), result1);
+            }
         }
-        //该设备所属电房
-        EleRoomResult roomResult = (EleRoomResult) rootAdapter.getChecked();
+
         //该设备巡视项目
         List<PatrolItemEntity> itemEntities = PatrolItemDao.getInstance().queryByEquipId(result.getEquipmentId());
         Log.i(TAG, "showPatrolItem:-------- "+itemEntities.size());
-
-        for (PatrolItemEntity entity : itemEntities) {
-            //过滤电房配置
-            if (entity.getHigh() != null && entity.getHigh().booleanValue()
-                    && (roomResult.getIsHigh() == null || !roomResult.getIsHigh().booleanValue())) {
-                continue;
-            }
-            if (entity.getLow() != null && entity.getLow().booleanValue()
-                    && (roomResult.getIsLow() == null || !roomResult.getIsLow().booleanValue())) {
-                continue;
-            }
-            if (entity.getTransfomer() != null && entity.getTransfomer().booleanValue()
-                    && (roomResult.getIsTransformer() == null || !roomResult.getIsTransformer().booleanValue())) {
-                continue;
-            }
+        for (PatrolItemEntity entity : itemEntities) {//26
             //如果已有巡视记录
             if (recordMap.containsKey(entity.getPatrolItemId())) {
                 entity.setInputType(PatrolLayoutAdapter.QUESTION);
                 entity.setResult(recordMap.get(entity.getPatrolItemId()));
-            } else {
+            }else {
                 entity.setInputType(PatrolLayoutAdapter.NOQUESTION);
                 entity.setResult(new PatrolResult());
             }
@@ -375,6 +367,7 @@ public class PatrolFragment extends BaseFragment {
             //页面显示项目
             showItemEntities.add(entity);
         }
+        showItemEntities.addAll(newEntities);
         patrolItemAdapter.setDataList(showItemEntities);
         patrolItemAdapter.notifyDataSetChanged();
         orderPtrlayout.refreshComplete();

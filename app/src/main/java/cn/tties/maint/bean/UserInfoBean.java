@@ -2,9 +2,6 @@ package cn.tties.maint.bean;
 
 
 import java.io.Serializable;
-import java.util.List;
-
-import cn.tties.maint.enums.RoleType;
 
 /**
  * 登录
@@ -12,89 +9,80 @@ import cn.tties.maint.enums.RoleType;
  */
 public class UserInfoBean implements Serializable {
 
-    private Integer staffId;
-    private String staffName;
-    private String staffNo;
-    private String staffTel;
-    private String loginPwd;
-    private Integer status;
-    private String createTime;
-    private Integer roleId;
-    private List<String> menuList;
 
-    public Integer getStaffId() {
-        return staffId;
-    }
+            /**
+             * maintStaffName : 托勒密
+             * districtId : 63
+             * loginPwd : $shiro1$SHA-256$500000$Tp/FmsT9S1m4JaGh9CfpJQ==$58NGTcevKqHlt4QLPjS85g6ERI+YA6+tald4UfYtH90=
+             * createTime : 2018-06-26 10:42:18
+             * maintStaffId : 161
+             * maintStaffTel : 13701125154
+             * status : 0
+             */
 
-    public void setStaffId(Integer staffId) {
-        this.staffId = staffId;
-    }
+            private String maintStaffName;
+            private int districtId;
+            private String loginPwd;
+            private String createTime;
+            private int maintStaffId;
+            private String maintStaffTel;
+            private int status;
 
-    public String getStaffName() {
-        return staffName;
-    }
+            public String getMaintStaffName() {
+                return maintStaffName;
+            }
 
-    public void setStaffName(String staffName) {
-        this.staffName = staffName;
-    }
+            public void setMaintStaffName(String maintStaffName) {
+                this.maintStaffName = maintStaffName;
+            }
 
-    public String getStaffNo() {
-        return staffNo;
-    }
+            public int getDistrictId() {
+                return districtId;
+            }
 
-    public void setStaffNo(String staffNo) {
-        this.staffNo = staffNo;
-    }
+            public void setDistrictId(int districtId) {
+                this.districtId = districtId;
+            }
 
-    public String getStaffTel() {
-        return staffTel;
-    }
+            public String getLoginPwd() {
+                return loginPwd;
+            }
 
-    public void setStaffTel(String staffTel) {
-        this.staffTel = staffTel;
-    }
+            public void setLoginPwd(String loginPwd) {
+                this.loginPwd = loginPwd;
+            }
 
-    public String getLoginPwd() {
-        return loginPwd;
-    }
+            public String getCreateTime() {
+                return createTime;
+            }
 
-    public void setLoginPwd(String loginPwd) {
-        this.loginPwd = loginPwd;
-    }
+            public void setCreateTime(String createTime) {
+                this.createTime = createTime;
+            }
 
-    public Integer getStatus() {
-        return status;
-    }
+            public int getMaintStaffId() {
+                return maintStaffId;
+            }
 
-    public RoleType getRoleType() {
-        return RoleType.getTpye(roleId);
-    }
+            public void setMaintStaffId(int maintStaffId) {
+                this.maintStaffId = maintStaffId;
+            }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+            public String getMaintStaffTel() {
+                return maintStaffTel;
+            }
 
-    public String getCreateTime() {
-        return createTime;
-    }
+            public void setMaintStaffTel(String maintStaffTel) {
+                this.maintStaffTel = maintStaffTel;
+            }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
+            public int getStatus() {
+                return status;
+            }
 
-    public Integer getRoleId() {
-        return roleId;
-    }
+            public void setStatus(int status) {
+                this.status = status;
+            }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
 
-    public List<String> getMenuList() {
-        return menuList;
-    }
-
-    public void setMenuList(List<String> menuList) {
-        this.menuList = menuList;
-    }
 }

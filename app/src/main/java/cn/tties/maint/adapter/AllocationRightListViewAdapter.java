@@ -1,12 +1,15 @@
 package cn.tties.maint.adapter;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +25,6 @@ import cn.tties.maint.bean.CommonListViewInterface;
 public class AllocationRightListViewAdapter<T extends CommonListViewInterface> extends BaseAdapter {
 
     private List<T> mDataList;
-    int unselect = Color.parseColor("#E9ECF3");
-    int select = Color.parseColor("#1B92EE");
-    int unselecttv = Color.parseColor("#959499");
-    int selecttv = Color.parseColor("#ffffff");
-
     @Override
     public int getCount() {
         if (null == this.mDataList) {
@@ -114,11 +112,17 @@ public class AllocationRightListViewAdapter<T extends CommonListViewInterface> e
         TextView nameText = (TextView) convertView.findViewById(R.id.text_name);
         RelativeLayout arrow_Rl = (RelativeLayout) convertView.findViewById(R.id.arrow_Rl);
         nameText.setText(item.getItemName());
-        if (item.isChecked()) {
-            arrow_Rl.setBackgroundColor(select);
+
+        int unselecttv = Color.parseColor("#FF6B6B6B");
+        int selecttv = Color.parseColor("#ffffff");
+        GradientDrawable drawable = (GradientDrawable)nameText.getBackground();
+        if (mDataList.get(position).isChecked()) {
+            drawable.setStroke(3, x.app().getResources().getColor(R.color.root_check));
+            drawable.setColor(x.app().getResources().getColor(R.color.root_check));
             nameText.setTextColor(selecttv);
         } else {
-            arrow_Rl.setBackgroundColor(unselect);
+            drawable.setStroke(2, x.app().getResources().getColor(R.color.background));
+            drawable.setColor(x.app().getResources().getColor(R.color.right_bg));
             nameText.setTextColor(unselecttv);
         }
         return convertView;

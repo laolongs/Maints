@@ -4,14 +4,15 @@ package cn.tties.maint.httpclient.params;
 import cn.tties.maint.httpclient.ClinetRequestParams;
 
 /**
- * 登录
+ * 登录    新登陸  郭
  * author chensi
  * param:userName:手机号或工号
  *       passWord：未加密密码
  */
 public class LoginParams extends ClinetRequestParams {
 
-    public static final String INTERFACE = "staffLoginApp.do";
+//    public static final String INTERFACE = "staffLoginApp.do";
+    public static final String INTERFACE = "login.do";
 
     private Integer type;
 

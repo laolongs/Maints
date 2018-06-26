@@ -67,7 +67,7 @@ public class ScheduleDialog extends BaseCustomDialog {
             @Override
             public void onClick(View v) {
                 AddScheduleParams addScheduleParams = new AddScheduleParams();
-                addScheduleParams.setStaffId(MyApplication.getUserInfo().getStaffId());
+                addScheduleParams.setStaffId(MyApplication.getUserInfo().getMaintStaffId());
                 addScheduleParams.setContent(editsShedule.getText().toString());
                 addScheduleParams.setQuestionId(questionId);
                 HttpClientSend.getInstance().send(addScheduleParams, new BaseStringCallback() {

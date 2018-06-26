@@ -4,6 +4,7 @@ import cn.tties.maint.httpclient.ClinetRequestParams;
 
 /**
  * Created by fultrust on 2018/1/5.
+ * 企业微信群发   安全交底
  */
 
 public class SafetyParams extends ClinetRequestParams {

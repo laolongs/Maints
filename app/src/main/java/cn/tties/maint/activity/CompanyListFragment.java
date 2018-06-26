@@ -121,7 +121,7 @@ public class CompanyListFragment extends BaseFragment {
     public void queryCompanyList() {
         CompanyParams params = new CompanyParams();
         //登录用户ID
-        params.setCreatorId(MyApplication.getUserInfo().getStaffId());
+        params.setCreatorId(MyApplication.getUserInfo().getMaintStaffId());
         HttpClientSend.getInstance().send(params, new BaseStringCallback() {
 
             @Override
@@ -199,7 +199,7 @@ public class CompanyListFragment extends BaseFragment {
                             AddWorkOrderActionParams addWorkOrderActionParams = new AddWorkOrderActionParams();
                             addWorkOrderActionParams.setCompanyId(curCompany.getCompanyId());
                             addWorkOrderActionParams.setStaffId(122);
-                            addWorkOrderActionParams.setFromStaffId(MyApplication.getUserInfo().getStaffId());
+                            addWorkOrderActionParams.setFromStaffId(MyApplication.getUserInfo().getMaintStaffId());
                             addWorkOrderActionParams.setStartDate(DateUtils.stringToInt(overhaulDialog.editOveraulDate.getText().toString()));
                             addWorkOrderActionParams.setEndDate(DateUtils.stringToInt(overhaulDialog.editOveraulEndDate.getText().toString()));
                             HttpClientSend.getInstance().send(addWorkOrderActionParams, new BaseStringCallback() {

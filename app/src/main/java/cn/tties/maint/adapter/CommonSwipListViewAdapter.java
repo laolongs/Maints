@@ -1,12 +1,18 @@
 package cn.tties.maint.adapter;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,17 +107,20 @@ public class CommonSwipListViewAdapter<T extends CommonListViewInterface> extend
 
     @Override
     public void onBindViewHolder(CommonSwipListViewAdapter.ViewHolder holder, int position) {
-        int unselect = Color.parseColor("#ffffff");
-        int select = Color.parseColor("#1B92EE");
         int unselecttv = Color.parseColor("#000000");
         int selecttv = Color.parseColor("#ffffff");
+        GradientDrawable drawable = (GradientDrawable)holder.nameText.getBackground();
         holder.setData(mDataList.get(position));
-        if (mDataList.get(position).isChecked()) {
-            holder.arrow_Rl.setBackgroundColor(select);
-            holder.nameText.setTextColor(selecttv);
+         if (mDataList.get(position).isChecked()) {
+             drawable.setStroke(3, x.app().getResources().getColor(R.color.root_check));
+             drawable.setColor(x.app().getResources().getColor(R.color.root_check));
+             holder.nameText.setTextColor(selecttv);
+             holder.arrow_img.setVisibility(View.VISIBLE);
         } else {
-            holder.arrow_Rl.setBackgroundColor(unselect);
-            holder.nameText.setTextColor(unselecttv);
+             drawable.setStroke(3, x.app().getResources().getColor(R.color.background));
+             drawable.setColor(x.app().getResources().getColor(R.color.background));
+             holder.nameText.setTextColor(unselecttv);
+             holder.arrow_img.setVisibility(View.GONE);
         }
     }
 
@@ -124,12 +133,13 @@ public class CommonSwipListViewAdapter<T extends CommonListViewInterface> extend
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameText;
-        RelativeLayout arrow_Rl;
-
+        LinearLayout arrow_Rl;
+        ImageView arrow_img;
         public ViewHolder(View itemView) {
             super(itemView);
             nameText = (TextView) itemView.findViewById(R.id.text_name);
-            arrow_Rl = (RelativeLayout) itemView.findViewById(R.id.arrow_Rl);
+            arrow_Rl = (LinearLayout) itemView.findViewById(R.id.arrow_Rl);
+            arrow_img = (ImageView) itemView.findViewById(R.id.arrow_img);
         }
 
         public void setData(T title) {

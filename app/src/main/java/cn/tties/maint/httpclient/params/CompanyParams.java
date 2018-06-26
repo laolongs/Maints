@@ -4,12 +4,13 @@ import cn.tties.maint.httpclient.ClinetRequestParams;
 
 /**
  * Created by fultrust on 2018/1/5.
- *
+ *公司信息
  */
 
 public class CompanyParams extends ClinetRequestParams {
 
-    public static final String INTERFACE = "selectListCompany.do";
+//    public static final String INTERFACE = "selectListCompany.do";//原接口
+    public static final String INTERFACE = "selectCompanyListByMaintStaff.do";//selectCompanyListByMaintStaff.do
 
     private Integer maintStaffId;
 

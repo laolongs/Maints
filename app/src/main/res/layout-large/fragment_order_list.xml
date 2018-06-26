@@ -3,51 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cube_ptr="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/x5"
+    android:paddingRight="@dimen/x5"
+    android:paddingBottom="@dimen/y5"
+    android:background="@color/common_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <View
         android:background="@color/common_root"
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="@dimen/y15"/>
     <RadioGroup
         android:id="@+id/radiogroup"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/x45"
         android:background="@color/common_root"
         android:gravity="center_vertical"
         android:orientation="horizontal">
         <RadioButton
             android:id="@+id/text_undo"
-            android:layout_width="100dp"
+            android:layout_width="@dimen/x100"
             android:layout_height="match_parent"
             android:button="@null"
             android:gravity="center"
             android:background="@drawable/selector_radiobtn_order_bg"
             android:textColor="@color/selector_radiobutton_text"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:textSize="14sp"
             android:text="未进行" />
         <RadioButton
             android:id="@+id/text_executing"
-            android:layout_width="100dp"
+            android:layout_width="@dimen/x100"
             android:layout_height="match_parent"
             android:button="@null"
             android:gravity="center"
             android:background="@drawable/selector_radiobtn_order_bg"
             android:textColor="@color/selector_radiobutton_text"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:textSize="14sp"
             android:text="进行中" />
         <RadioButton
             android:id="@+id/text_complete"
-            android:layout_width="100dp"
+            android:layout_width="@dimen/x100"
             android:layout_height="match_parent"
             android:button="@null"
             android:gravity="center"
             android:background="@drawable/selector_radiobtn_order_bg"
             android:textColor="@color/selector_radiobutton_text"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:textSize="14sp"
             android:text="已完成" />
 
     </RadioGroup>
@@ -57,7 +64,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <View
             style="@style/common_linewidth"/>
         <LinearLayout
@@ -66,32 +74,32 @@
             android:layout_weight="1"
             android:layout_height="match_parent">
             <LinearLayout
-                android:background="@color/common_bg"
+                android:background="@color/common_order_bg"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/x58"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <LinearLayout
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="@dimen/x18"
                     android:background="@color/white"
                     android:orientation="horizontal"
-                    android:layout_width="120dp"
-                    android:layout_height="30dp">
+                    android:layout_width="@dimen/x150"
+                    android:layout_height="@dimen/y40">
                     <Spinner
                         android:id="@+id/spinner_kind"
-                        android:layout_width="120dp"
-                        android:layout_height="30dp" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </LinearLayout>
 
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="@dimen/y5"
                 android:background="@color/white"/>
             <in.srain.cube.views.ptr.PtrClassicFrameLayout
-                android:paddingLeft="10dp"
-                android:paddingRight="20dp"
-                android:background="@color/common_bg"
+                android:paddingLeft="@dimen/x10"
+                android:paddingRight="@dimen/x20"
+                android:background="@color/common_order_bg"
                 android:id="@+id/ptrlayout_order"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -102,7 +110,7 @@
                 cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
                 cube_ptr:ptr_resistance="1.7">
                     <ListView
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/y10"
                         android:id="@+id/table_order"
                         style="@style/table_listview" />
             </in.srain.cube.views.ptr.PtrClassicFrameLayout>
@@ -110,6 +118,7 @@
         <View
             style="@style/common_linewidth"/>
     </LinearLayout>
-
+    <View
+        style="@style/common_linehightdown"/>
 
 </LinearLayout>

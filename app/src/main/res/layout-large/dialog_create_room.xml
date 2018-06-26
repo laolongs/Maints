@@ -1,84 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/table_dialog_layout">
+    android:orientation="vertical"
+    android:background="@drawable/bg_5"
+    android:layout_width="@dimen/x680"
+    android:layout_height="@dimen/y263"
+    android:gravity="center_vertical">
 
     <RelativeLayout
+        android:layout_marginTop="@dimen/y36"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:background="@drawable/bg_table_dialog_title">
+        android:layout_height="@dimen/y52"
+        android:gravity="center_vertical">
         <TextView
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/x44"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textColor="@color/black"
             android:text="新建电房" />
         <Button android:id="@+id/btn_cancel"
-            android:layout_marginRight="80dp"
+            android:layout_marginRight="@dimen/x222"
             android:layout_alignParentRight="true"
-            android:layout_width="40dp"
-            android:layout_height="25dp"
-            android:background="@drawable/btn_dialog_cancel"
+            android:layout_width="@dimen/x119"
+            android:layout_height="@dimen/y52"
+            android:background="@drawable/btn_cancel"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             android:text="返回"
             />
-        <Button
-            android:layout_marginRight="20dp"
+        <Button android:id="@+id/btn_save"
+            android:layout_marginRight="@dimen/x49"
             android:layout_alignParentRight="true"
-            android:id="@+id/btn_save"
-            android:layout_width="40dp"
-            android:layout_height="25dp"
-            android:background="@drawable/selector_btn_confirm_click"
-            android:text="保存" />
+            android:layout_width="@dimen/x158"
+            android:layout_height="@dimen/y52"
+            android:background="@drawable/btn_confirm_normal"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="保存"
+            />
     </RelativeLayout>
 
     <LinearLayout
+        android:layout_marginLeft="@dimen/x44"
+        android:layout_marginRight="@dimen/x46"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_height="@dimen/y48"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/y39"
         android:orientation="horizontal">
 
         <TextView
-            style="@style/table_dialog_first_text"
-            android:text="电房名称" />
-
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/common_text_min_gray"
+            android:text="名称" />
+        <View
+            android:layout_marginTop="@dimen/y8"
+            android:layout_marginBottom="@dimen/y8"
+            android:layout_marginLeft="@dimen/x100"
+            android:background="@color/common_text_min_gray"
+            android:layout_width="@dimen/x1"
+            android:layout_height="match_parent"/>
         <EditText
+            android:layout_marginLeft="@dimen/x10"
             android:id="@+id/edit_eleRoomName"
-            style="@style/table_dialog_edit" />
+            android:background="@null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
-
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_marginBottom="@dimen/x38"
+        android:layout_marginLeft="@dimen/x44"
+        android:layout_marginRight="@dimen/x46"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y48"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/y2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/common_text_min_gray"
+            android:text="类型" />
+        <View
+            android:layout_marginTop="@dimen/y8"
+            android:layout_marginBottom="@dimen/y8"
+            android:layout_marginLeft="@dimen/x100"
+            android:background="@color/common_text_min_gray"
+            android:layout_width="@dimen/x1"
+            android:layout_height="match_parent"/>
         <CheckBox
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/x6"
             android:button="@null"
             android:id="@+id/high_room"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/y30"
             android:text="高压电房"
-            android:paddingLeft="40dp"
-            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:textColor="@color/white"
             android:background="@drawable/bg_check"/>
         <CheckBox
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/x20"
             android:button="@null"
             android:id="@+id/low_room"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/y30"
             android:text="低压电房"
-            android:paddingLeft="40dp"
-            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:textColor="@color/white"
             android:background="@drawable/bg_check"/>
         <CheckBox
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/x20"
             android:button="@null"
             android:id="@+id/transformer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/y30"
             android:text="变压器室"
-            android:paddingLeft="40dp"
-            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:textColor="@color/white"
             android:background="@drawable/bg_check"/>
     </LinearLayout>
-
-
 </LinearLayout>

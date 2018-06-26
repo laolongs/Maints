@@ -2,24 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="67dp">
+    android:layout_height="@dimen/y67">
     <View
         android:layout_width="match_parent"
-        android:layout_height="7dp" />
+        android:layout_height="@dimen/y7" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/y60"
         android:background="@drawable/equ_ele_item"
         android:gravity="center_vertical">
 
         <TextView
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/x20"
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="电表箱1"
             android:textColor="@color/common_text_max_gray"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>

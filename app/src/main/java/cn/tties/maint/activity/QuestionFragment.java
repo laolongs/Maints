@@ -34,33 +34,24 @@ import java.util.List;
 import java.util.Locale;
 
 import cn.tties.maint.R;
-import cn.tties.maint.adapter.QuestionListAdapter;
 import cn.tties.maint.adapter.QuestionNewListAdapter;
 import cn.tties.maint.adapter.QuestionSearchAdapter;
-import cn.tties.maint.bean.EquipmentLayoutBean;
 import cn.tties.maint.common.EventKind;
 import cn.tties.maint.common.MyApplication;
 import cn.tties.maint.enums.QuestionStatusType;
-import cn.tties.maint.enums.WorkStatusType;
 import cn.tties.maint.httpclient.BaseStringCallback;
 import cn.tties.maint.httpclient.HttpClientSend;
 import cn.tties.maint.httpclient.params.CompanyParams;
 import cn.tties.maint.httpclient.params.QueryNewQuertionParams;
-import cn.tties.maint.httpclient.params.QueryQuertionParams;
 import cn.tties.maint.httpclient.result.BaseResult;
 import cn.tties.maint.httpclient.result.CompanyResult;
-import cn.tties.maint.httpclient.result.DescriptionResult;
-import cn.tties.maint.httpclient.result.OrderResult;
 import cn.tties.maint.httpclient.result.QuertionNewResult;
 import cn.tties.maint.httpclient.result.QuertionResult;
-import cn.tties.maint.httpclient.result.QuestionScheduleResult;
 import cn.tties.maint.util.JsonUtils;
-import cn.tties.maint.util.PinYinUtils;
 import cn.tties.maint.util.StringUtil;
 import cn.tties.maint.util.ToastUtil;
 import cn.tties.maint.util.XUtils3ImageLoader;
 import cn.tties.maint.view.BaseCustomDialog;
-import cn.tties.maint.view.DescriptionDialog;
 import cn.tties.maint.widget.CustomDatePicker;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -96,7 +87,7 @@ public class QuestionFragment extends BaseFragment implements RadioGroup.OnCheck
     private TimeDialog dialogtime;
 
     QuestionSearchAdapter adapter;
-    ArrayList<CompanyResult> serachList;
+    ArrayList<CompanyResult> searchList;
     private CustomDatePicker cuys;
     private QuestionNewListAdapter adapterquestion;
 
@@ -145,19 +136,26 @@ public class QuestionFragment extends BaseFragment implements RadioGroup.OnCheck
                     @Override
                     public void onClick(View view) {
                         // 循环变量数据源，如果有属性满足过滤条件，则添加到result中
-                                String str=comapnyDialog.search.getText().toString();
-                                for (int i = 0; i < companyList.size(); i++) {
-                                    CompanyResult result = companyList.get(i);
-                                    if (null == result.getCompanyShortName()) {
-                                        continue;
-                                    }
-                                    if (result.getCompanyShortName().contains(str)) {
-                                        serachList.add(result);
-                                        continue;
-                                    }
-                                }
-                                adapter.setCompanyList(serachList);
-                                adapter.notifyDataSetChanged();
+                        String str = comapnyDialog.search.getText().toString();
+
+                        searchList.clear();
+                        for (int i = 0; i < companyList.size(); i++) {
+                            CompanyResult result = companyList.get(i);
+                            if (null == result) {
+                                continue;
+                            }
+                            if (result.getCompanyShortName().contains(str)) {
+                                searchList.add(result);
+                                continue;
+                            }
+                            // 没输入条件展示所有
+                            if ("".equals(str)) {
+                                searchList.add(result);
+                            }
+                        }
+
+                        adapter.setCompanyList(searchList);
+                        adapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -247,7 +245,7 @@ public class QuestionFragment extends BaseFragment implements RadioGroup.OnCheck
     private void getCompanyList() {
         adapterquestion = new QuestionNewListAdapter(QuestionFragment.this);
         lsitQuestion.setAdapter(adapterquestion);
-        serachList=new ArrayList<>();
+        searchList =new ArrayList<>();
         companyList = new ArrayList<>();
         companyNameList = new ArrayList<>();
         CompanyParams params = new CompanyParams();

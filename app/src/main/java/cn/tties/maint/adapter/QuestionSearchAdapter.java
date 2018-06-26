@@ -1,43 +1,20 @@
 package cn.tties.maint.adapter;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import org.xutils.x;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import cn.tties.maint.R;
-import cn.tties.maint.activity.QuestionFragment;
-import cn.tties.maint.bean.UserInfoBean;
-import cn.tties.maint.common.MyApplication;
-import cn.tties.maint.dao.EquipmentDao;
-import cn.tties.maint.dao.PatrolItemDao;
-import cn.tties.maint.entity.EquipmentEntity;
-import cn.tties.maint.entity.PatrolItemEntity;
-import cn.tties.maint.enums.OtherPatrolItemType;
-import cn.tties.maint.enums.QuestionStatusType;
-import cn.tties.maint.httpclient.result.AdviceResult;
 import cn.tties.maint.httpclient.result.CompanyResult;
-import cn.tties.maint.httpclient.result.DescriptionResult;
-import cn.tties.maint.httpclient.result.QuertionResult;
-import cn.tties.maint.util.AppUtils;
-import cn.tties.maint.util.StringUtil;
-import cn.tties.maint.view.AdviceDialog;
-import cn.tties.maint.view.ScheduleDialog;
 
 /**
  * 问题Adapter.
@@ -46,7 +23,7 @@ import cn.tties.maint.view.ScheduleDialog;
 
 public class QuestionSearchAdapter extends BaseAdapter{
     List<CompanyResult> companyList;
-    List<Integer> companyArrays=new ArrayList<>();
+    Set<Integer> companyIds =new HashSet<>();
     public void setCompanyList(List<CompanyResult> companyList){
         this.companyList=companyList;
     }
@@ -90,14 +67,14 @@ public class QuestionSearchAdapter extends BaseAdapter{
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if (isChecked){
                 // 添加已选中的复选框
-                companyArrays.add(buttonView.getId());
+                companyIds.add(buttonView.getId());
             }else{
-                companyArrays.remove(buttonView.getId());
+                companyIds.remove(buttonView.getId());
             }
 
         }
     };
     public List<Integer> getcompanyArrays(){
-       return companyArrays;
+       return new ArrayList<>(companyIds);
     }
 }
